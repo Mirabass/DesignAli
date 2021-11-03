@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DADataManager
+namespace DAApi
 {
     public class Program
     {

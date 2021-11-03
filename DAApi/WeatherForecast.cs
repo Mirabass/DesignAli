@@ -1,6 +1,6 @@
 using System;
 
-namespace DADataManager
+namespace DAApi
 {
     public class WeatherForecast
     {

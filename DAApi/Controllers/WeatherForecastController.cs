@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DADataManager.Controllers
+namespace DAApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]

@@ -65,4 +65,11 @@
   <ItemGroup>
     <None Include="PublishedLocations\DAData.publish.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\User.sql" />
+    <Build Include="dbo\Tables\Product.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="DAData.refactorlog" />
+  </ItemGroup>
 </Project>

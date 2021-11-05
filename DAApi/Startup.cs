@@ -35,6 +35,8 @@ namespace DesignAliAPI
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
+
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +55,9 @@ namespace DesignAliAPI
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseRouting();
 

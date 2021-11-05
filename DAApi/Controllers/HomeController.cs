@@ -1,4 +1,5 @@
 ﻿using DesignAliAPI.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,10 +13,12 @@ namespace DesignAliAPI.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, RoleManager<IdentityRole> roleManager)
         {
             _logger = logger;
+            _roleManager = roleManager;
         }
 
         public IActionResult Index()
@@ -25,6 +28,10 @@ namespace DesignAliAPI.Controllers
 
         public IActionResult Privacy()
         {
+            string[] roles = { "Admin", "Manager", "Cashier" };
+            foreach (var role in roles)
+            {
+            }
             return View();
         }
 

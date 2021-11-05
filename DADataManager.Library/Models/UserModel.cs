@@ -10,5 +10,6 @@ namespace DADataManager.Library.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string EmailAdress { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

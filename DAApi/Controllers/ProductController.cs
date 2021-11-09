@@ -12,8 +12,7 @@ namespace DesignAliAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = "Cashier")]
-
+    [Authorize(Roles = "Cashier")]
     public class ProductController : Controller
     {
         private readonly IConfiguration _config;
@@ -23,6 +22,7 @@ namespace DesignAliAPI.Controllers
             _config = config;
         }
 
+        [HttpGet]
         public List<ProductModel> Get()
         {
             ProductData data = new ProductData(_config);

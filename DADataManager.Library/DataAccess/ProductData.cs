@@ -7,22 +7,20 @@ using System.Text;
 
 namespace DADataManager.Library.DataAccess
 {
-    public class UserData
+    public class ProductData
     {
         private readonly IConfiguration _config;
 
-        public UserData(IConfiguration config)
+        public ProductData(IConfiguration config)
         {
             _config = config;
         }
 
-        public List<UserModel> GetUserById(string Id)
+        public List<ProductModel> GetProducts()
         {
             SqlDataAccess sql = new SqlDataAccess(_config);
-
-            var p = new { Id = Id };
-
-            var output = sql.LoadData<UserModel, dynamic>("dbo.spUserLookup", p, "DADataConnection");
+            //var output = sql.LoadData<ProductModel, dynamic>("dbo.spProduct_GetAll", new { }, "DAData");
+            var output = sql.LoadData<ProductModel, dynamic>("dbo.spProduct_GetAll", new { }, "DADataConnection");
 
             return output;
         }

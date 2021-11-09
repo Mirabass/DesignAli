@@ -49,7 +49,7 @@ namespace DesignAliAPI.Controllers
             //    await _userManager.AddToRoleAsync(user, "Admin");
             //    await _userManager.AddToRoleAsync(user, "Cashier");
             //}
-
+            await Task.WhenAll();
             return View();
         }
 

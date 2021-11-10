@@ -11,7 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DADataManager.Library", "DA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAApi", "DAApi\DAApi.csproj", "{6358321B-4244-462E-9A57-AFEDAB57BCF2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DADesktopUI.Library", "DADesktopUI.Library\DADesktopUI.Library.csproj", "{752CB125-D7CD-46A5-9D33-B19C59E36112}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DADesktopUI.Library", "DADesktopUI.Library\DADesktopUI.Library.csproj", "{752CB125-D7CD-46A5-9D33-B19C59E36112}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DatabaseShared", "DatabaseShared", "{88D46DFE-87E1-4F41-AE71-3570CCC3B2D6}"
+	ProjectSection(SolutionItems) = preProject
+		DatabaseShared\ApiAuthDb.mdf = DatabaseShared\ApiAuthDb.mdf
+		DatabaseShared\DAData_Primary.mdf = DatabaseShared\DAData_Primary.mdf
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

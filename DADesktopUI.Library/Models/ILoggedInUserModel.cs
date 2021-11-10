@@ -10,5 +10,7 @@ namespace DADesktopUI.Library.Models
         string Id { get; set; }
         string LastName { get; set; }
         public string Token { get; set; }
+
+        void LogOffUser();
     }
 }

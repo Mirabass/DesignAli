@@ -59,7 +59,7 @@ namespace DADesktopUI.Library.Api
             apiClient.DefaultRequestHeaders.Clear();
             apiClient.DefaultRequestHeaders.Accept.Clear();
             apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            apiClient.DefaultRequestHeaders.Add("Authoriation", $"Bearer {token}");
+            apiClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {token}");
 
             using (HttpResponseMessage response = await apiClient.GetAsync("/api/User"))
             {

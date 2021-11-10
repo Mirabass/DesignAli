@@ -12,7 +12,7 @@ namespace DesignAliAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Cashier")]
+    [Authorize(Roles = "Cashier,Manager,Admin")]
     public class ProductController : Controller
     {
         private readonly IConfiguration _config;

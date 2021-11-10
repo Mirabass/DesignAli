@@ -7,6 +7,8 @@ using System.Windows;
 using System.Windows.Controls;
 using Caliburn.Micro;
 using DADesktopUI.Helpers;
+using DADesktopUI.Library.Api;
+using DADesktopUI.Library.Models;
 using DADesktopUI.ViewModels;
 
 namespace DADesktopUI
@@ -31,7 +33,9 @@ namespace DADesktopUI
 
             _container
                 .Singleton<IWindowManager, WindowManager>()
-                .Singleton<IEventAggregator, EventAggregator>();
+                .Singleton<IEventAggregator, EventAggregator>()
+                .Singleton<ILoggedInUserModel, LoggedInUserModel>()
+                .Singleton<IAPIHelper, APIHelper>();
 
             GetType().Assembly.GetTypes()
                 .Where(type => type.IsClass)

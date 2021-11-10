@@ -1,8 +1,11 @@
 ﻿using Caliburn.Micro;
+using DADesktopUI.EventModels;
+using DADesktopUI.Library.Api;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DADesktopUI.ViewModels
@@ -11,6 +14,14 @@ namespace DADesktopUI.ViewModels
     {
         private string _userName;
         private string _password;
+        private IAPIHelper _apiHelper;
+        private IEventAggregator _events;
+
+        public LoginViewModel(IAPIHelper aPIHelper, IEventAggregator events)
+        {
+            _apiHelper = aPIHelper;
+            _events = events;
+        }
 
         public string UserName
         {
@@ -34,6 +45,32 @@ namespace DADesktopUI.ViewModels
             }
         }
 
+        public bool IsErrorVisible
+        {
+            get
+            {
+                bool output = false;
+                if (ErrorMessage?.Length > 0)
+                {
+                    output = true;
+                }
+                return output;
+            }
+        }
+
+        private string _errorMessage;
+
+        public string ErrorMessage
+        {
+            get { return _errorMessage; }
+            set
+            {
+                NotifyOfPropertyChange(() => IsErrorVisible);
+                NotifyOfPropertyChange(() => ErrorMessage);
+                _errorMessage = value;
+            }
+        }
+
         public bool CanLogIn
         {
             get
@@ -47,9 +84,22 @@ namespace DADesktopUI.ViewModels
             }
         }
 
-        public void LogIn(string userName, string password)
+        public async Task LogIn()
         {
-            Console.WriteLine();
+            try
+            {
+                ErrorMessage = "";
+                var result = await _apiHelper.Authenticate(UserName, Password);
+
+                // Capture more information about the user:
+                await _apiHelper.GetLoggedInUserInfo(result.Access_Token);
+
+                await _events.PublishOnUIThreadAsync(new LogOnEvent(), new CancellationToken());
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

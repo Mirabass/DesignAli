@@ -7,9 +7,11 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "DAData", "DAData\DAData.sql
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DADesktopUI", "DADesktopUI\DADesktopUI.csproj", "{83863D54-B190-47E6-9CA9-5DF2056AF367}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DADataManager.Library", "DADataManager.Library\DADataManager.Library.csproj", "{5CDF491B-05B9-4464-B6A0-C1E9635A88FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DADataManager.Library", "DADataManager.Library\DADataManager.Library.csproj", "{5CDF491B-05B9-4464-B6A0-C1E9635A88FD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAApi", "DAApi\DAApi.csproj", "{6358321B-4244-462E-9A57-AFEDAB57BCF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DADesktopUI.Library", "DADesktopUI.Library\DADesktopUI.Library.csproj", "{752CB125-D7CD-46A5-9D33-B19C59E36112}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{6358321B-4244-462E-9A57-AFEDAB57BCF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6358321B-4244-462E-9A57-AFEDAB57BCF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6358321B-4244-462E-9A57-AFEDAB57BCF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{752CB125-D7CD-46A5-9D33-B19C59E36112}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{752CB125-D7CD-46A5-9D33-B19C59E36112}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{752CB125-D7CD-46A5-9D33-B19C59E36112}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{752CB125-D7CD-46A5-9D33-B19C59E36112}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

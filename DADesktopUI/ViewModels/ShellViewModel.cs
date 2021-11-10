@@ -14,15 +14,13 @@ namespace DADesktopUI.ViewModels
     {
         private readonly IEventAggregator _events;
         private readonly ILoggedInUserModel _user;
-        private readonly SimpleContainer _container;
 
-        public ShellViewModel(LoginViewModel loginVM, IEventAggregator events, ILoggedInUserModel user, SimpleContainer container)
+        public ShellViewModel(IEventAggregator events, ILoggedInUserModel user)
         {
             _events = events;
             _user = user;
-            _container = container;
             _events.SubscribeOnPublishedThread(this);
-            ActivateItemAsync(_container.GetInstance<LoginViewModel>());
+            ActivateItemAsync(IoC.Get<LoginViewModel>());
         }
 
         public bool IsLoggedIn
@@ -46,7 +44,7 @@ namespace DADesktopUI.ViewModels
         public void LogOut()
         {
             _user.LogOffUser();
-            ActivateItemAsync(_container.GetInstance<LoginViewModel>());
+            ActivateItemAsync(IoC.Get<LoginViewModel>());
             NotifyOfPropertyChange(() => IsLoggedIn);
         }
 

@@ -63,9 +63,6 @@
     <Folder Include="PublishedLocations" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PublishedLocations\DAData.publish.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <Build Include="dbo\Tables\User.sql" />
     <Build Include="dbo\Tables\Product.sql" />
     <Build Include="dbo\Stored Procedures\spUserLookup.sql" />
@@ -73,5 +70,8 @@
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="DAData.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="PublishedLocations\DAData.publish.xml" />
   </ItemGroup>
 </Project>

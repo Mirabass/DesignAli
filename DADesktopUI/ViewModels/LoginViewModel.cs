@@ -65,9 +65,10 @@ namespace DADesktopUI.ViewModels
             get { return _errorMessage; }
             set
             {
+                _errorMessage = value;
                 NotifyOfPropertyChange(() => IsErrorVisible);
                 NotifyOfPropertyChange(() => ErrorMessage);
-                _errorMessage = value;
+                
             }
         }
 
@@ -96,9 +97,9 @@ namespace DADesktopUI.ViewModels
 
                 await _events.PublishOnUIThreadAsync(new LogOnEvent(), new CancellationToken());
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                ErrorMessage = ex.Message;
             }
         }
     }

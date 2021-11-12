@@ -14,11 +14,13 @@ namespace DADesktopUI.ViewModels
     {
         private readonly IEventAggregator _events;
         private readonly ILoggedInUserModel _user;
+        private readonly ProductsViewModel _productsVM;
 
-        public ShellViewModel(IEventAggregator events, ILoggedInUserModel user)
+        public ShellViewModel(IEventAggregator events, ILoggedInUserModel user, ProductsViewModel productsVM)
         {
             _events = events;
             _user = user;
+            _productsVM = productsVM;
             _events.SubscribeOnPublishedThread(this);
             ActivateItemAsync(IoC.Get<LoginViewModel>());
         }
@@ -50,7 +52,7 @@ namespace DADesktopUI.ViewModels
 
         public async Task HandleAsync(LogOnEvent message, CancellationToken cancellationToken)
         {
-            await ActivateItemAsync(null, cancellationToken);
+            await ActivateItemAsync(_productsVM, cancellationToken);
             NotifyOfPropertyChange(() => IsLoggedIn);
         }
     }

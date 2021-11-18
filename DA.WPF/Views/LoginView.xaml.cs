@@ -11,7 +11,8 @@ namespace DA.WPF.Views
     /// Interaction logic for LoginView.xaml
     /// </summary>
     //[MvxWpfPresenter("MainWindowRegion")]
-    public partial class LoginView : MvxWpfView//<LoginViewModel>
+    //[MvxContentPresentation(WindowIdentifier = nameof(MainWindow), StackNavigation = false)]
+    public partial class LoginView : MvxWpfView
     { 
         public LoginView()
         {

@@ -1,4 +1,5 @@
 ﻿using DA.Core.ViewModels;
+using MvvmCross.Platforms.Wpf.Presenters.Attributes;
 using MvvmCross.Platforms.Wpf.Views;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace DA.WPF
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    [MvxWindowPresentation(Identifier = nameof(MainWindow), Modal = false)]
     public partial class MainWindow : MvxWindow
     {
         public MainWindow()

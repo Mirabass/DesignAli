@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DA.Core.ViewModels
 {
-    public class LoginViewModel : MvxViewModel
+    public class LoginViewModel : MvxViewModel, ILoginViewModel
     {
         private string? _userName;
         private string? _password;

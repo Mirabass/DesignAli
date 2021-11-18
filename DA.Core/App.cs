@@ -22,7 +22,6 @@ namespace DA.Core
 
             Mvx.IoCProvider.RegisterType<ILoggedInUserModel, LoggedInUserModel>();
             //Mvx.IoCProvider.RegisterType<ILoginViewModel, LoginViewModel>();
-
             RegisterCustomAppStart<CustomAppStart>();
         }
     }

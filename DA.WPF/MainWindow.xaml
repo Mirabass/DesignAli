@@ -4,7 +4,7 @@
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                  xmlns:local="clr-namespace:DA.WPF"
+                  xmlns:local="clr-namespace:DA.WPF.Views"
                   xmlns:region="clr-namespace:Mvx.Wpf.ItemsPresenter;assembly=Mvx.Wpf.ItemsPresenter"
                   xmlns:vm="clr-namespace:DA.Core.ViewModels;assembly=DA.Core"
                   mc:Ignorable="d"
@@ -20,11 +20,14 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="auto" MinWidth="120" />
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0" Margin="5">
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Grid.Column="0" Background="SeaGreen" VerticalAlignment="Center" >
+            <TextBlock Margin="5" Foreground="White" FontWeight="Bold" VerticalAlignment="Center" >
             This is Menu
-        </TextBlock>
+            </TextBlock>
+        </StackPanel>
         <Grid  Grid.Row="1" Grid.Column="0">
-            <ItemsControl region:MvxContainer.Id="MainWindowRegion"></ItemsControl>
+            <local:LoginView />
+            <!--<ItemsControl region:MvxContainer.Id="MainWindowRegion"></ItemsControl>-->
         </Grid>
     </Grid>
 </views:MvxWindow>

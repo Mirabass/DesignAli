@@ -12,8 +12,8 @@ namespace DADesktopUI.ViewModels
 {
     public class LoginViewModel : Screen
     {
-        private string _userName;
-        private string _password;
+        private string _userName = "admin@designali.cz"; // easy develop
+        private string _password = "SuperSecret123.";
         private IAPIHelper _apiHelper;
         private IEventAggregator _events;
 

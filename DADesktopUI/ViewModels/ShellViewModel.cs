@@ -39,7 +39,14 @@ namespace DADesktopUI.ViewModels
                 return output;
             }
         }
-
+        public bool CanHome
+        {
+            get
+            {
+                bool output = ActiveItem != _homeVM && IsLoggedIn;
+                return output;
+            }
+        }
         public void ExitApplication()
         {
             TryCloseAsync();
@@ -51,15 +58,21 @@ namespace DADesktopUI.ViewModels
             ActivateItemAsync(IoC.Get<LoginViewModel>());
             NotifyOfPropertyChange(() => IsLoggedIn);
         }
-
+        public async Task Home()
+        {
+            await ActivateItemAsync(_homeVM, new CancellationToken());
+            NotifyOfPropertyChange(() => CanHome);
+        }
         public async Task HandleAsync(LogOnEvent message, CancellationToken cancellationToken)
         {
             await ActivateItemAsync(_homeVM, cancellationToken);
             NotifyOfPropertyChange(() => IsLoggedIn);
+            NotifyOfPropertyChange(() => CanHome);
         }
         public async Task HandleAsync(GoToProductsEvent message, CancellationToken cancellationToken)
         {
             await ActivateItemAsync(_productsVM, cancellationToken);
+            NotifyOfPropertyChange(() => CanHome);
         }
     }
 }

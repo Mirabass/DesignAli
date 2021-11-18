@@ -10,16 +10,18 @@ using System.Threading.Tasks;
 
 namespace DADesktopUI.ViewModels
 {
-    public class ShellViewModel : Conductor<object>, IHandle<LogOnEvent>
+    public class ShellViewModel : Conductor<object>, IHandle<LogOnEvent>, IHandle<GoToProductsEvent>
     {
         private readonly IEventAggregator _events;
         private readonly ILoggedInUserModel _user;
+        private readonly HomeViewModel _homeVM;
         private readonly ProductsViewModel _productsVM;
 
-        public ShellViewModel(IEventAggregator events, ILoggedInUserModel user, ProductsViewModel productsVM)
+        public ShellViewModel(IEventAggregator events, ILoggedInUserModel user, HomeViewModel homeVM, ProductsViewModel productsVM)
         {
             _events = events;
             _user = user;
+            _homeVM = homeVM;
             _productsVM = productsVM;
             _events.SubscribeOnPublishedThread(this);
             ActivateItemAsync(IoC.Get<LoginViewModel>());
@@ -52,8 +54,12 @@ namespace DADesktopUI.ViewModels
 
         public async Task HandleAsync(LogOnEvent message, CancellationToken cancellationToken)
         {
-            await ActivateItemAsync(_productsVM, cancellationToken);
+            await ActivateItemAsync(_homeVM, cancellationToken);
             NotifyOfPropertyChange(() => IsLoggedIn);
+        }
+        public async Task HandleAsync(GoToProductsEvent message, CancellationToken cancellationToken)
+        {
+            await ActivateItemAsync(_productsVM, cancellationToken);
         }
     }
 }

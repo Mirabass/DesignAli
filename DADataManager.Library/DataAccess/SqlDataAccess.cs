@@ -8,9 +8,9 @@ using Dapper;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
 
-namespace DADataManager.Library.Internal.DataAccess
+namespace DADataManager.Library.DataAccess
 {
-    internal class SqlDataAccess
+    public class SqlDataAccess : ISqlDataAccess
     {
         private readonly IConfiguration _config;
 

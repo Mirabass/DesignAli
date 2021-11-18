@@ -1,4 +1,4 @@
-﻿using DADataManager.Library.Internal.DataAccess;
+﻿using DADataManager.Library.DataAccess;
 using DADataManager.Library.Models;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -7,20 +7,19 @@ using System.Text;
 
 namespace DADataManager.Library.DataAccess
 {
-    public class ProductData
+    public class ProductData : IProductData
     {
-        private readonly IConfiguration _config;
+        private readonly ISqlDataAccess _sql;
 
-        public ProductData(IConfiguration config)
+        public ProductData(ISqlDataAccess sqlDataAccess)
         {
-            _config = config;
+            _sql = sqlDataAccess;
         }
 
         public List<ProductModel> GetProducts()
         {
-            SqlDataAccess sql = new SqlDataAccess(_config);
             //var output = sql.LoadData<ProductModel, dynamic>("dbo.spProduct_GetAll", new { }, "DAData");
-            var output = sql.LoadData<ProductModel, dynamic>("dbo.spProduct_GetAll", new { }, "DADataConnection");
+            var output = _sql.LoadData<ProductModel, dynamic>("dbo.spProduct_GetAll", new { }, "DADataConnection");
 
             return output;
         }

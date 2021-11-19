@@ -14,7 +14,8 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
-        <DataGrid x:Name="Products" Grid.Row="0" Grid.Column="0"
+        <DataGrid x:Name="Products" SelectedItem="{Binding Path=SelectedProduct}"
+                  Grid.Row="0" Grid.Column="0"
                  MinHeight="100" MinWidth="200"
                   CanUserAddRows="False" AutoGenerateColumns="False">
             <DataGrid.Columns>

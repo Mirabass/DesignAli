@@ -10,7 +10,7 @@
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition MinWidth="120" Width="auto" />
+                <ColumnDefinition Width="5" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30" />
@@ -28,7 +28,7 @@
                     
                 </StackPanel>
             </DockPanel>
-            <ContentControl Grid.Row="1" Grid.Column="0" x:Name="ActiveItem" Margin="5" />
+            <ContentControl Grid.Row="1" Grid.Column="0" x:Name="ActiveItem" />
         </Grid>
     </DockPanel>
 </Window>

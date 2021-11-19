@@ -23,6 +23,22 @@ namespace DADesktopUI.Views
         public ProductsView()
         {
             InitializeComponent();
+            Menu.Visibility = Visibility.Collapsed;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            this.Menu.Visibility = this.Menu.Visibility == Visibility.Visible
+                            ? Visibility.Collapsed
+                            : Visibility.Visible;
+            if (Menu.IsVisible)
+            {
+                Expander.Content = ">";
+            }
+            else
+            {
+                Expander.Content = "<";
+            }
         }
     }
 }

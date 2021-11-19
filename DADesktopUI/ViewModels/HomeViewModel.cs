@@ -17,7 +17,7 @@ namespace DADesktopUI.ViewModels
             _events = events;
         }
 
-        public async Task Products()
+        public async Task ProductsList()
         {
             await _events.PublishOnUIThreadAsync(new GoToProductsEvent(), new CancellationToken());
         }

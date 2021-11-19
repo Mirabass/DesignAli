@@ -14,14 +14,16 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="Products" Grid.Row="0" Grid.Column="0"
-                 MinHeight="100" MinWidth="200">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}" />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <DataGrid x:Name="Products" Grid.Row="0" Grid.Column="0"
+                 MinHeight="100" MinWidth="200"
+                  CanUserAddRows="False" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="Designation" Binding="{Binding Path=Designation}" Header="Designation"/>
+                <DataGridTextColumn x:Name="EAN" Binding="{Binding Path=EAN}" Header="EAN"/>
+                <DataGridTextColumn x:Name="Name" Binding="{Binding Path=Name}" Header="Name"/>
+                <DataGridTextColumn x:Name="Type" Binding="{Binding Path=Type}" Header="Type"/>
+            </DataGrid.Columns>
+        </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Column="1" Background="SeaGreen">
             <Button x:Name="Expander" Content="&lt;" Width="10" Click="Button_Click" HorizontalAlignment="Right" />
             <StackPanel Grid.Column="1" x:Name="Menu" Background="SeaGreen"

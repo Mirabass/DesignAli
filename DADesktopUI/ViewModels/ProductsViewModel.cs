@@ -12,7 +12,7 @@ namespace DADesktopUI.ViewModels
 {
     public class ProductsViewModel : Screen
     {
-        private BindingList<ProductModel> _products;
+        private BindableCollection<ProductModel> _products;
         private IProductEndpoint _productEndpoint;
         public ProductsViewModel(IProductEndpoint productEndpoint)
         {
@@ -26,9 +26,9 @@ namespace DADesktopUI.ViewModels
         private async Task LoadProducts()
         {
             var productList = await _productEndpoint.GetAll();
-            Products = new BindingList<ProductModel>(productList);
+            Products = new BindableCollection<ProductModel>(productList);
         }
-        public BindingList<ProductModel> Products
+        public BindableCollection<ProductModel> Products
         {
             get { return _products; }
             set 

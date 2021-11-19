@@ -26,5 +26,10 @@ namespace DesignAliAPI.Controllers
         {
             return _productData.GetProducts();
         }
+        [HttpPost]
+        public void Post(ProductModel product)
+        {
+            _productData.AddProduct(product);
+        }
     }
 }

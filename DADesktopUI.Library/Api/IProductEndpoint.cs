@@ -7,5 +7,6 @@ namespace DADesktopUI.Library.Api
     public interface IProductEndpoint
     {
         Task<List<ProductModel>> GetAll();
+        Task PostProduct(ProductModel product);
     }
 }

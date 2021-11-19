@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DADesktopUI.ViewModels
@@ -14,7 +15,6 @@ namespace DADesktopUI.ViewModels
     {
         private BindableCollection<ProductModel> _products;
         private IProductEndpoint _productEndpoint;
-        private ICollectionView _fooView;
         public ProductsViewModel(IProductEndpoint productEndpoint)
         {
             _productEndpoint = productEndpoint;
@@ -46,11 +46,64 @@ namespace DADesktopUI.ViewModels
             set
             {
                 _selectedProduct = value;
-                SetCopyProductControls();
+                if (_selectedProduct is not null)
+                {
+                    SetCopyProductControls();
+                }
+                
+                NotifyOfPropertyChange(() => CanCopyProduct);
             }
         }
-        public string ProductName { get; set; }
-        public string ProductType { get; set; }
+        private string _designation;
+        public string ProductDesignation
+        {
+            get { return _designation; }
+            set
+            {
+                _designation = value;
+                NotifyOfPropertyChange(() => ProductDesignation);
+                NotifyOfPropertyChange(() => CanCopyProduct);
+            }
+        }
+        private long _ean;
+
+        public long ProductEAN
+        {
+            get { return _ean; }
+            set
+            {
+                _ean = value;
+                NotifyOfPropertyChange(() => ProductEAN);
+                NotifyOfPropertyChange(() => CanCopyProduct);
+            }
+        }
+
+        private string _productName;
+
+        public string ProductName
+        {
+            get { return _productName; }
+            set 
+            {
+                _productName = value;
+                NotifyOfPropertyChange(() => ProductName);
+                NotifyOfPropertyChange(() => CanCopyProduct);
+            }
+        }
+
+        private string _productType;
+
+        public string ProductType
+        {
+            get { return _productType; }
+            set 
+            { 
+                _productType = value;
+                NotifyOfPropertyChange(() => ProductType);
+                NotifyOfPropertyChange(() => CanCopyProduct);
+            }
+        }
+
 
         private void SetCopyProductControls()
 
@@ -59,6 +112,40 @@ namespace DADesktopUI.ViewModels
             NotifyOfPropertyChange(() => ProductName);
             ProductType = _selectedProduct.Type;
             NotifyOfPropertyChange(() => ProductType);
+        }
+        public bool CanCopyProduct
+        {
+            get
+            {
+                bool output = _selectedProduct is not null &&
+                    !string.IsNullOrEmpty(ProductDesignation) &&
+                    !string.IsNullOrEmpty(ProductEAN.ToString()) &&
+                    !string.IsNullOrEmpty(ProductName) &&
+                    !string.IsNullOrEmpty(ProductType);
+
+                return output;
+            }
+        }
+
+        public async Task CopyProduct()
+        {
+            ProductModel newProduct = _selectedProduct;
+            newProduct.Designation = ProductDesignation;
+            newProduct.EAN=ProductEAN;
+            newProduct.Name = ProductName;
+            newProduct.Type = ProductType;
+            await _productEndpoint.PostProduct(newProduct);
+            Products.Add(newProduct);
+            EraseCopyProductControls();
+        }
+
+        private void EraseCopyProductControls()
+        {
+            ProductDesignation = "";
+            ProductName = "";
+            ProductEAN = 1111111111111;
+            ProductType = "";
+
         }
     }
 }

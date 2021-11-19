@@ -23,5 +23,9 @@ namespace DADataManager.Library.DataAccess
 
             return output;
         }
+        public void AddProduct(ProductModel product)
+        {
+            _sql.SaveData("dbo.spProduct_Insert", product, "DADataConnection");
+        }
     }
 }

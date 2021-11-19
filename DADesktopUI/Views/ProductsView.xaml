@@ -30,8 +30,8 @@
             <StackPanel Grid.Column="1" x:Name="Menu" Background="SeaGreen"
                     Orientation="Vertical" Width="200" Margin="2">
                 <TextBlock TextWrapping="Wrap" Foreground="White" Margin="0 0 0 10" FontWeight="Bold">Add a new product by copying an existing one:</TextBlock>
-                <TextBlock Foreground="White">Product number</TextBlock>
-                <TextBox x:Name="ProductNumber" Margin="4 0 4 0"/>
+                <TextBlock Foreground="White">Designation</TextBlock>
+                <TextBox x:Name="ProductDesignation" Margin="4 0 4 0"/>
                 <TextBlock Foreground="White">Product EAN</TextBlock>
                 <TextBox x:Name="ProductEAN" Margin="4 0 4 0"/>
                 <TextBlock Foreground="White">Product name</TextBlock>

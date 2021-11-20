@@ -15,6 +15,22 @@ namespace DADesktopUI.Library.Api
         {
             _apiHelper = apiHelper;
         }
+
+        public async Task DeleteProduct(ProductModel product)
+        {
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.DeleteAsync($"/api/Product?id={product.Id}"))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    // Say OK.
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
         public async Task<List<ProductModel>> GetAll()
         {
             using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/Product"))

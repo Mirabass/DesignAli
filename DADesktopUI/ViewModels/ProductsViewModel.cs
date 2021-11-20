@@ -81,6 +81,7 @@ namespace DADesktopUI.ViewModels
                 }
                 
                 NotifyOfPropertyChange(() => CanCopyProduct);
+                NotifyOfPropertyChange(() => CanDeleteProduct);
             }
         }
         private string _designation;
@@ -191,6 +192,35 @@ namespace DADesktopUI.ViewModels
             ProductEAN = 1111111111111;
             ProductType = "";
 
+        }
+
+        public bool CanDeleteProduct
+        {
+            get
+            {
+                return _selectedProduct is not null; 
+            }
+        }
+
+        public async Task DeleteProduct()
+        {
+            try
+            {
+                await _productEndpoint.DeleteProduct(_selectedProduct);
+                Products.Remove(SelectedProduct);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "Unauthorized")
+                {
+                    _status.UpdateMessage("System Error", ex.Message, "You are not allowed to delete product.");
+                }
+                else
+                {
+                    _status.UpdateMessage("System Error", ex.Message, ex.StackTrace);
+                }
+                await _status.ShowDialogAsync();
+            }
         }
     }
 }

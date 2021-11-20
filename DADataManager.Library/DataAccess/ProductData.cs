@@ -3,6 +3,7 @@ using DADataManager.Library.Models;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Text;
 
 namespace DADataManager.Library.DataAccess
@@ -26,6 +27,11 @@ namespace DADataManager.Library.DataAccess
         public void AddProduct(ProductModel product)
         {
             _sql.SaveData("dbo.spProduct_Insert", product, "DADataConnection");
+        }
+
+        public void DeleteProduct(int Id)
+        {
+            _sql.SaveData("dbo.spProduct_Delete", new {Id = Id}, "DADataConnection");
         }
     }
 }

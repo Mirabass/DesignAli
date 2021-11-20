@@ -31,5 +31,10 @@ namespace DesignAliAPI.Controllers
         {
             _productData.AddProduct(product);
         }
+        [HttpDelete]
+        public void Delete(int id)
+        {
+            _productData.DeleteProduct(id);
+        }
     }
 }

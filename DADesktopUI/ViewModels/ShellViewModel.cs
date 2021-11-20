@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using DADesktopUI.EventModels;
+using DADesktopUI.Library;
 using DADesktopUI.Library.Models;
 using System;
 using System.Collections.Generic;
@@ -7,10 +8,11 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static DADesktopUI.Library.Enums;
 
 namespace DADesktopUI.ViewModels
 {
-    public class ShellViewModel : Conductor<object>, IHandle<LogOnEvent>, IHandle<GoToProductsEvent>
+    public class ShellViewModel : Conductor<object>, IHandle<LogOnEvent>, IHandle<GoToEvent>
     {
         private readonly IEventAggregator _events;
         private readonly ILoggedInUserModel _user;
@@ -69,9 +71,21 @@ namespace DADesktopUI.ViewModels
             NotifyOfPropertyChange(() => IsLoggedIn);
             NotifyOfPropertyChange(() => CanHome);
         }
-        public async Task HandleAsync(GoToProductsEvent message, CancellationToken cancellationToken)
+        public async Task HandleAsync(GoToEvent message, CancellationToken cancellationToken)
         {
-            await ActivateItemAsync(_productsVM, cancellationToken);
+            Screen screenToGo;
+            switch (message.View)
+            {
+                case GoTo.Home:
+                    screenToGo = _homeVM;
+                    break;
+                case GoTo.Products:
+                    screenToGo = _productsVM;
+                    break;
+                default:
+                    throw new NotImplementedException("View to redirect not set.");
+            }
+            await ActivateItemAsync(screenToGo, cancellationToken);
             NotifyOfPropertyChange(() => CanHome);
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using DADesktopUI.EventModels;
 using DADesktopUI.Library.Api;
 using DADesktopUI.Library.Models;
 using System;
@@ -10,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using static DADesktopUI.Library.Enums;
 
 namespace DADesktopUI.ViewModels
 {
@@ -18,12 +20,13 @@ namespace DADesktopUI.ViewModels
         private BindableCollection<ProductModel> _products;
         private IProductEndpoint _productEndpoint;
         private StatusInfoViewModel _status;
-        private IWindowManager _window;
-        public ProductsViewModel(IProductEndpoint productEndpoint, StatusInfoViewModel statusInfoViewModel, IWindowManager window)
+        private IEventAggregator _events;
+        public ProductsViewModel(IProductEndpoint productEndpoint, StatusInfoViewModel statusInfoViewModel,
+            IEventAggregator events)
         {
             _productEndpoint = productEndpoint;
             _status = statusInfoViewModel;
-            _window = window;
+            _events = events;
         }
         protected override async void OnViewLoaded(object view)
         {
@@ -35,21 +38,18 @@ namespace DADesktopUI.ViewModels
             }
             catch (Exception ex)
             {
-                dynamic settings = new ExpandoObject();
-                settings.WindowtartupLocation = WindowStartupLocation.CenterOwner;
-                settings.ResizeMode = ResizeMode.NoResize;
-                settings.Title = "System Error";
                 if (ex.Message == "Unauthorized")
                 {
-                    _status.UpdateMessage("Unauthorized access", "You are not authorized to access this.");
-                    await _window.ShowWindowAsync(_status, null, settings);
+                    _status.UpdateMessage("System Error","Unauthorized access", "You are not authorized to access this.");
+                    await _status.ShowDialogAsync();
                 }
                 else
                 {
-                    _status.UpdateMessage("Fatal Error", ex.StackTrace);
-                    await _window.ShowWindowAsync(_status, null, settings);
+                    _status.UpdateMessage("System Error","Fatal Error", ex.StackTrace);
+                    await _status.ShowDialogAsync();
                 }
                 await TryCloseAsync();
+                await _events.PublishOnUIThreadAsync(new GoToEvent(GoTo.Home), new CancellationToken());
             }
            
         }
@@ -158,14 +158,30 @@ namespace DADesktopUI.ViewModels
 
         public async Task CopyProduct()
         {
-            ProductModel newProduct = _selectedProduct;
-            newProduct.Designation = ProductDesignation;
-            newProduct.EAN=ProductEAN;
-            newProduct.Name = ProductName;
-            newProduct.Type = ProductType;
-            await _productEndpoint.PostProduct(newProduct);
-            Products.Add(newProduct);
-            EraseCopyProductControls();
+
+            try
+            {
+                ProductModel newProduct = _selectedProduct;
+                newProduct.Designation = ProductDesignation;
+                newProduct.EAN = ProductEAN;
+                newProduct.Name = ProductName;
+                newProduct.Type = ProductType;
+                await _productEndpoint.PostProduct(newProduct);
+                Products.Add(newProduct);
+                EraseCopyProductControls();
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "Unauthorized")
+                {
+                    _status.UpdateMessage("System Error", ex.Message, "You are not allowed to copy product.");
+                }
+                else
+                {
+                    _status.UpdateMessage("System Error", ex.Message, ex.StackTrace);
+                }
+                await _status.ShowDialogAsync();
+            }
         }
 
         private void EraseCopyProductControls()

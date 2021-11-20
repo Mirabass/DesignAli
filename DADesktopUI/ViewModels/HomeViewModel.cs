@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static DADesktopUI.Library.Enums;
 
 namespace DADesktopUI.ViewModels
 {
@@ -17,9 +18,9 @@ namespace DADesktopUI.ViewModels
             _events = events;
         }
 
-        public async Task ProductsList()
+        public async Task GoToProductList()
         {
-            await _events.PublishOnUIThreadAsync(new GoToProductsEvent(), new CancellationToken());
+            await _events.PublishOnUIThreadAsync(new GoToEvent(GoTo.Products), new CancellationToken());
         }
     }
 }

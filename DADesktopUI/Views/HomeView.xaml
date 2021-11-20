@@ -43,11 +43,11 @@
             <TextBlock Margin="20 2 2 2">02.00 - Catalog of items</TextBlock>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Margin="60 2 2 2">02.00.01 -</TextBlock>
-                <Button x:Name="MaterialsList" Content="Materials list" Grid.Row="1" Grid.Column="0" Padding="1" Margin="1"/>
+                <Button x:Name="MaterialsList" Content="Material list" Grid.Row="1" Grid.Column="0" Padding="1" Margin="1"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Margin="60 2 2 2">02.00.02 -</TextBlock>
-                <Button x:Name="ProductsList" Content="Products list" Grid.Row="1" Grid.Column="0" Padding="1" Margin="1"/>
+                <Button x:Name="GoToProductList" Content="Product list" Grid.Row="1" Grid.Column="0" Padding="1" Margin="1"/>
                 <TextBlock Margin="20 2 2 2"> - Only this one works at the moment</TextBlock>
             </StackPanel>
             <TextBlock>04 - Stocks</TextBlock>

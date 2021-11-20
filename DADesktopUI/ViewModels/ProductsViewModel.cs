@@ -4,10 +4,12 @@ using DADesktopUI.Library.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace DADesktopUI.ViewModels
 {
@@ -15,14 +17,41 @@ namespace DADesktopUI.ViewModels
     {
         private BindableCollection<ProductModel> _products;
         private IProductEndpoint _productEndpoint;
-        public ProductsViewModel(IProductEndpoint productEndpoint)
+        private StatusInfoViewModel _status;
+        private IWindowManager _window;
+        public ProductsViewModel(IProductEndpoint productEndpoint, StatusInfoViewModel statusInfoViewModel, IWindowManager window)
         {
             _productEndpoint = productEndpoint;
+            _status = statusInfoViewModel;
+            _window = window;
         }
         protected override async void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
-            await LoadProducts();
+            try
+            {
+                await LoadProducts();
+                //throw new NotImplementedException("Testing error...");
+            }
+            catch (Exception ex)
+            {
+                dynamic settings = new ExpandoObject();
+                settings.WindowtartupLocation = WindowStartupLocation.CenterOwner;
+                settings.ResizeMode = ResizeMode.NoResize;
+                settings.Title = "System Error";
+                if (ex.Message == "Unauthorized")
+                {
+                    _status.UpdateMessage("Unauthorized access", "You are not authorized to access this.");
+                    await _window.ShowWindowAsync(_status, null, settings);
+                }
+                else
+                {
+                    _status.UpdateMessage("Fatal Error", ex.StackTrace);
+                    await _window.ShowWindowAsync(_status, null, settings);
+                }
+                await TryCloseAsync();
+            }
+           
         }
         private async Task LoadProducts()
         {

@@ -1,27 +1,25 @@
-﻿using DADesktopUI.Library.Models;
-using DADesktopUI.Models;
+﻿using DA.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DADesktopUI.Library.Api
+namespace DA.Core.Services
 {
-    public class APIHelper : IAPIHelper
+    public class UserService : IUserService
     {
-        private HttpClient _apiClient;
+        private HttpClient? _apiClient;
         private readonly ILoggedInUserModel _loggedInUser;
 
-        public APIHelper(ILoggedInUserModel loggedInUser)
+        public UserService(ILoggedInUserModel loggedInUser)
         {
             InitializeClient();
             _loggedInUser = loggedInUser;
         }
-        public HttpClient ApiClient { get => _apiClient; }
+        public HttpClient? ApiClient { get => _apiClient; }
         private void InitializeClient()
         {
             string api = ConfigurationManager.AppSettings["api"];
@@ -34,6 +32,7 @@ namespace DADesktopUI.Library.Api
 
         public async Task<AuthenticatedUser> Authenticate(string username, string password)
         {
+            if (_apiClient is null) throw new Exception("Api Client is null");
             var data = new FormUrlEncodedContent(new[]
             {
                 new KeyValuePair<string,string>("grant_type", "password"),
@@ -54,8 +53,10 @@ namespace DADesktopUI.Library.Api
             }
         }
 
-        public async Task GetLoggedInUserInfo(string token)
+        public async Task GetLoggedInUserInfo(string? token)
         {
+            if (token is null) throw new Exception("Token is null");
+            if (_apiClient is null) throw new Exception("Api Client is null");
             _apiClient.DefaultRequestHeaders.Clear();
             _apiClient.DefaultRequestHeaders.Accept.Clear();
             _apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

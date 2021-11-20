@@ -15,19 +15,21 @@ namespace DesignAliAPI.Controllers
     [Authorize(Roles = "Cashier,Manager,Admin")]
     public class ProductController : Controller
     {
-        private readonly IConfiguration _config;
-
-        public ProductController(IConfiguration config)
+        private readonly IProductData _productData;
+        public ProductController(IProductData productData)
         {
-            _config = config;
+            _productData = productData;
         }
 
         [HttpGet]
         public List<ProductModel> Get()
         {
-            ProductData data = new ProductData(_config);
-
-            return data.GetProducts();
+            return _productData.GetProducts();
+        }
+        [HttpPost]
+        public void Post(ProductModel product)
+        {
+            _productData.AddProduct(product);
         }
     }
 }

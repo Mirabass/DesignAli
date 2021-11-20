@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="DADesktopUI.Views.ProductsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DADesktopUI.Views"
+             mc:Ignorable="d" Background="White" FontSize="12"
+             d:DesignHeight="425" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="auto" />
+        </Grid.ColumnDefinitions>
+        <DataGrid x:Name="Products" SelectedItem="{Binding Path=SelectedProduct}"
+                  Grid.Row="0" Grid.Column="0"
+                 MinHeight="100" MinWidth="200"
+                  CanUserAddRows="False" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn x:Name="Designation" Binding="{Binding Path=Designation}" Header="Designation"/>
+                <DataGridTextColumn x:Name="EAN" Binding="{Binding Path=EAN}" Header="EAN"/>
+                <DataGridTextColumn x:Name="Name" Binding="{Binding Path=Name}" Header="Name"/>
+                <DataGridTextColumn x:Name="Type" Binding="{Binding Path=Type}" Header="Type"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Orientation="Horizontal" Grid.Column="1" Background="SeaGreen">
+            <Button x:Name="Expander" Content="&lt;" Width="10" Click="Button_Click" HorizontalAlignment="Right" />
+            <StackPanel Grid.Column="1" x:Name="Menu" Background="SeaGreen"
+                    Orientation="Vertical" Width="200" Margin="2">
+                <TextBlock TextWrapping="Wrap" Foreground="White" Margin="0 0 0 10" FontWeight="Bold">Add a new product by copying an existing one:</TextBlock>
+                <TextBlock Foreground="White">Designation</TextBlock>
+                <TextBox x:Name="ProductDesignation" Margin="4 0 4 0"/>
+                <TextBlock Foreground="White">Product EAN</TextBlock>
+                <TextBox x:Name="ProductEAN" Margin="4 0 4 0"/>
+                <TextBlock Foreground="White">Product name</TextBlock>
+                <TextBox x:Name="ProductName" Margin="4 0 4 0"/>
+                <TextBlock Foreground="White">Product Type</TextBlock>
+                <TextBox x:Name="ProductType" Margin="4 0 4 0"/>
+                <CheckBox x:Name="ShowNewBOM" Content="Show new bill of materials" Foreground="White" Margin="4 6 4 0"/>
+                <Button x:Name="CopyProduct" Content="Copy product" Margin="0 10 0 0" HorizontalAlignment="Center" Padding="3"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

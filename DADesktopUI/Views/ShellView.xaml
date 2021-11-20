@@ -5,19 +5,30 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DADesktopUI.Views"
         mc:Ignorable="d" FontSize="12"
-        Title="ShellView" Height="450" Width="800">
+        Title="Design Ali" Height="450" Width="800" WindowStyle="SingleBorderWindow" Background="White">
     <DockPanel>
-        <Menu DockPanel.Dock="Top" FontSize="12">
-            <MenuItem Header="_File">
-            </MenuItem>
-            <MenuItem Header="_Account" Visibility="{Binding IsAccountVissible,
-                Converter={StaticResource BooleanToVisibilityConverter},
-                FallbackValue=Collapsed}">
-                <MenuItem x:Name="LogOut" Header="_Log Out" />
-            </MenuItem>
-        </Menu>
         <Grid>
-            <ContentControl x:Name="ActiveItem" Margin="5" />
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="5" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <DockPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="SeaGreen">
+                <StackPanel Margin="2" HorizontalAlignment="Left" Orientation="Horizontal">
+                    <Button x:Name="Home" Content="Home" Width="80" Margin="2" Foreground="White" FontWeight="Bold" BorderBrush="#FF064810" Background="#FF3DA920" />
+                    <Button x:Name="LogForm" Content="Log Form" Width="80" Margin="2" Foreground="White" FontWeight="Bold" BorderBrush="#FF064810" Background="#FF3DA920" />
+                    <Button x:Name="AddWindow" Content="+ Add Window" Width="100" Margin="2" Foreground="White" FontWeight="Bold" BorderBrush="#FF064810" Background="#FF3DA920" />
+                </StackPanel>
+            </DockPanel>
+            <DockPanel Grid.Row="1" Grid.Column="1" Background="SeaGreen">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="2">
+                    
+                </StackPanel>
+            </DockPanel>
+            <ContentControl Grid.Row="1" Grid.Column="0" x:Name="ActiveItem" />
         </Grid>
     </DockPanel>
 </Window>

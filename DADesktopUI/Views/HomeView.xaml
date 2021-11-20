@@ -1,0 +1,86 @@
+﻿<UserControl x:Class="DADesktopUI.Views.HomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DADesktopUI.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             FontSize="12">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <WrapPanel Grid.Row="0" Grid.Column="0" Margin="10 2 50 2" Orientation="Vertical">
+            <TextBlock>01 - Store</TextBlock>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="20 2 2 2">01.00 -</TextBlock>
+                <Button x:Name="Custmers" Content="Customer directory" Grid.Row="1" Grid.Column="0" Padding="1" Margin="1"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="20 2 2 2">01.04 -</TextBlock>
+                <Button x:Name="DeliveryNotes" Content="Delivery notes" Grid.Row="1" Grid.Column="0" Padding="1" Margin="1"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="20 2 2 2">01.05 -</TextBlock>
+                <Button x:Name="GoodsReturn" Content="Goods return" Grid.Row="1" Grid.Column="0" Padding="1" Margin="1"/>
+            </StackPanel>
+            <TextBlock Margin="20 2 2 2">01.11 - Price lists</TextBlock>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="60 2 2 2">01.11.02 -</TextBlock>
+                <Button x:Name="Tariffs" Grid.Row="1" Grid.Column="0" Width="160" Padding="1" Margin="1">
+                    <TextBlock Text="Overview of items, tariffs and overheads for calculations" TextWrapping="Wrap"/>
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="60 2 2 2">01.11.03 -</TextBlock>
+                <Button x:Name="CurrencyRates" Content="Currency rates" Grid.Row="1" Grid.Column="0" Padding="1" Margin="1"/>
+            </StackPanel>
+            <TextBlock>02 - Production preparation</TextBlock>
+            <TextBlock Margin="20 2 2 2">02.00 - Catalog of items</TextBlock>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="60 2 2 2">02.00.01 -</TextBlock>
+                <Button x:Name="MaterialsList" Content="Material list" Grid.Row="1" Grid.Column="0" Padding="1" Margin="1"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="60 2 2 2">02.00.02 -</TextBlock>
+                <Button x:Name="GoToProductList" Content="Product list" Grid.Row="1" Grid.Column="0" Padding="1" Margin="1"/>
+                <TextBlock Margin="20 2 2 2"> - Only this one works at the moment</TextBlock>
+            </StackPanel>
+            <TextBlock>04 - Stocks</TextBlock>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="20 2 2 2">04.01 -</TextBlock>
+                <Button x:Name="StockOfMaterial" Content="Stock of material" Grid.Row="1" Grid.Column="0" Padding="1" Margin="1"/>
+            </StackPanel>
+            <TextBlock Margin="20 2 2 2">04.02 - Stock of products</TextBlock>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="60 2 2 2">04.02.01 -</TextBlock>
+                <Button x:Name="StockOfProducts" Content="Stock of products - state" Grid.Row="1" Grid.Column="0" Padding="1" Margin="1"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="60 2 2 2">04.02.02 -</TextBlock>
+                <Button x:Name="ProductReceipts" Content="Product receipts" Grid.Row="1" Grid.Column="0" Padding="1" Margin="1"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="60 2 2 2">04.02.03 -</TextBlock>
+                <Button x:Name="RecordingOfDeliveryNotes" Content="Recording of delivery notes" Grid.Row="1" Grid.Column="0" Padding="1" Margin="1"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="60 2 2 2">04.02.04 -</TextBlock>
+                <Button x:Name="RecordingOfInvoices" Content="Recording of issued invoices" Grid.Row="1" Grid.Column="0" Padding="1" Margin="1"/>
+            </StackPanel>
+            <TextBlock>09 - Economy</TextBlock>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="20 2 2 2">09.02 -</TextBlock>
+                <Button x:Name="IssuedInvoices" Content="Issued invoices" Grid.Row="1" Grid.Column="0" Padding="1" Margin="1"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="20 2 2 2">09.11 -</TextBlock>
+                <Button x:Name="RevenuesAndProfits" Content="Revenues and profits" Grid.Row="1" Grid.Column="0" Padding="1" Margin="1"/>
+            </StackPanel>
+        </WrapPanel>
+    </Grid>
+</UserControl>

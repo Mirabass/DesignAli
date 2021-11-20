@@ -3,6 +3,6 @@ AS
 begin
 	set nocount on;
 
-	SELECT Name
+	SELECT *
 	from [dbo].[Product]
 end

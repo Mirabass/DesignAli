@@ -17,6 +17,7 @@ using System.Text;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.IO;
+using DADataManager.Library.DataAccess;
 
 namespace DesignAliAPI
 {
@@ -41,6 +42,11 @@ namespace DesignAliAPI
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
+
+            // Personal services:
+            services.AddTransient<ISqlDataAccess, SqlDataAccess>();
+            services.AddTransient<IUserData, UserData>();
+            services.AddTransient<IProductData, ProductData>();
 
             services.AddAuthentication(options =>
             {

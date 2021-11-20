@@ -11,3 +11,12 @@ In the first place, it is to serve as a product manager for a small business of 
 Secondly, the system can grow into an e-shop.
 
 In its current state, this Solution is almost completely written according to the TimCoRetailManager course from the IAmTimCorey channel. Not copied. I went through the course and wrote the code myself (can be traced in commits). I tried not only to blindly describe everything that is written in this Solution, but also to understand it. The course was used mainly to create authorizations with roles, but the product will continue to be adapted to the needs of Design Ali.
+
+Application structure:
+BackEnd:
+1. DAData - Ready MSSQL database (Net Framework 4.8, SQL server 2016).
+2. DADataManager.Library - Library .Net Standard 2.1, Using Dapper and Procedures allows communication with SQL database. Provides DataAccess.
+3. DAApi - ASP .NET 5 MVC WebAPI with authentication and authorization using JWT token. Contains Controllers that are connected to DADataMaganer.Library.
+FrontEnd:
+4. DADesktopUI.Library - .NET Library 5. Arranges communication with API.
+5. DADesktopUI - .NET 5 WPF MVVM using Caliburn Micro.

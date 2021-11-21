@@ -84,6 +84,31 @@ namespace DADesktopUI.ViewModels
                 NotifyOfPropertyChange(() => CanDeleteProduct);
             }
         }
+        public async Task OnCellEdit()
+        {
+            await UpdateSelectedProduct();
+        }
+
+        private async Task UpdateSelectedProduct()
+        {
+            try
+            {
+                await _productEndpoint.UpdateProduct(_selectedProduct);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "Unauthorized")
+                {
+                    _status.UpdateMessage("System Error", ex.Message, "You are not allowed to edit this product.");
+                }
+                else
+                {
+                    _status.UpdateMessage("System Error", ex.Message, ex.StackTrace);
+                }
+                await _status.ShowDialogAsync();
+            }
+        }
+
         private string _designation;
         public string ProductDesignation
         {

@@ -70,6 +70,7 @@
     <Build Include="dbo\Stored Procedures\spProduct_GetAll.sql" />
     <Build Include="dbo\Stored Procedures\spProduct_Insert.sql" />
     <Build Include="dbo\Stored Procedures\spProduct_Delete.sql" />
+    <Build Include="dbo\Stored Procedures\spProduct_Update.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="DAData.refactorlog" />

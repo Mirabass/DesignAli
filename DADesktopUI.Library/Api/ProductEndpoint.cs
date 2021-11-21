@@ -60,5 +60,20 @@ namespace DADesktopUI.Library.Api
                 }
             }
         }
+
+        public async Task UpdateProduct(ProductModel product)
+        {
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PutAsJsonAsync("/api/Product", product))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    // Say OK.
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
     }
 }

@@ -33,5 +33,10 @@ namespace DADataManager.Library.DataAccess
         {
             _sql.SaveData("dbo.spProduct_Delete", new {Id = Id}, "DADataConnection");
         }
+
+        public void Update(ProductModel product)
+        {
+            _sql.SaveData("dbo.spProduct_Update", product, "DADataConnection");
+        }
     }
 }

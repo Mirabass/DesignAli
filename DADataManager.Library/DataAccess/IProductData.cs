@@ -7,5 +7,7 @@ namespace DADataManager.Library.DataAccess
     {
         void AddProduct(ProductModel product);
         List<ProductModel> GetProducts();
+        void DeleteProduct(int productId);
+        void Update(ProductModel product);
     }
 }

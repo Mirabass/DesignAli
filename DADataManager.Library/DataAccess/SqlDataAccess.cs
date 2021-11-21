@@ -7,16 +7,34 @@ using System.Text;
 using Dapper;
 using System.Linq;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace DADataManager.Library.DataAccess
 {
-    public class SqlDataAccess : ISqlDataAccess
+    public class SqlDataAccess : IDisposable, ISqlDataAccess
     {
         private readonly IConfiguration _config;
-
-        public SqlDataAccess(IConfiguration config)
+        private ILogger<SqlDataAccess> _logger;
+        private bool isClosed;
+        public SqlDataAccess(IConfiguration config, ILogger<SqlDataAccess> logger)
         {
             _config = config;
+            _logger = logger;
+        }
+
+        public void Dispose()
+        {
+            if (isClosed == false)
+            {
+                try
+                {
+
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "");
+                }
+            }
         }
 
         public string GetConnectionString(string name)

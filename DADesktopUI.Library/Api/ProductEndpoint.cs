@@ -15,6 +15,22 @@ namespace DADesktopUI.Library.Api
         {
             _apiHelper = apiHelper;
         }
+
+        public async Task DeleteProduct(ProductModel product)
+        {
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.DeleteAsync($"/api/Product?id={product.Id}"))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    // Say OK.
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
         public async Task<List<ProductModel>> GetAll()
         {
             using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/Product"))
@@ -33,6 +49,21 @@ namespace DADesktopUI.Library.Api
         public async Task PostProduct(ProductModel product)
         {
             using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsJsonAsync("/api/Product", product))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    // Say OK.
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        public async Task UpdateProduct(ProductModel product)
+        {
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PutAsJsonAsync("/api/Product", product))
             {
                 if (response.IsSuccessStatusCode)
                 {

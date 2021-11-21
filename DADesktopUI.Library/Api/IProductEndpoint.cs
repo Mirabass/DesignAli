@@ -8,5 +8,7 @@ namespace DADesktopUI.Library.Api
     {
         Task<List<ProductModel>> GetAll();
         Task PostProduct(ProductModel product);
+        Task DeleteProduct(ProductModel product);
+        Task UpdateProduct(ProductModel selectedProduct);
     }
 }

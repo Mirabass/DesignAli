@@ -58,7 +58,7 @@ namespace DesignAliAPI
                     jwtBearerOptions.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("assGD46G6asf46sf8DS9h88sd8g45")),
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration.GetValue<string>("Secrets:SecurityKey"))),
                         ValidateIssuer = false,
                         ValidateAudience = false,
                         ValidateLifetime = true,

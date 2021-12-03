@@ -62,15 +62,22 @@
     <Folder Include="dbo\Views" />
     <Folder Include="dbo\Stored Procedures" />
     <Folder Include="PublishedLocations" />
+    <Folder Include="dbo\Tables\Product" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\User.sql" />
-    <Build Include="dbo\Tables\Product.sql" />
     <Build Include="dbo\Stored Procedures\spUserLookup.sql" />
     <Build Include="dbo\Stored Procedures\spProduct_GetAll.sql" />
     <Build Include="dbo\Stored Procedures\spProduct_Insert.sql" />
     <Build Include="dbo\Stored Procedures\spProduct_Delete.sql" />
     <Build Include="dbo\Stored Procedures\spProduct_Update.sql" />
+    <Build Include="dbo\Tables\Product\Product.sql" />
+    <Build Include="dbo\Tables\Product\ProductDivision.sql" />
+    <Build Include="dbo\Tables\Product\ProductKind.sql" />
+    <Build Include="dbo\Tables\Product\ProductMaterial.sql" />
+    <Build Include="dbo\Tables\Product\ProductColorDesign.sql" />
+    <Build Include="dbo\Tables\Product\ProductStrap.sql" />
+    <Build Include="dbo\Stored Procedures\spProductDivision_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="DAData.refactorlog" />

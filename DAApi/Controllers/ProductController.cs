@@ -1,5 +1,5 @@
 ﻿using DADataManager.Library.DataAccess;
-using DADataManager.Library.Models;
+using DADataManager.Library.Models.Product;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;

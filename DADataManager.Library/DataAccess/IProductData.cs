@@ -1,4 +1,4 @@
-﻿using DADataManager.Library.Models;
+﻿using DADataManager.Library.Models.Product;
 using System.Collections.Generic;
 
 namespace DADataManager.Library.DataAccess
@@ -9,5 +9,6 @@ namespace DADataManager.Library.DataAccess
         List<ProductModel> GetProducts();
         void DeleteProduct(int productId);
         void Update(ProductModel product);
+        List<ProductDivisionModel> GetProductDivisions();
     }
 }

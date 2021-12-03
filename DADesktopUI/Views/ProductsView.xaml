@@ -7,39 +7,133 @@
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:local="clr-namespace:DADesktopUI.Views"
              mc:Ignorable="d" Background="White" FontSize="12"
-             d:DesignHeight="425" d:DesignWidth="800">
+             d:DesignHeight="425" d:DesignWidth="1600">
+    <UserControl.Resources>
+        <Style TargetType="{x:Type Border}">
+            <Setter Property="Background" Value="WhiteSmoke" />
+            <Setter Property="TextBlock.FontSize" Value="12" />
+            <Setter Property="TextBlock.FontWeight" Value="DemiBold" />
+            <Setter Property="BorderBrush" Value="Gray" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+        </Style>
+    </UserControl.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="auto" />
         </Grid.ColumnDefinitions>
-        <DataGrid x:Name="Products" SelectedItem="{Binding Path=SelectedProduct}"
-                  Grid.Row="0" Grid.Column="0" cal:Message.Attach="[Event CellEditEnding]=[Action OnCellEdit()]"
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="{Binding ElementName=Division, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=Designation, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=EAN, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=Name, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=Type, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=Design, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=Quantity, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=Orientation, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=MainPartRAL, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=MainPartColorName, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=MainPartPattern, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=PocketRAL, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=PocketColorName, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=PocketPattern, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=StrapType, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=StrapMaterial, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=StrapLength, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=StrapWidth, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=StrapRAL, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=StrapColorName, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=StrapPattern, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=StrapAttachment, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=Motive, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=Accessories, Path=ActualWidth}" />
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0" Grid.ColumnSpan="6">
+                    <TextBlock Text="Product" TextAlignment="Center" Background="LightYellow" />
+                </Border>
+                <Border Grid.Column="6" Grid.ColumnSpan="8">
+                    <TextBlock Text="Color design" TextAlignment="Center" Background="LightSteelBlue"/>
+                </Border>
+                <Border Grid.Column="14" Grid.ColumnSpan="8">
+                    <TextBlock Text="Strip / Handles" TextAlignment="Center" Background="LightSeaGreen"/>
+                </Border>
+                <Border Grid.Column="22" Grid.ColumnSpan="1">
+                    <TextBlock Text="Motive" TextAlignment="Center" />
+                </Border>
+                <Border Grid.Column="23" Grid.ColumnSpan="1">
+                    <TextBlock Text="Accessories" TextAlignment="Center" />
+                </Border>
+            </Grid>
+            <DataGrid x:Name="Products" SelectedItem="{Binding Path=SelectedProduct}"
+                  Grid.Row="1" cal:Message.Attach="[Event CellEditEnding]=[Action OnCellEdit()]"
                  MinHeight="100" MinWidth="200"
                   CanUserAddRows="False" AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn x:Name="Designation" Binding="{Binding Path=Designation, UpdateSourceTrigger=PropertyChanged}" Header="Designation"/>
-                <DataGridTextColumn x:Name="EAN" Binding="{Binding Path=EAN, UpdateSourceTrigger=PropertyChanged}" Header="EAN"/>
-                <DataGridTextColumn x:Name="Name" Binding="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}" Header="Name"/>
-                <DataGridTextColumn x:Name="Type" Binding="{Binding Path=Type, UpdateSourceTrigger=PropertyChanged}" Header="Type"/>
-            </DataGrid.Columns>
-        </DataGrid>
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="Division" Binding="{Binding Path=ProductDivision.Number, UpdateSourceTrigger=PropertyChanged}" Header="Division"/>
+                    <DataGridTextColumn x:Name="Designation" Binding="{Binding Path=Designation, UpdateSourceTrigger=PropertyChanged}" Header="Designation"/>
+                    <DataGridTextColumn x:Name="EAN" Binding="{Binding Path=EAN, UpdateSourceTrigger=PropertyChanged}" Header="EAN"/>
+                    <DataGridTextColumn x:Name="Name" Binding="{Binding Path=ProductDivision.Name, UpdateSourceTrigger=PropertyChanged}" Header="Name"/>
+                    <DataGridTextColumn x:Name="Type" Binding="{Binding Path=ProductDivision.ProductType, UpdateSourceTrigger=PropertyChanged}" Header="Type"/>
+                    <DataGridTextColumn x:Name="Design" Binding="{Binding Path=Design, UpdateSourceTrigger=PropertyChanged}" Header="Design"/>
+                    <DataGridTextColumn x:Name="Quantity" Binding="{Binding Path=ProductColorDesign.Quantity, UpdateSourceTrigger=PropertyChanged}" Header="Quantity"/>
+                    <DataGridTextColumn x:Name="Orientation" Binding="{Binding Path=ProductColorDesign.Orientation, UpdateSourceTrigger=PropertyChanged}" Header="Orientation"/>
+                    <DataGridTextColumn x:Name="MainPartRAL" Binding="{Binding Path=ProductColorDesign.MainPartRAL, UpdateSourceTrigger=PropertyChanged}" Header="RAL"/>
+                    <DataGridTextColumn x:Name="MainPartColorName" Binding="{Binding Path=ProductColorDesign.MainPartColorName, UpdateSourceTrigger=PropertyChanged}" Header="Main part color"/>
+                    <DataGridTextColumn x:Name="MainPartPattern" Header="Pattern"/>
+                    <DataGridTextColumn x:Name="PocketRAL" Binding="{Binding Path=ProductColorDesign.PocketRAL, UpdateSourceTrigger=PropertyChanged}" Header="RAL"/>
+                    <DataGridTextColumn x:Name="PocketColorName" Binding="{Binding Path=ProductColorDesign.PocketColorName, UpdateSourceTrigger=PropertyChanged}" Header="Pocket color"/>
+                    <DataGridTextColumn x:Name="PocketPattern" Header="Pattern"/>
+                    <DataGridTextColumn x:Name="StrapType" Binding="{Binding Path=ProductStrap.Type, UpdateSourceTrigger=PropertyChanged}" Header="Type"/>
+                    <DataGridTextColumn x:Name="StrapMaterial" Binding="{Binding Path=ProductStrap.Material, UpdateSourceTrigger=PropertyChanged}" Header="Material"/>
+                    <DataGridTextColumn x:Name="StrapLength" Binding="{Binding Path=ProductStrap.Length, UpdateSourceTrigger=PropertyChanged}" Header="Length"/>
+                    <DataGridTextColumn x:Name="StrapWidth" Binding="{Binding Path=ProductStrap.Width, UpdateSourceTrigger=PropertyChanged}" Header="Width"/>
+                    <DataGridTextColumn x:Name="StrapRAL" Binding="{Binding Path=ProductStrap.RAL, UpdateSourceTrigger=PropertyChanged}" Header="RAL"/>
+                    <DataGridTextColumn x:Name="StrapColorName" Binding="{Binding Path=ProductStrap.ColorName, UpdateSourceTrigger=PropertyChanged}" Header="ColorName"/>
+                    <DataGridTextColumn x:Name="StrapPattern" Header="Pattern"/>
+                    <DataGridTextColumn x:Name="StrapAttachment" Binding="{Binding Path=ProductStrap.Attachment, UpdateSourceTrigger=PropertyChanged}" Header="Attachment"/>
+                    <DataGridTextColumn x:Name="Motive" Binding="{Binding Path=Motive, UpdateSourceTrigger=PropertyChanged}" Header="Motive"/>
+                    <DataGridTextColumn x:Name="Accessories" Binding="{Binding Path=Accessories, UpdateSourceTrigger=PropertyChanged}" Header="Accessories"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
         <StackPanel Orientation="Horizontal" Grid.Column="1" Background="SeaGreen">
             <Button x:Name="Expander" Content="&lt;" Width="10" Click="Button_Click" HorizontalAlignment="Right" />
             <StackPanel Grid.Column="1" x:Name="Menu" Background="SeaGreen"
                     Orientation="Vertical" Width="200" Margin="2">
                 <TextBlock TextWrapping="Wrap" Foreground="White" Margin="0 0 0 10" FontWeight="Bold">Add a new product by copying an existing one:</TextBlock>
-                <TextBlock Foreground="White">Designation</TextBlock>
-                <TextBox x:Name="ProductDesignation" Margin="4 0 4 0"/>
+                <TextBlock Foreground="White">Product Division</TextBlock>
+                <ComboBox x:Name="ProductDivisions" SelectedItem="{Binding Path=SelectedProductDivision, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                          Margin="4 0 4 0">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Number}" Margin="2 0 2 0"/>
+                                    <TextBlock Text="{Binding Name}" Margin="0 0 2 0"/>
+                                    <TextBlock Text="{Binding ProductKind.Number}" Margin="2 0 2 0" />
+                                    <TextBlock Text="{Binding ProductKind.Name}" Margin="0 0 2 0" />
+                                    <TextBlock Text="{Binding ProductMaterial.Number}" Margin="2 0 2 0" />
+                                    <TextBlock Text="{Binding ProductMaterial.Name}" Margin="0 0 2 0" />
+                                </StackPanel>
+                                <TextBlock Text="{Binding ProductType}" Margin="2 0 2 0" />
+                                <TextBlock Text="{Binding Comment}" Margin="2 0 2 0" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
                 <TextBlock Foreground="White">Product EAN</TextBlock>
-                <TextBox x:Name="ProductEAN" Margin="4 0 4 0"/>
-                <TextBlock Foreground="White">Product name</TextBlock>
-                <TextBox x:Name="ProductName" Margin="4 0 4 0"/>
-                <TextBlock Foreground="White">Product Type</TextBlock>
-                <TextBox x:Name="ProductType" Margin="4 0 4 0"/>
+                <TextBox x:Name="NewEAN" Margin="4 0 4 0"/>
+                <TextBlock Foreground="White">New Design:</TextBlock>
+                <TextBox x:Name="NewDesign" Margin="4 0 4 4"/>
+                <TextBlock Foreground="White">New designation:</TextBlock>
+                <TextBlock x:Name="NewDesignation" Foreground="White" FontWeight="Bold" Margin="4 0 4 0"/>
                 <Button x:Name="CopyProduct" Content="Copy product" Margin="0 10 0 0" HorizontalAlignment="Center" Padding="3"/>
                 <Border BorderBrush="Gray" BorderThickness="2" Margin="0 10 0 0"/>
                 <Button x:Name="EditBillOfMaterials" Margin="0 10 0 0" HorizontalAlignment="Center" Padding="3" MaxWidth="150">

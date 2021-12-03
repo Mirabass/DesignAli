@@ -21,4 +21,39 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="Designation" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="bfcdcbaf-924a-4c25-a752-0b2abf764ff2" ChangeDateTime="11/24/2021 15:49:03">
+    <Property Name="ElementName" Value="[dbo].[ProductKind].[Name]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ProductKind]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Value" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b061d5df-7739-42cd-bceb-319dd9e0c91e" ChangeDateTime="11/24/2021 15:49:15">
+    <Property Name="ElementName" Value="[dbo].[Product].[Name]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Product]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Value" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2b28cc48-b95a-4479-a493-8b7ea9ab3114" ChangeDateTime="11/24/2021 15:50:21">
+    <Property Name="ElementName" Value="[dbo].[Product].[Value]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Product]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Name" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="a6204931-271d-49d8-9074-18f30b35c889" ChangeDateTime="11/26/2021 13:30:35">
+    <Property Name="ElementName" Value="[dbo].[ProductColorDesign].[RAL]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ProductColorDesign]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="MainPartRAL" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="c21d4421-d1f7-466a-a9f7-530492e7a1cf" ChangeDateTime="11/26/2021 13:30:41">
+    <Property Name="ElementName" Value="[dbo].[ProductColorDesign].[MainPartColor]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ProductColorDesign]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="MainPartColorName" />
+  </Operation>
 </Operations>

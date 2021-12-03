@@ -1,10 +1,11 @@
-﻿using DADesktopUI.Library.Models;
+﻿using DADesktopUI.Library.Models.Product;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net.Http.Json;
 
 namespace DADesktopUI.Library.Api
 {
@@ -33,6 +34,8 @@ namespace DADesktopUI.Library.Api
 
         public async Task<List<ProductModel>> GetAll()
         {
+            //var products = await _apiHelper.ApiClient.GetFromJsonAsync<List<ProductModel>>("/api/Product");
+            //return products;
             using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/Product"))
             {
                 if (response.IsSuccessStatusCode)
@@ -46,6 +49,23 @@ namespace DADesktopUI.Library.Api
                 }
             }
         }
+
+        public async Task<List<ProductDivisionModel>> GetDivisions()
+        {
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/ProductDivision"))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsAsync<List<ProductDivisionModel>>();
+                    return result;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
         public async Task PostProduct(ProductModel product)
         {
             using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsJsonAsync("/api/Product", product))

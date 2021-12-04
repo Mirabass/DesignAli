@@ -231,7 +231,7 @@ namespace DADesktopUI.ViewModels
         private bool ExistNewDesignation()
         {
             // TODO: make sure that proposed designation does not already exist
-            return true;
+            return false;
         }
 
         public async Task CopyProduct()

@@ -114,7 +114,7 @@ namespace DADesktopUI.ViewModels
             get { return _selectedProductDivision; }
             set
             {
-                if (ProductDivisions.Select(x => x.Id).Contains(value.Id))
+                if (value != null && ProductDivisions.Select(x => x.Id).Contains(value.Id))
                 {
                     _selectedProductDivision = ProductDivisions.Where(x => x.Id == value.Id).FirstOrDefault();
                     RefreshDesignation();
@@ -123,6 +123,7 @@ namespace DADesktopUI.ViewModels
                 }
                 else
                 {
+                    _selectedProductDivision = null;
                     //This error would be unhandled, so just continue.
                     //throw new Exception("Product division can not be set because it is not in collection of all product divisions.");
                 }
@@ -179,6 +180,11 @@ namespace DADesktopUI.ViewModels
         }
         private void RefreshDesignation()
         {
+            if (_selectedProductDivision == null)
+            {
+                NewDesignation = null;
+                return;
+            }
             string newDivisionLZ = CustomOperations.LeadingZeros(_selectedProductDivision.Number, 3);
             string kindLZ = CustomOperations.LeadingZeros(_selectedProductDivision.ProductKind.Number, 2);
             string materialLZ = CustomOperations.LeadingZeros(_selectedProductDivision.ProductMaterial.Number, 2);

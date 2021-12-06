@@ -129,9 +129,9 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
                 <TextBlock Foreground="White">Product EAN</TextBlock>
-                <TextBox x:Name="NewEAN" Margin="4 0 4 0"/>
+                <TextBox x:Name="NewEAN" MaxLength="13" Margin="4 0 4 0" />
                 <TextBlock Foreground="White">New Design:</TextBlock>
-                <TextBox x:Name="NewDesign" Margin="4 0 4 4"/>
+                <TextBox x:Name="NewDesign" MaxLength="4" Margin="4 0 4 4"/>
                 <TextBlock Foreground="White">New designation:</TextBlock>
                 <TextBlock x:Name="NewDesignation" Foreground="White" FontWeight="Bold" Margin="4 0 4 0"/>
                 <Button x:Name="CopyProduct" Content="Copy product" Margin="0 10 0 0" HorizontalAlignment="Center" Padding="3"/>

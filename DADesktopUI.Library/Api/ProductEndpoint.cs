@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http.Json;
+using System.Web;
 
 namespace DADesktopUI.Library.Api
 {
@@ -50,6 +51,27 @@ namespace DADesktopUI.Library.Api
             }
         }
 
+        public async Task<List<ProductModel>> GetByDesignation(string designation)
+        {
+            string designationEncoded = HttpUtility.UrlEncode(designation,Encoding.UTF8);
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/Product/"+ designationEncoded))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsAsync<List<ProductModel>>();
+                    return result;
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return new List<ProductModel>();
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
         public async Task<List<ProductDivisionModel>> GetDivisions()
         {
             using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/ProductDivision"))
@@ -66,13 +88,14 @@ namespace DADesktopUI.Library.Api
             }
         }
 
-        public async Task PostProduct(ProductModel product)
+        public async Task<int> PostProduct(ProductModel product)
         {
             using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsJsonAsync("/api/Product", product))
             {
                 if (response.IsSuccessStatusCode)
                 {
-                    // Say OK.
+                    int newId = await response.Content.ReadAsAsync<int>();
+                    return newId;
                 }
                 else
                 {

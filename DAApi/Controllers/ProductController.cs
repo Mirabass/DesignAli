@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace DesignAliAPI.Controllers
 {
@@ -26,10 +27,17 @@ namespace DesignAliAPI.Controllers
         {
             return _productData.GetProducts();
         }
-        [HttpPost]
-        public void Post(ProductModel product)
+        [HttpGet("{designationEncoded}")]
+        public List<ProductModel> Get(string designationEncoded)
         {
-            _productData.AddProduct(product);
+            string designationDecoded = HttpUtility.UrlDecode(designationEncoded,System.Text.Encoding.UTF8);
+            return _productData.GetProducts(designationDecoded);
+        }
+        [HttpPost]
+        public int Post(ProductModel product)
+        {
+            int newId = _productData.AddProduct(product);
+            return newId;
         }
         [HttpPut]
         public void Put(ProductModel product)

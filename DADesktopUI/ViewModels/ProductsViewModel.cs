@@ -180,8 +180,8 @@ namespace DADesktopUI.ViewModels
         private void RefreshDesignation()
         {
             string newDivisionLZ = CustomOperations.LeadingZeros(_selectedProductDivision.Number, 3);
-            string kindLZ = CustomOperations.LeadingZeros(_selectedProductDivision.ProductKind.Number, 3);
-            string materialLZ = CustomOperations.LeadingZeros(_selectedProductDivision.ProductMaterial.Number, 3);
+            string kindLZ = CustomOperations.LeadingZeros(_selectedProductDivision.ProductKind.Number, 2);
+            string materialLZ = CustomOperations.LeadingZeros(_selectedProductDivision.ProductMaterial.Number, 2);
             string newDesignLZ = CustomOperations.LeadingZeros(_newDesign, 4);
             NewDesignation = $"{newDivisionLZ}-{kindLZ}-" +
                 $"{materialLZ}/{newDesignLZ}";
@@ -221,17 +221,16 @@ namespace DADesktopUI.ViewModels
                 bool output = _selectedProduct is not null &&
                     NewDesign != 0 &&
                     !string.IsNullOrEmpty(NewEAN.ToString()) &&
-                    SelectedProductDivision is not null &&
-                    !ExistNewDesignation();
+                    SelectedProductDivision is not null;
 
                 return output;
             }
         }
 
-        private bool ExistNewDesignation()
+        private async Task<bool> ExistNewDesignation()
         {
-            // TODO: make sure that proposed designation does not already exist
-            return false;
+            var productList = await _productEndpoint.GetByDesignation(NewDesignation);
+            return productList.Count > 0;
         }
 
         public async Task CopyProduct()
@@ -239,11 +238,14 @@ namespace DADesktopUI.ViewModels
 
             try
             {
+                await CopyProductValidation();
                 ProductModel newProduct = _selectedProduct;
                 newProduct.Designation = NewDesignation;
                 newProduct.ProductDivision = SelectedProductDivision;
                 newProduct.EAN = NewEAN;
-                await _productEndpoint.PostProduct(newProduct);
+                newProduct.Design = NewDesign;
+                int newId = await _productEndpoint.PostProduct(newProduct);
+                newProduct.Id = newId;
                 Products.Add(newProduct);
                 EraseCopyProductControls();
             }
@@ -258,6 +260,14 @@ namespace DADesktopUI.ViewModels
                     _status.UpdateMessage("System Error", ex.Message, ex.StackTrace);
                 }
                 await _status.ShowDialogAsync();
+            }
+        }
+
+        private async Task CopyProductValidation()
+        {
+            if (await ExistNewDesignation())
+            {
+                throw new TaskCanceledException("Product with this designation already exists.");
             }
         }
 

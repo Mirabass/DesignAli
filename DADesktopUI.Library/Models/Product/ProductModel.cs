@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DADesktopUI.Library.Models.Product
 {
-    public class ProductModel
+    public class ProductModel : IPrototype<ProductModel>
     {
         /// <summary>
         /// The unique identifier for product model
@@ -18,5 +18,14 @@ namespace DADesktopUI.Library.Models.Product
         public int Design { get; set; }
         public string Motive { get; set; }
         public string Accessories { get; set; }
+
+        public ProductModel CreateDeepCopy()
+        {
+            var product = (ProductModel)MemberwiseClone();
+            product.ProductDivision = ProductDivision.CreateDeepCopy();
+            product.ProductColorDesign = ProductColorDesign.CreateDeepCopy();
+            product.ProductStrap = ProductStrap.CreateDeepCopy();
+            return product;
+        }
     }
 }

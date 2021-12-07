@@ -10,7 +10,7 @@ namespace DADataManager.Library.DataAccess
         /// </summary>
         /// <param name="product"></param>
         /// <returns>id of new product</returns>
-        int AddProduct(ProductModel product);
+        (int,int,int) AddProduct(ProductModel product);
         List<ProductModel> GetProducts();
         void DeleteProduct(int productId);
         void Update(ProductModel product);

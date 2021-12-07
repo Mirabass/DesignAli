@@ -241,17 +241,18 @@ namespace DADesktopUI.ViewModels
 
         public async Task CopyProduct()
         {
-
             try
             {
                 await CopyProductValidation();
-                ProductModel newProduct = _selectedProduct;
+                ProductModel newProduct = _selectedProduct.CreateDeepCopy();
                 newProduct.Designation = NewDesignation;
                 newProduct.ProductDivision = SelectedProductDivision;
                 newProduct.EAN = NewEAN;
                 newProduct.Design = NewDesign;
-                int newId = await _productEndpoint.PostProduct(newProduct);
-                newProduct.Id = newId;
+                (int newProductId, int newColorDesignId, int newStrapId) = await _productEndpoint.PostProduct(newProduct);
+                newProduct.Id = newProductId;
+                newProduct.ProductColorDesign.Id = newColorDesignId;
+                newProduct.ProductStrap.Id = newStrapId;
                 Products.Add(newProduct);
                 EraseCopyProductControls();
             }

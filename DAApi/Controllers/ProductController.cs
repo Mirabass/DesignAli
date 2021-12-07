@@ -34,10 +34,10 @@ namespace DesignAliAPI.Controllers
             return _productData.GetProducts(designationDecoded);
         }
         [HttpPost]
-        public int Post(ProductModel product)
+        public IActionResult Post(ProductModel product)
         {
-            int newId = _productData.AddProduct(product);
-            return newId;
+            (int,int,int) ids = _productData.AddProduct(product);
+            return Json(new { NewProductId = ids.Item1, NewColorDesignId = ids.Item2, NewStrapId = ids.Item3 });
         }
         [HttpPut]
         public void Put(ProductModel product)

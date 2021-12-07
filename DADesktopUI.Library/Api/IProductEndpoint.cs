@@ -7,7 +7,7 @@ namespace DADesktopUI.Library.Api
     public interface IProductEndpoint
     {
         Task<List<ProductModel>> GetAll();
-        Task<int> PostProduct(ProductModel product);
+        Task<(int,int,int)> PostProduct(ProductModel product);
         Task DeleteProduct(ProductModel product);
         Task UpdateProduct(ProductModel selectedProduct);
         Task<List<ProductDivisionModel>> GetDivisions();

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http.Json;
 using System.Web;
+using Newtonsoft.Json;
 
 namespace DADesktopUI.Library.Api
 {
@@ -87,15 +88,18 @@ namespace DADesktopUI.Library.Api
                 }
             }
         }
-
-        public async Task<int> PostProduct(ProductModel product)
+        private record PostProductResponseBody(int NewProductId, int NewColorDesignId, int NewStrapId);
+        public async Task<(int,int,int)> PostProduct(ProductModel product)
         {
             using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsJsonAsync("/api/Product", product))
             {
                 if (response.IsSuccessStatusCode)
                 {
-                    int newId = await response.Content.ReadAsAsync<int>();
-                    return newId;
+                    response.EnsureSuccessStatusCode();
+                    string responseBody = await response.Content.ReadAsStringAsync();
+
+                    var (NewProductId, NewColorDesignId, NewStrapId) = JsonConvert.DeserializeObject<PostProductResponseBody>(responseBody);
+                    return (NewProductId, NewColorDesignId, NewStrapId);
                 }
                 else
                 {

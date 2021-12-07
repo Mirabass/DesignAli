@@ -1,6 +1,6 @@
 ﻿namespace DADesktopUI.Library.Models.Product
 {
-    public class ProductStrapModel
+    public class ProductStrapModel : IPrototype<ProductStrapModel>
     {
         public int Id { get; set; }
         public string Type { get; set; }
@@ -11,5 +11,10 @@
         public int RAL { get; set; }
         public string ColorName { get; set; }
         public string Attachment { get; set; }
+
+        public ProductStrapModel CreateDeepCopy()
+        {
+            return (ProductStrapModel)MemberwiseClone();
+        }
     }
 }

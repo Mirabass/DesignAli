@@ -1,6 +1,6 @@
 ﻿namespace DADesktopUI.Library.Models.Product
 {
-    public class ProductColorDesignModel
+    public class ProductColorDesignModel : IPrototype<ProductColorDesignModel>
     {
         public int Id { get; set; }
         public int Quantity { get; set; }
@@ -9,5 +9,10 @@
         public string MainPartColorName { get; set; }
         public int PocketRAL { get; set; }
         public string PocketColorName { get; set; }
+
+        public ProductColorDesignModel CreateDeepCopy()
+        {
+            return (ProductColorDesignModel)MemberwiseClone();
+        }
     }
 }

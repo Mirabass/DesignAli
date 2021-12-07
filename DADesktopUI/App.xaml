@@ -11,6 +11,9 @@
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <Style TargetType="TextBox">
+                <EventSetter Event="GotKeyboardFocus" Handler="TextBox_GotKeyboardFocus"/>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

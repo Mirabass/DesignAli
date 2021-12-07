@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[ProductMaterial]
+(
+	[Id] INT NOT NULL IDENTITY(0,1) PRIMARY KEY,
+	[Number] NUMERIC(2,0) NOT NULL,
+	[Name] NVARCHAR(50) NOT NULL
+)

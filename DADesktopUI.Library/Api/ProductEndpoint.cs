@@ -1,10 +1,13 @@
-﻿using DADesktopUI.Library.Models;
+﻿using DADesktopUI.Library.Models.Product;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net.Http.Json;
+using System.Web;
+using Newtonsoft.Json;
 
 namespace DADesktopUI.Library.Api
 {
@@ -33,6 +36,8 @@ namespace DADesktopUI.Library.Api
 
         public async Task<List<ProductModel>> GetAll()
         {
+            //var products = await _apiHelper.ApiClient.GetFromJsonAsync<List<ProductModel>>("/api/Product");
+            //return products;
             using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/Product"))
             {
                 if (response.IsSuccessStatusCode)
@@ -46,13 +51,55 @@ namespace DADesktopUI.Library.Api
                 }
             }
         }
-        public async Task PostProduct(ProductModel product)
+
+        public async Task<List<ProductModel>> GetByDesignation(string designation)
+        {
+            string designationEncoded = HttpUtility.UrlEncode(designation,Encoding.UTF8);
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/Product/"+ designationEncoded))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsAsync<List<ProductModel>>();
+                    return result;
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return new List<ProductModel>();
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+
+        public async Task<List<ProductDivisionModel>> GetDivisions()
+        {
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/ProductDivision"))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var result = await response.Content.ReadAsAsync<List<ProductDivisionModel>>();
+                    return result;
+                }
+                else
+                {
+                    throw new Exception(response.ReasonPhrase);
+                }
+            }
+        }
+        private record PostProductResponseBody(int NewProductId, int NewColorDesignId, int NewStrapId);
+        public async Task<(int,int,int)> PostProduct(ProductModel product)
         {
             using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsJsonAsync("/api/Product", product))
             {
                 if (response.IsSuccessStatusCode)
                 {
-                    // Say OK.
+                    response.EnsureSuccessStatusCode();
+                    string responseBody = await response.Content.ReadAsStringAsync();
+
+                    var (NewProductId, NewColorDesignId, NewStrapId) = JsonConvert.DeserializeObject<PostProductResponseBody>(responseBody);
+                    return (NewProductId, NewColorDesignId, NewStrapId);
                 }
                 else
                 {

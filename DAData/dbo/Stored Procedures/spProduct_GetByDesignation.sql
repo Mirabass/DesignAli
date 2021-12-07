@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[spProduct_GetAll]
+﻿CREATE PROCEDURE [dbo].[spProduct_GetByDesignation]
+	@Designation nvarchar(50)
 AS
 begin
 	set nocount on;
@@ -15,4 +16,5 @@ begin
 			on d.ProductKindId = k.Id
 		inner join dbo.ProductMaterial m
 			on d.ProductMaterialId = m.Id
+	where Designation = @Designation
 end

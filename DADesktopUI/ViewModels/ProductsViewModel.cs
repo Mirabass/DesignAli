@@ -1,7 +1,8 @@
 ﻿using Caliburn.Micro;
 using DADesktopUI.EventModels;
+using DADesktopUI.Library;
 using DADesktopUI.Library.Api;
-using DADesktopUI.Library.Models;
+using DADesktopUI.Library.Models.Product;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,6 +19,7 @@ namespace DADesktopUI.ViewModels
     public class ProductsViewModel : Screen
     {
         private BindableCollection<ProductModel> _products;
+        private BindableCollection<ProductDivisionModel> _productDivisions;
         private IProductEndpoint _productEndpoint;
         private StatusInfoViewModel _status;
         private IEventAggregator _events;
@@ -34,6 +36,7 @@ namespace DADesktopUI.ViewModels
             try
             {
                 await LoadProducts();
+                await LoadProductDivisions();
                 //throw new NotImplementedException("Testing error...");
             }
             catch (Exception ex)
@@ -53,6 +56,7 @@ namespace DADesktopUI.ViewModels
             }
            
         }
+
         private async Task LoadProducts()
         {
             var productList = await _productEndpoint.GetAll();
@@ -67,6 +71,23 @@ namespace DADesktopUI.ViewModels
                 NotifyOfPropertyChange(() => Products);
             }
         }
+        private async Task LoadProductDivisions()
+        {
+            var productDivisionList = await _productEndpoint.GetDivisions();
+            ProductDivisions = new BindableCollection<ProductDivisionModel>(productDivisionList);
+        }
+
+        public BindableCollection<ProductDivisionModel> ProductDivisions
+        {
+            get { return _productDivisions; }
+            set
+            {
+                _productDivisions = value;
+                NotifyOfPropertyChange(() => ProductDivisions);
+            }
+        }
+
+
         private ProductModel _selectedProduct;
 
         public ProductModel SelectedProduct
@@ -77,13 +98,38 @@ namespace DADesktopUI.ViewModels
                 _selectedProduct = value;
                 if (_selectedProduct is not null)
                 {
-                    SetCopyProductControls();
+                    new Task(async () =>
+                    {
+                        await SetCopyProductControls();
+                    }).Start();
                 }
-                
                 NotifyOfPropertyChange(() => CanCopyProduct);
                 NotifyOfPropertyChange(() => CanDeleteProduct);
             }
         }
+        private ProductDivisionModel _selectedProductDivision;
+
+        public ProductDivisionModel SelectedProductDivision
+        {
+            get { return _selectedProductDivision; }
+            set
+            {
+                if (value != null && ProductDivisions.Select(x => x.Id).Contains(value.Id))
+                {
+                    _selectedProductDivision = ProductDivisions.Where(x => x.Id == value.Id).FirstOrDefault();
+                    RefreshDesignation();
+                    NotifyOfPropertyChange(() => SelectedProductDivision);
+                    NotifyOfPropertyChange(() => CanCopyProduct);
+                }
+                else
+                {
+                    _selectedProductDivision = null;
+                    //This error would be unhandled, so just continue.
+                    //throw new Exception("Product division can not be set because it is not in collection of all product divisions.");
+                }
+            }
+        }
+
         public async Task OnCellEdit()
         {
             await UpdateSelectedProduct();
@@ -108,91 +154,105 @@ namespace DADesktopUI.ViewModels
                 await _status.ShowDialogAsync();
             }
         }
+        private int _newDesign;
+
+        public int NewDesign
+        {
+            get { return _newDesign; }
+            set
+            {
+                _newDesign = value;
+                RefreshDesignation();
+                NotifyOfPropertyChange(() => CanCopyProduct);
+            }
+        }
 
         private string _designation;
-        public string ProductDesignation
+        public string NewDesignation
         {
             get { return _designation; }
             set
             {
                 _designation = value;
-                NotifyOfPropertyChange(() => ProductDesignation);
+                NotifyOfPropertyChange(() => NewDesignation);
                 NotifyOfPropertyChange(() => CanCopyProduct);
             }
         }
+        private void RefreshDesignation()
+        {
+            if (_selectedProductDivision == null)
+            {
+                NewDesignation = null;
+                return;
+            }
+            string newDivisionLZ = CustomOperations.LeadingZeros(_selectedProductDivision.Number, 3);
+            string kindLZ = CustomOperations.LeadingZeros(_selectedProductDivision.ProductKind.Number, 2);
+            string materialLZ = CustomOperations.LeadingZeros(_selectedProductDivision.ProductMaterial.Number, 2);
+            string newDesignLZ = CustomOperations.LeadingZeros(_newDesign, 4);
+            NewDesignation = $"{newDivisionLZ}-{kindLZ}-" +
+                $"{materialLZ}/{newDesignLZ}";
+        }
         private long _ean;
 
-        public long ProductEAN
+        public long NewEAN
         {
             get { return _ean; }
             set
             {
                 _ean = value;
-                NotifyOfPropertyChange(() => ProductEAN);
+                RefreshDesignation();
+                NotifyOfPropertyChange(() => NewEAN);
                 NotifyOfPropertyChange(() => CanCopyProduct);
             }
         }
 
-        private string _productName;
+        private async Task SetCopyProductControls()
 
-        public string ProductName
         {
-            get { return _productName; }
-            set 
+            try
             {
-                _productName = value;
-                NotifyOfPropertyChange(() => ProductName);
-                NotifyOfPropertyChange(() => CanCopyProduct);
+                SelectedProductDivision = _selectedProduct.ProductDivision;
             }
-        }
-
-        private string _productType;
-
-        public string ProductType
-        {
-            get { return _productType; }
-            set 
-            { 
-                _productType = value;
-                NotifyOfPropertyChange(() => ProductType);
-                NotifyOfPropertyChange(() => CanCopyProduct);
+            catch (Exception ex)
+            {
+                _status.UpdateMessage("System Error", ex.Message, ex.StackTrace);
+                await _status.ShowDialogAsync();
             }
-        }
-
-
-        private void SetCopyProductControls()
-
-        {
-            ProductName = _selectedProduct.Name;
-            NotifyOfPropertyChange(() => ProductName);
-            ProductType = _selectedProduct.Type;
-            NotifyOfPropertyChange(() => ProductType);
+            
         }
         public bool CanCopyProduct
         {
             get
             {
                 bool output = _selectedProduct is not null &&
-                    !string.IsNullOrEmpty(ProductDesignation) &&
-                    !string.IsNullOrEmpty(ProductEAN.ToString()) &&
-                    !string.IsNullOrEmpty(ProductName) &&
-                    !string.IsNullOrEmpty(ProductType);
+                    NewDesign != 0 &&
+                    !string.IsNullOrEmpty(NewEAN.ToString()) &&
+                    SelectedProductDivision is not null;
 
                 return output;
             }
         }
 
+        private async Task<bool> ExistNewDesignation()
+        {
+            var productList = await _productEndpoint.GetByDesignation(NewDesignation);
+            return productList.Count > 0;
+        }
+
         public async Task CopyProduct()
         {
-
             try
             {
-                ProductModel newProduct = _selectedProduct;
-                newProduct.Designation = ProductDesignation;
-                newProduct.EAN = ProductEAN;
-                newProduct.Name = ProductName;
-                newProduct.Type = ProductType;
-                await _productEndpoint.PostProduct(newProduct);
+                await CopyProductValidation();
+                ProductModel newProduct = _selectedProduct.CreateDeepCopy();
+                newProduct.Designation = NewDesignation;
+                newProduct.ProductDivision = SelectedProductDivision;
+                newProduct.EAN = NewEAN;
+                newProduct.Design = NewDesign;
+                (int newProductId, int newColorDesignId, int newStrapId) = await _productEndpoint.PostProduct(newProduct);
+                newProduct.Id = newProductId;
+                newProduct.ProductColorDesign.Id = newColorDesignId;
+                newProduct.ProductStrap.Id = newStrapId;
                 Products.Add(newProduct);
                 EraseCopyProductControls();
             }
@@ -210,12 +270,19 @@ namespace DADesktopUI.ViewModels
             }
         }
 
+        private async Task CopyProductValidation()
+        {
+            if (await ExistNewDesignation())
+            {
+                throw new TaskCanceledException("Product with this designation already exists.");
+            }
+        }
+
         private void EraseCopyProductControls()
         {
-            ProductDesignation = "";
-            ProductName = "";
-            ProductEAN = 1111111111111;
-            ProductType = "";
+            NewDesignation = "";
+            SelectedProductDivision = null;
+            NewEAN = 1111111111111;
 
         }
 

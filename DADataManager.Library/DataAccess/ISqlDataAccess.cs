@@ -6,6 +6,6 @@ namespace DADataManager.Library.DataAccess
     {
         string GetConnectionString(string name);
         List<T> LoadData<T, U>(string storedProcedure, U parameters, string connectionStringName);
-        void SaveData<T>(string storedProcedure, T parameters, string connectionStringName);
+        object SaveData<T>(string storedProcedure, T parameters, string connectionStringName);
     }
 }

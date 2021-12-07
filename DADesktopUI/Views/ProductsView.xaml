@@ -76,30 +76,127 @@
                  MinHeight="100" MinWidth="200"
                   CanUserAddRows="False" AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn x:Name="Division" Binding="{Binding Path=ProductDivision.Number, UpdateSourceTrigger=PropertyChanged}" Header="Division" IsReadOnly="True"/>
-                    <DataGridTextColumn x:Name="Designation" Binding="{Binding Path=Designation, UpdateSourceTrigger=PropertyChanged}" Header="Designation"/>
-                    <DataGridTextColumn x:Name="EAN" Binding="{Binding Path=EAN, UpdateSourceTrigger=PropertyChanged}" Header="EAN"/>
+                    <DataGridTextColumn x:Name="Division" Binding="{Binding Path=ProductDivision.Number, UpdateSourceTrigger=PropertyChanged}"
+                                         Header="Division" IsReadOnly="True"/>
+                    <DataGridTextColumn x:Name="Designation" Binding="{Binding Path=Designation, UpdateSourceTrigger=PropertyChanged}" Header="Designation">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <Setter Property="MaxLength" Value="14" />
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="EAN" Binding="{Binding Path=EAN, UpdateSourceTrigger=PropertyChanged}" Header="EAN">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <Setter Property="MaxLength" Value="13" />
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
                     <DataGridTextColumn x:Name="Name" Binding="{Binding Path=ProductDivision.Name, UpdateSourceTrigger=PropertyChanged}" Header="Name" IsReadOnly="True"/>
                     <DataGridTextColumn x:Name="Type" Binding="{Binding Path=ProductDivision.ProductType, UpdateSourceTrigger=PropertyChanged}" Header="Type" IsReadOnly="True"/>
-                    <DataGridTextColumn x:Name="Design" Binding="{Binding Path=Design, UpdateSourceTrigger=PropertyChanged}" Header="Design"/>
-                    <DataGridTextColumn x:Name="Quantity" Binding="{Binding Path=ProductColorDesign.Quantity, UpdateSourceTrigger=PropertyChanged}" Header="Quantity"/>
-                    <DataGridTextColumn x:Name="Orientation" Binding="{Binding Path=ProductColorDesign.Orientation, UpdateSourceTrigger=PropertyChanged}" Header="Orientation"/>
-                    <DataGridTextColumn x:Name="MainPartRAL" Binding="{Binding Path=ProductColorDesign.MainPartRAL, UpdateSourceTrigger=PropertyChanged}" Header="RAL"/>
-                    <DataGridTextColumn x:Name="MainPartColorName" Binding="{Binding Path=ProductColorDesign.MainPartColorName, UpdateSourceTrigger=PropertyChanged}" Header="Main part color"/>
+                    <DataGridTextColumn x:Name="Design" Binding="{Binding Path=Design, UpdateSourceTrigger=PropertyChanged}" Header="Design">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <Setter Property="MaxLength" Value="4" />
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="Quantity" Binding="{Binding Path=ProductColorDesign.Quantity, UpdateSourceTrigger=PropertyChanged}" Header="Quantity">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <Setter Property="MaxLength" Value="2" />
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="Orientation" Binding="{Binding Path=ProductColorDesign.Orientation, UpdateSourceTrigger=PropertyChanged}" Header="Orientation">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <Setter Property="MaxLength" Value="256" />
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="MainPartRAL" Binding="{Binding Path=ProductColorDesign.MainPartRAL, UpdateSourceTrigger=PropertyChanged}" Header="RAL">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <Setter Property="MaxLength" Value="4" />
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="MainPartColorName" Binding="{Binding Path=ProductColorDesign.MainPartColorName, UpdateSourceTrigger=PropertyChanged}" Header="Main part color">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <Setter Property="MaxLength" Value="128" />
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
                     <DataGridTextColumn x:Name="MainPartPattern" Header="Pattern"/>
                     <DataGridTextColumn x:Name="PocketRAL" Binding="{Binding Path=ProductColorDesign.PocketRAL, UpdateSourceTrigger=PropertyChanged}" Header="RAL"/>
                     <DataGridTextColumn x:Name="PocketColorName" Binding="{Binding Path=ProductColorDesign.PocketColorName, UpdateSourceTrigger=PropertyChanged}" Header="Pocket color"/>
                     <DataGridTextColumn x:Name="PocketPattern" Header="Pattern"/>
-                    <DataGridTextColumn x:Name="StrapType" Binding="{Binding Path=ProductStrap.Type, UpdateSourceTrigger=PropertyChanged}" Header="Type"/>
-                    <DataGridTextColumn x:Name="StrapMaterial" Binding="{Binding Path=ProductStrap.Material, UpdateSourceTrigger=PropertyChanged}" Header="Material"/>
-                    <DataGridTextColumn x:Name="StrapLength" Binding="{Binding Path=ProductStrap.Length, UpdateSourceTrigger=PropertyChanged}" Header="Length"/>
-                    <DataGridTextColumn x:Name="StrapWidth" Binding="{Binding Path=ProductStrap.Width, UpdateSourceTrigger=PropertyChanged}" Header="Width"/>
-                    <DataGridTextColumn x:Name="StrapRAL" Binding="{Binding Path=ProductStrap.RAL, UpdateSourceTrigger=PropertyChanged}" Header="RAL"/>
-                    <DataGridTextColumn x:Name="StrapColorName" Binding="{Binding Path=ProductStrap.ColorName, UpdateSourceTrigger=PropertyChanged}" Header="ColorName"/>
+                    <DataGridTextColumn x:Name="StrapType" Binding="{Binding Path=ProductStrap.Type, UpdateSourceTrigger=PropertyChanged}" Header="Type">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <Setter Property="MaxLength" Value="256" />
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="StrapMaterial" Binding="{Binding Path=ProductStrap.Material, UpdateSourceTrigger=PropertyChanged}" Header="Material">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <Setter Property="MaxLength" Value="256" />
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="StrapLength" Binding="{Binding Path=ProductStrap.Length, UpdateSourceTrigger=PropertyChanged}" Header="Length">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <Setter Property="MaxLength" Value="6" />
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="StrapWidth" Binding="{Binding Path=ProductStrap.Width, UpdateSourceTrigger=PropertyChanged}" Header="Width">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <Setter Property="MaxLength" Value="6" />
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="StrapRAL" Binding="{Binding Path=ProductStrap.RAL, UpdateSourceTrigger=PropertyChanged}" Header="RAL">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <Setter Property="MaxLength" Value="4" />
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="StrapColorName" Binding="{Binding Path=ProductStrap.ColorName, UpdateSourceTrigger=PropertyChanged}" Header="ColorName">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <Setter Property="MaxLength" Value="128" />
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
                     <DataGridTextColumn x:Name="StrapPattern" Header="Pattern"/>
-                    <DataGridTextColumn x:Name="StrapAttachment" Binding="{Binding Path=ProductStrap.Attachment, UpdateSourceTrigger=PropertyChanged}" Header="Attachment"/>
-                    <DataGridTextColumn x:Name="Motive" Binding="{Binding Path=Motive, UpdateSourceTrigger=PropertyChanged}" Header="Motive"/>
-                    <DataGridTextColumn x:Name="Accessories" Binding="{Binding Path=Accessories, UpdateSourceTrigger=PropertyChanged}" Header="Accessories"/>
+                    <DataGridTextColumn x:Name="StrapAttachment" Binding="{Binding Path=ProductStrap.Attachment, UpdateSourceTrigger=PropertyChanged}" Header="Attachment">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <Setter Property="MaxLength" Value="128" />
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="Motive" Binding="{Binding Path=Motive, UpdateSourceTrigger=PropertyChanged}" Header="Motive">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <Setter Property="MaxLength" Value="2047" />
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="Accessories" Binding="{Binding Path=Accessories, UpdateSourceTrigger=PropertyChanged}" Header="Accessories">
+                        <DataGridTextColumn.EditingElementStyle>
+                            <Style TargetType="TextBox">
+                                <Setter Property="MaxLength" Value="256" />
+                            </Style>
+                        </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

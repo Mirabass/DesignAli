@@ -30,7 +30,7 @@
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="{Binding ElementName=Division, Path=ActualWidth}" />
+                    <ColumnDefinition Width="{Binding ElementName=Division, Path=ActualWidth}"/>
                     <ColumnDefinition Width="{Binding ElementName=Designation, Path=ActualWidth}" />
                     <ColumnDefinition Width="{Binding ElementName=EAN, Path=ActualWidth}" />
                     <ColumnDefinition Width="{Binding ElementName=Name, Path=ActualWidth}" />
@@ -76,11 +76,11 @@
                  MinHeight="100" MinWidth="200"
                   CanUserAddRows="False" AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn x:Name="Division" Binding="{Binding Path=ProductDivision.Number, UpdateSourceTrigger=PropertyChanged}" Header="Division"/>
+                    <DataGridTextColumn x:Name="Division" Binding="{Binding Path=ProductDivision.Number, UpdateSourceTrigger=PropertyChanged}" Header="Division" IsReadOnly="True"/>
                     <DataGridTextColumn x:Name="Designation" Binding="{Binding Path=Designation, UpdateSourceTrigger=PropertyChanged}" Header="Designation"/>
                     <DataGridTextColumn x:Name="EAN" Binding="{Binding Path=EAN, UpdateSourceTrigger=PropertyChanged}" Header="EAN"/>
-                    <DataGridTextColumn x:Name="Name" Binding="{Binding Path=ProductDivision.Name, UpdateSourceTrigger=PropertyChanged}" Header="Name"/>
-                    <DataGridTextColumn x:Name="Type" Binding="{Binding Path=ProductDivision.ProductType, UpdateSourceTrigger=PropertyChanged}" Header="Type"/>
+                    <DataGridTextColumn x:Name="Name" Binding="{Binding Path=ProductDivision.Name, UpdateSourceTrigger=PropertyChanged}" Header="Name" IsReadOnly="True"/>
+                    <DataGridTextColumn x:Name="Type" Binding="{Binding Path=ProductDivision.ProductType, UpdateSourceTrigger=PropertyChanged}" Header="Type" IsReadOnly="True"/>
                     <DataGridTextColumn x:Name="Design" Binding="{Binding Path=Design, UpdateSourceTrigger=PropertyChanged}" Header="Design"/>
                     <DataGridTextColumn x:Name="Quantity" Binding="{Binding Path=ProductColorDesign.Quantity, UpdateSourceTrigger=PropertyChanged}" Header="Quantity"/>
                     <DataGridTextColumn x:Name="Orientation" Binding="{Binding Path=ProductColorDesign.Orientation, UpdateSourceTrigger=PropertyChanged}" Header="Orientation"/>

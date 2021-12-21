@@ -1,6 +1,6 @@
 using System;
 
-namespace DesignAliAPI.Models
+namespace DAApi.Models
 {
     public class ErrorViewModel
     {

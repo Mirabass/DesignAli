@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace DesignAliAPI.Controllers
+namespace DAApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -30,13 +30,13 @@ namespace DesignAliAPI.Controllers
         [HttpGet("{designationEncoded}")]
         public List<ProductModel> Get(string designationEncoded)
         {
-            string designationDecoded = HttpUtility.UrlDecode(designationEncoded,System.Text.Encoding.UTF8);
+            string designationDecoded = HttpUtility.UrlDecode(designationEncoded, System.Text.Encoding.UTF8);
             return _productData.GetProducts(designationDecoded);
         }
         [HttpPost]
         public IActionResult Post(ProductModel product)
         {
-            (int,int,int) ids = _productData.AddProduct(product);
+            (int, int, int) ids = _productData.AddProduct(product);
             return Json(new { NewProductId = ids.Item1, NewColorDesignId = ids.Item2, NewStrapId = ids.Item3 });
         }
         [HttpPut]

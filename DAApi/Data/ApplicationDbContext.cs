@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DesignAliAPI.Data
+namespace DAApi.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {

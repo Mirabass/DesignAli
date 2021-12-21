@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DesignAliAPI.Controllers
+namespace DAApi.Controllers
 {
     public class HomeController : Controller
     {

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 
-namespace DAApi.Data.Migrations
+namespace DAWebERP1.Data.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {

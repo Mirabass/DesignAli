@@ -28,7 +28,9 @@ namespace DADataManager.Library.Models.Product
         [Required]
         [Column(TypeName = "numeric(4)")]
         public int Design { get; set; }
+        [Column(TypeName = "nvarchar(2048)")]
         public string Motive { get; set; }
+        [Column(TypeName = "nvarchar(256)")]
         public string Accessories { get; set; }
         [Required]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

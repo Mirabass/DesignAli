@@ -12,4 +12,37 @@
             Create new Product
         </div>
     </div>
+    <br />
+    @if (Model.Count() > 0)
+   {
+       <table class="table table-bordered table-striped" style="width:100%;text-align:center">
+           <thead>
+               <tr>
+                   <th colspan="4">
+                       Výrobek
+                   </th>
+               </tr>
+               <tr>
+                   <th>Číslo výrobku</th>
+                   <th>EAN</th>
+                   <th>Název výrobku</th>
+                   <th>Typ výrobku</th>
+               </tr>
+           </thead>
+
+           <tbody>
+               @foreach (var product in Model)
+               {
+                   <tr>
+                       <td>@product.Designation</td>
+                       <td>@product.EAN</td>
+                       <td>@product.ProductDivision.Name</td>
+                       <td>@product.ProductDivision.ProductType</td>
+                   </tr>
+               }
+
+           </tbody>
+
+       </table>
+   }
 </div>

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DADataManager.Library.Models.Product
+namespace DAWebERP1.Models.Product
 {
     public class ProductMaterialModel
     {

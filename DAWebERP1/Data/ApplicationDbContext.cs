@@ -1,4 +1,4 @@
-﻿using DADataManager.Library.Models.Product;
+﻿using DAWebERP1.Models.Product;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAWebERP1.Data

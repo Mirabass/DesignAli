@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DADataManager.Library.Models.Product
+namespace DAWebERP1.Models.Product
 {
     public class ProductColorDesignModel
     {

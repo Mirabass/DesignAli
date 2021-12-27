@@ -15,34 +15,47 @@
     <br />
     @if (Model.Count() > 0)
    {
-       <table class="table table-bordered table-striped" style="width:100%;text-align:center">
-           <thead>
-               <tr>
-                   <th colspan="4">
-                       Výrobek
-                   </th>
-               </tr>
-               <tr>
-                   <th>Číslo výrobku</th>
-                   <th>EAN</th>
-                   <th>Název výrobku</th>
-                   <th>Typ výrobku</th>
-               </tr>
-           </thead>
-
-           <tbody>
-               @foreach (var product in Model)
-               {
+       <div class=overflow-auto>
+           <table class="table table-bordered table-striped" style="width:unset;text-align:center">
+               <thead>
                    <tr>
-                       <td>@product.Designation</td>
-                       <td>@product.EAN</td>
-                       <td>@product.ProductDivision.Name</td>
-                       <td>@product.ProductDivision.ProductType</td>
+                       <th colspan="4" style="background-color:lightyellow">
+                           Výrobek
+                       </th>
+                       <th colspan="4" style="background-color:lightblue">
+                           Barevné provedení
+                       </th>
                    </tr>
-               }
+                   <tr>
+                       <th style="background-color:lightyellow">Číslo výrobku</th>
+                       <th style="background-color:lightyellow">EAN</th>
+                       <th style="background-color:lightyellow">Název výrobku</th>
+                       <th style="background-color:lightyellow">Typ výrobku</th>
+                       <th style="background-color:lightblue">Počet</th>
+                       <th style="background-color:lightblue">Orientace</th>
+                       <th style="background-color:lightblue">RAL</th>
+                       <th style="background-color:lightblue">Barva základní části</th>
+                   </tr>
+               </thead>
 
-           </tbody>
+               <tbody>
+                   @foreach (var product in Model)
+                   {
+                       <tr>
+                           <td>@product.Designation</td>
+                           <td>@product.EAN</td>
+                           <td>@product.ProductDivision.Name</td>
+                           <td>@product.ProductDivision.ProductType</td>
+                           <td>@product.ProductColorDesign.Quantity</td>
+                           <td>@product.ProductColorDesign.Orientation</td>
+                           <td>@product.ProductColorDesign.MainPartRAL</td>
+                           <td>@product.ProductColorDesign.MainPartColorName</td>
+                       </tr>
+                   }
 
-       </table>
+               </tbody>
+
+           </table>
+       </div>
    }
 </div>

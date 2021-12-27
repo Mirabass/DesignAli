@@ -14,6 +14,8 @@ namespace DAWebERP1.Models.Product
         public int MainPartRAL { get; set; }
         [Column(TypeName = "nvarchar(128)")]
         public string MainPartColorName { get; set; }
+        [NotMapped]
+        public string MainPartColorHex { get; set; }
         [Column(TypeName = "numeric(4)")]
         public int PocketRAL { get; set; }
         [Column(TypeName = "nvarchar(256)")]

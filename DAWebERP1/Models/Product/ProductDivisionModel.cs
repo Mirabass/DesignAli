@@ -10,6 +10,7 @@ namespace DAWebERP1.Models.Product
         [Required]
         [Column(TypeName = "numeric(3,0)")]
         public int Number { get; set; }
+        [Display(Name = "Název výrobku")]
         [Required]
         [Column(TypeName = "nvarchar(50)")]
         public string Name { get; set; }

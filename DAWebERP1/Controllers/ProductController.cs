@@ -37,5 +37,10 @@ namespace DAWebERP1.Controllers
             }
             return View(products);
         }
+        public IActionResult Create()
+        {
+            // TODO: ProductNames to view bag
+            return View();
+        }
     }
 }

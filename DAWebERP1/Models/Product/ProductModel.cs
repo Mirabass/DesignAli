@@ -25,6 +25,7 @@ namespace DAWebERP1.Models.Product
         public ProductColorDesignModel ProductColorDesign { get; set; }
         [Required]
         public ProductStrapModel ProductStrap { get; set; }
+        [Display(Name = "Provedení")]
         [Required]
         [Column(TypeName = "numeric(4)")]
         public int Design { get; set; }

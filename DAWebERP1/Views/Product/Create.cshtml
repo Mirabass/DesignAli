@@ -1,6 +1,7 @@
 ﻿@model DAWebERP1.Models.Product.ProductModel
 <form method="post" asp-action="Create">
     <div class="border p-3">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group row">
             <h2 class="text-black-50 pl-3">Nový výrobek</h2>
         </div>
@@ -26,9 +27,11 @@
                     </div>
                     <div class="col-4">
                         <input asp-for="Design" class="form-control"/>
+                        <span asp-validation-for="Design" class="text-danger"></span>
                     </div>
                     <div class="col-4">
                         <input asp-for="EAN" class="form-control"/>
+                        <span asp-validation-for="EAN" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="form-group row">

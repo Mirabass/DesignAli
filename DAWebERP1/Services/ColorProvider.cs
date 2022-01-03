@@ -29,7 +29,7 @@ namespace DAWebERP1.Services
         {
             return _colors.Where(color => color.RAL == ral).Select(color => color.HEX).FirstOrDefault();
         }
-        public string GetHexFromRal(int ral)
+        public string GetHexFromRal(int? ral)
         {
             string ralString = BusinessLogic.CustomOperations.LeadingZeros(ral, 4);
             return GetHexFromRal(ralString);

@@ -3,6 +3,6 @@
     public interface IColorProvider
     {
         string GetHexFromRal(string ral);
-        string GetHexFromRal(int ral);
+        string GetHexFromRal(int? ral);
     }
 }

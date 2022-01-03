@@ -7,7 +7,7 @@ namespace DAWebERP1.Models.Product
     public class ProductMaterialModel
     {
         public int Id { get; set; }
-        public int Number { get; set; }
+        public int? Number { get; set; }
         public string Name { get; set; }
     }
 }

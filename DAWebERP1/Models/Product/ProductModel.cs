@@ -17,7 +17,6 @@ namespace DAWebERP1.Models.Product
         [Column(TypeName ="nvarchar(15)")]
         public string Designation { get; set; }
         [Required]
-        [MaxLength(13)]
         public long EAN { get; set; }
         [Required]
         public ProductDivisionModel ProductDivision { get; set; }
@@ -34,10 +33,8 @@ namespace DAWebERP1.Models.Product
         [Column(TypeName = "nvarchar(256)")]
         public string Accessories { get; set; }
         [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime DateCreated { get; set; }
         [Required]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime DateLastModified { get; set; }
     }
 }

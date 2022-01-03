@@ -32,7 +32,8 @@ namespace DAWebERP1.Controllers
                     .ThenInclude(pd => pd.ProductMaterial);
             foreach (ProductModel product in products)
             {
-                product.ProductColorDesign.MainPartColorHex = _colorProvider.GetHexFromRal(product.ProductColorDesign.MainPartRAL);
+                var colorHex = _colorProvider.GetHexFromRal(product.ProductColorDesign.MainPartRAL);
+                product.ProductColorDesign.MainPartColorHex = colorHex != null ? colorHex : "#FFFFFF";
             }
             return View(products);
         }
@@ -62,6 +63,14 @@ namespace DAWebERP1.Controllers
                 .FirstOrDefault();
             product.ProductDivision = selectedProductDivision;
             CustomOperations.CreateAndAsignDesignationFor(product);
+            ProductColorDesignModel productColorDesign = new ProductColorDesignModel();
+            ProductStrapModel productStrap = new ProductStrapModel();
+            product.ProductColorDesign = productColorDesign;
+            product.ProductStrap = productStrap;
+            product.DateCreated = System.DateTime.Today;
+            product.DateLastModified = System.DateTime.Today;
+            _db.Add(productColorDesign);
+            _db.Add(productStrap);
             _db.Add(product);
             _db.SaveChanges();
             return RedirectToAction("Index");

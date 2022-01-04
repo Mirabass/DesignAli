@@ -19,6 +19,7 @@
            <table class="table table-bordered table-striped" style="width:unset;text-align:center">
                <thead>
                    <tr>
+                       <th></th>
                        <th colspan="4" style="background-color:lightyellow">
                            Výrobek
                        </th>
@@ -27,6 +28,7 @@
                        </th>
                    </tr>
                    <tr>
+                       <th></th>
                        <th style="background-color:lightyellow">Číslo výrobku</th>
                        <th style="background-color:lightyellow">EAN</th>
                        <th style="background-color:lightyellow">Název výrobku</th>
@@ -46,6 +48,12 @@
                    @foreach (var product in Model)
                    {
                        <tr>
+                           <td>
+                               <div class="col-2 text-left">
+                                   <a asp-controller="Product" asp-action="Update" asp-route-Id="@product.Id" class="btn btn-primary mx-1">Upravit</a>
+                                   <a asp-controller="Product" asp-action="Delete" asp-route-Id="@product.Id" class="btn btn-danger mx-1">Odstranit</a>
+                               </div>
+                           </td>
                            <td>@product.Designation</td>
                            <td>@product.EAN</td>
                            <td>@product.ProductDivision.Name</td>

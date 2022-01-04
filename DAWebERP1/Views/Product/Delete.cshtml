@@ -1,9 +1,9 @@
 ﻿@model DAWebERP1.Models.Product.ProductModel
-<form method="post" asp-action="Create">
+<form method="post" asp-action="DeletePost">
+    <input asp-for="Id" hidden />
     <div class="border p-3">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group row">
-            <h2 class="text-black-50 pl-3">Nový výrobek</h2>
+            <h2 class="text-black-50 pl-3">Odstranit výrobek</h2>
         </div>
         <div class="row">
             <div class="col-12">
@@ -22,25 +22,22 @@
             <div class="col-12">
                 <div class="form-group row">
                     <div class="col-4">
-                        @Html.DropDownListFor(product => product.ProductDivision.Id, this.ViewBag.ProductNames as SelectList,
-                            new { id = "ProductNames", @class = "selectProductDivision show-tick form-control" })
+                        <input asp-for="ProductDivision.Name" disabled class="form-control" />
                     </div>
                     <div class="col-4">
-                        <input asp-for="Design" class="form-control"/>
-                        <span asp-validation-for="Design" class="text-danger"></span>
+                        <input asp-for="Design" disabled class="form-control"/>
                     </div>
                     <div class="col-4">
-                        <input asp-for="EAN" class="form-control"/>
-                        <span asp-validation-for="EAN" class="text-danger"></span>
+                        <input asp-for="EAN" disabled class="form-control"/>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div class="col-8 text-center row">
                         <div class="col">
-                            <input type="submit" class="btn btn-info w-75" value="Vytvořit nový výrobek" />
+                            <input type="submit" class="btn btn-danger w-75" value="Odstranit výrobek" />
                         </div>
                         <div class="col">
-                            <a class="btn btn-danger w-75" asp-action="Index">Vrátit se</a>
+                            <a class="btn btn-success w-75" asp-action="Index">Vrátit se</a>
                         </div>
                     </div>
                 </div>
@@ -50,5 +47,3 @@
     </div>
 
 </form>
-<script src="~/lib/bootstrap/dist/js/bootstrap-select"></script>
-<style src="~/lib/bootstrap/dist/css/bootstrap-select"></style>

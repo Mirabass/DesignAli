@@ -32,7 +32,8 @@ namespace DAWebERP1.Services
         public string GetHexFromRal(int? ral)
         {
             string ralString = BusinessLogic.CustomOperations.LeadingZeros(ral, 4);
-            return GetHexFromRal(ralString);
+            var colorHex = GetHexFromRal(ralString);
+            return colorHex != null ? colorHex : "#FFFFFF";
         }
     }
 }

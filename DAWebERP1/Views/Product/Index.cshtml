@@ -26,6 +26,15 @@
                        <th colspan="8" style="background-color:lightblue">
                            Barevné provedení
                        </th>
+                       <th colspan="8" style="background-color:lightgray">
+                           Popruh / ucha
+                       </th>
+                       <th style="background-color:lightsalmon">
+                           Motiv
+                       </th>
+                       <th style="background-color:lightpink">
+                           Doplňky
+                       </th>
                    </tr>
                    <tr>
                        <th></th>
@@ -33,6 +42,7 @@
                        <th style="background-color:lightyellow">EAN</th>
                        <th style="background-color:lightyellow">Název výrobku</th>
                        <th style="background-color:lightyellow">Typ výrobku</th>
+
                        <th style="background-color:lightblue">Počet</th>
                        <th style="background-color:lightblue">Orientace</th>
                        <th style="background-color:lightblue">RAL</th>
@@ -40,7 +50,19 @@
                        <th style="background-color:lightblue">Vzor</th>
                        <th style="background-color:lightblue">RAL</th>
                        <th style="background-color:lightblue">Barva dna, kapsy</th>
-                       <th style="background-color:lightblue">Kapsa</th>
+                       <th style="background-color:lightblue">Vzor</th>
+
+                       <th style="background-color:lightgray">Typ</th>
+                       <th style="background-color:lightgray">Materiál</th>
+                       <th style="background-color:lightgray">Délka [mm]</th>
+                       <th style="background-color:lightgray">Šířka [mm]</th>
+                       <th style="background-color:lightgray">RAL</th>
+                       <th style="background-color:lightgray">Barva</th>
+                       <th style="background-color:lightgray">Vzor</th>
+                       <th style="background-color:lightgray">Uchycení</th>
+                       
+                       <th style="background-color:lightsalmon"></th>
+                       <th style="background-color:lightpink"></th>
                    </tr>
                </thead>
 
@@ -54,10 +76,12 @@
                                    <a asp-controller="Product" asp-action="Delete" asp-route-Id="@product.Id" class="btn btn-danger mx-1">Odstranit</a>
                                </div>
                            </td>
+
                            <td>@product.Designation</td>
                            <td>@product.EAN</td>
                            <td>@product.ProductDivision.Name</td>
                            <td>@product.ProductDivision.ProductType</td>
+
                            <td>@product.ProductColorDesign.Quantity</td>
                            <td>@product.ProductColorDesign.Orientation</td>
                            <td>@product.ProductColorDesign.MainPartRAL</td>
@@ -65,7 +89,19 @@
                            <td style="background-color:@product.ProductColorDesign.MainPartColorHex"></td>
                            <td>@product.ProductColorDesign.PocketRAL</td>
                            <td>@product.ProductColorDesign.PocketColorName</td>
-                           <td></td>
+                           <td style="background-color:@product.ProductColorDesign.PocketColorHex"></td>
+
+                           <td>@product.ProductStrap.Type</td>
+                           <td>@product.ProductStrap.Material</td>
+                           <td>@product.ProductStrap.Length</td>
+                           <td>@product.ProductStrap.Width</td>
+                           <td>@product.ProductStrap.RAL</td>
+                           <td>@product.ProductStrap.ColorName</td>
+                           <td style="background-color:@product.ProductStrap.ColorHex"></td>
+                           <td>@product.ProductStrap.Attachment</td>
+
+                           <td>@product.Motive</td>
+                           <td>@product.Accessories</td>
                        </tr>
                    }
 

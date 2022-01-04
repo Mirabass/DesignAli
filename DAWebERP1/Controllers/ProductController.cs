@@ -32,8 +32,9 @@ namespace DAWebERP1.Controllers
                     .ThenInclude(pd => pd.ProductMaterial);
             foreach (ProductModel product in products)
             {
-                var colorHex = _colorProvider.GetHexFromRal(product.ProductColorDesign.MainPartRAL);
-                product.ProductColorDesign.MainPartColorHex = colorHex != null ? colorHex : "#FFFFFF";
+                product.ProductColorDesign.MainPartColorHex = _colorProvider.GetHexFromRal(product.ProductColorDesign.MainPartRAL);
+                product.ProductColorDesign.PocketColorHex = _colorProvider.GetHexFromRal(product.ProductColorDesign.PocketRAL);
+                product.ProductStrap.ColorHex = _colorProvider.GetHexFromRal(product.ProductStrap.RAL);
             }
             return View(products);
         }

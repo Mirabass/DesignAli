@@ -20,5 +20,7 @@ namespace DAWebERP1.Models.Product
         public int? PocketRAL { get; set; }
         [Column(TypeName = "nvarchar(256)")]
         public string PocketColorName { get; set; }
+        [NotMapped]
+        public string PocketColorHex { get; set; }
     }
 }

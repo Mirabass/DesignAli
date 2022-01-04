@@ -19,6 +19,8 @@ namespace DAWebERP1.Models.Product
         public int? RAL { get; set; }
         [Column(TypeName = "nvarchar(128)")]
         public string ColorName { get; set; }
+        [NotMapped]
+        public string ColorHex { get; set; }
         [Column(TypeName = "nvarchar(128)")]
         public string Attachment { get; set; }
     }

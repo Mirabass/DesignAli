@@ -27,8 +27,10 @@ namespace DAWebERP1.ViewModels
         [Required]
         [Column(TypeName = "numeric(4)")]
         public int Design { get; set; }
+        [Display(Name = "Motiv")]
         [Column(TypeName = "nvarchar(2048)")]
         public string Motive { get; set; }
+        [Display(Name = "Doplňky")]
         [Column(TypeName = "nvarchar(256)")]
         public string Accessories { get; set; }
     }

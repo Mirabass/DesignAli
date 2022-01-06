@@ -7,9 +7,12 @@ using System.Linq;
 using DAWebERP1.BusinessLogic;
 using DAWebERP1.Services;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
+using DAWebERP1.ViewModels;
 
 namespace DAWebERP1.Controllers
 {
+    [Authorize]
     public class ProductController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -59,31 +62,38 @@ namespace DAWebERP1.Controllers
         // POST-Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(ProductModel product)
+        public IActionResult Create(ProductViewModel productViewModel)
         {
-            //if (ModelState.IsValid)
-            //{
-                ProductDivisionModel selectedProductDivision = _db.ProductDivisions
+            if (ModelState.IsValid)
+            {
+                ProductDivisionModel selectedProductDivision = _db.ProductDivisions.AsNoTracking()
                         .Include(pd => pd.ProductKind)
                         .Include(pd => pd.ProductMaterial)
-                        .Where(pd => pd.Id == product.ProductDivision.Id)
+                        .Where(pd => pd.Id == productViewModel.ProductDivisionId)
                         .FirstOrDefault();
+                ProductModel product = new ProductModel()
+                {
+                    ProductColorDesign = productViewModel.ProductColorDesign,
+                    ProductStrap = productViewModel.ProductStrap,
+                    ProductDivision = selectedProductDivision,
+                    Design = productViewModel.Design,
+                    EAN = productViewModel.EAN,
+                    Motive = productViewModel.Motive,
+                    Accessories = productViewModel.Accessories
+                };
                 product.ProductDivision = selectedProductDivision;
                 CustomOperations.CreateAndAsignDesignationFor(product);
-                ProductColorDesignModel productColorDesign = new ProductColorDesignModel();
-                ProductStrapModel productStrap = new ProductStrapModel();
-                product.ProductColorDesign = productColorDesign;
-                product.ProductStrap = productStrap;
                 product.DateCreated = System.DateTime.Today;
                 product.DateLastModified = System.DateTime.Today;
-                _db.Add(productColorDesign);
-                _db.Add(productStrap);
                 _db.Add(product);
+                _db.Entry(product.ProductDivision).State = EntityState.Unchanged;
+                _db.Entry(product.ProductDivision.ProductKind).State = EntityState.Unchanged;
+                _db.Entry(product.ProductDivision.ProductMaterial).State = EntityState.Unchanged;
                 _db.SaveChanges();
-                return RedirectToAction("Index"); 
-            //}
-            //CreateViewBagOfProductNames();
-            //return View(product);
+                return RedirectToAction("Index");
+            }
+            CreateViewBagOfProductNames();
+            return View(productViewModel);
         }
         // Get-Delete
         public IActionResult Delete(int? Id)

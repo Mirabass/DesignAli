@@ -1,25 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using DAWebERP1.Models.Product;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Text;
 
-namespace DAWebERP1.Models.Product
+namespace DAWebERP1.ViewModels
 {
-    public class ProductModel
+    public class ProductViewModel
     {
         /// <summary>
         /// The unique identifier for product model
         /// </summary>
         [Required]
         public int Id { get; set; }
-        [Required]
-        [Column(TypeName ="nvarchar(15)")]
+
+        [Column(TypeName = "nvarchar(15)")]
         public string Designation { get; set; }
         [Required]
         public long EAN { get; set; }
-        //[Required]
-        public ProductDivisionModel ProductDivision { get; set; }
+        [Display(Name = "Název výrobku")]
+        [Required]
+        public int ProductDivisionId { get; set; }
         [Required]
         public ProductColorDesignModel ProductColorDesign { get; set; }
         [Required]
@@ -32,9 +31,5 @@ namespace DAWebERP1.Models.Product
         public string Motive { get; set; }
         [Column(TypeName = "nvarchar(256)")]
         public string Accessories { get; set; }
-        [Required]
-        public DateTime DateCreated { get; set; }
-        [Required]
-        public DateTime DateLastModified { get; set; }
     }
 }

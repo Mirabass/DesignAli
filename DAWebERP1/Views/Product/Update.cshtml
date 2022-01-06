@@ -63,7 +63,7 @@
             <div class="col-12">
                 <div class="form-group row justify-content-around p-2">
                     <div class="col-sm-3 p-2">
-                        <input type="submit" class="btn btn-info w-75" value="Upravit nový výrobek" />
+                        <input type="submit" onchange="nullProductDivision()" class="btn btn-info w-75" value="Upravit nový výrobek" />
                     </div>
                     <div class="col-sm-3 p-2">
                         <a class="btn btn-danger w-75" asp-action="Index">Vrátit se</a>
@@ -74,5 +74,8 @@
     </div>
 
 </form>
-<script src="~/lib/bootstrap/dist/js/bootstrap-select"></script>
-<style src="~/lib/bootstrap/dist/css/bootstrap-select"></style>
+<script>
+    function nullProductDivision() {
+        alert("works");
+}
+</script>

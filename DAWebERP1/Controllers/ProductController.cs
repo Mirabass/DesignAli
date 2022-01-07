@@ -1,11 +1,11 @@
-﻿using DAWebERP1.Models.Product;
-using DAWebERP1.Data;
+﻿using DAERPLibrary.Models.Product;
+using DAERPLibrary.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
-using DAWebERP1.BusinessLogic;
-using DAWebERP1.Services;
+using DAERPLibrary.BusinessLogic;
+using DAERPLibrary.Services;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
 using DAWebERP1.ViewModels;

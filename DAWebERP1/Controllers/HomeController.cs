@@ -1,4 +1,4 @@
-﻿using DAWebERP1.Models;
+﻿using DAWebERP1.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;

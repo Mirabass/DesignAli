@@ -83,12 +83,14 @@ namespace DAERP.Web.Controllers
             {
                 return NotFound();
             }
-            ProductModel product = _productData.GetProductBy(Id);
+            ProductModel product = _productData.GetProductWithChildModelsIncludedBy(Id);
             if (product == null)
             {
                 return NotFound();
             }
-            return View(product);
+            ProductViewModel productViewModel = _mapper.Map<ProductViewModel>(product);
+            ViewBag.ProductName = _productData.GetProductDivisionNameBy(product.ProductDivision.Id);
+            return View(productViewModel);
         }
         // POST-Delete
         [HttpPost]
@@ -114,7 +116,7 @@ namespace DAERP.Web.Controllers
             {
                 return NotFound();
             }
-            ProductModel product = _productData.GetProductBy(Id);
+            ProductModel product = _productData.GetProductWithChildModelsIncludedBy(Id);
             if (product == null)
             {
                 return NotFound();

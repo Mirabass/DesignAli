@@ -92,5 +92,10 @@ namespace DAERP.DAL.DataAccess
             _db.Products.Update(updatedProduct);
             _db.SaveChanges();
         }
+
+        public string GetProductDivisionNameBy(int productDivisionId)
+        {
+            return GetAllProductDivisions().Where(pd => pd.Id == productDivisionId).Select(pd => pd.Name).FirstOrDefault();
+        }
     }
 }

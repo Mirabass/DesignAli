@@ -14,5 +14,6 @@ namespace DAERP.DAL.DataAccess
         void RemoveProduct(ProductModel product);
         ProductDivisionModel GetProductDivisionWithChildModelsIncludedBy(int id);
         void UpdateProduct(ProductModel updatedProduct);
+        string GetProductDivisionNameBy(int productDivisionId);
     }
 }

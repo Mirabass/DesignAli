@@ -1,6 +1,8 @@
+using AutoMapper;
 using DAERP.DAL.Data;
 using DAERP.DAL.DataAccess;
 using DAERP.DAL.Services;
+using DAERP.Web.ViewModels.Mapping;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -37,6 +39,8 @@ namespace DAERP.Web
                 .AddEntityFrameworkStores<UserDbContext>();
 
             // Personal services:
+            services.AddAutoMapper(typeof(ProductProfile));
+
             services.AddSingleton<IColorProvider, ColorProvider>();
             services.AddTransient<IProductData, ProductData>();
 

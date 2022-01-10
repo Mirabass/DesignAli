@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
 using DAERP.Web.ViewModels;
 using DAERP.DAL.DataAccess;
+using AutoMapper;
 
 namespace DAERP.Web.Controllers
 {
@@ -17,11 +18,13 @@ namespace DAERP.Web.Controllers
     {
         private readonly IProductData _productData;
         private readonly IColorProvider _colorProvider;
+        private readonly IMapper _mapper;
 
-        public ProductController(IColorProvider colorProvider, IProductData productData)
+        public ProductController(IColorProvider colorProvider, IProductData productData, IMapper mapper)
         {
             _colorProvider = colorProvider;
             _productData = productData;
+            _mapper = mapper;
         }
 
         public IActionResult Index()
@@ -62,16 +65,7 @@ namespace DAERP.Web.Controllers
             if (ModelState.IsValid)
             {
                 ProductDivisionModel selectedProductDivision = _productData.GetProductDivisionBy(productViewModel.ProductDivisionId);
-                ProductModel product = new ProductModel()
-                {
-                    ProductColorDesign = productViewModel.ProductColorDesign,
-                    ProductStrap = productViewModel.ProductStrap,
-                    ProductDivision = selectedProductDivision,
-                    Design = productViewModel.Design,
-                    EAN = productViewModel.EAN,
-                    Motive = productViewModel.Motive,
-                    Accessories = productViewModel.Accessories
-                };
+                ProductModel product = _mapper.Map<ProductModel>(productViewModel);
                 product.ProductDivision = selectedProductDivision;
                 CustomOperations.CreateAndAsignDesignationFor(product);
                 product.DateCreated = System.DateTime.Today;

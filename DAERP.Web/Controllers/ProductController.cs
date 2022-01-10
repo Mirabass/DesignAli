@@ -1,5 +1,4 @@
 ﻿using DAERP.BL.Models.Product;
-using DAERP.DAL.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -17,19 +16,17 @@ namespace DAERP.Web.Controllers
     public class ProductController : Controller
     {
         private readonly IProductData _productData;
-        private readonly ApplicationDbContext _db;
         private readonly IColorProvider _colorProvider;
 
-        public ProductController(ApplicationDbContext db, IColorProvider colorProvider, IProductData productData)
+        public ProductController(IColorProvider colorProvider, IProductData productData)
         {
-            _db = db;
             _colorProvider = colorProvider;
             _productData = productData;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<ProductModel> products = _productData.GetAllProductsChildModelsIncluded();
+            IEnumerable<ProductModel> products = _productData.GetAllProductsWithChildModelsIncluded();
             foreach (ProductModel product in products)
             {
                 product.ProductColorDesign.MainPartColorHex = _colorProvider.GetHexFromRal(product.ProductColorDesign.MainPartRAL);
@@ -47,7 +44,8 @@ namespace DAERP.Web.Controllers
 
         private void CreateViewBagOfProductNames()
         {
-            var list = _db.ProductDivisions.Select(pd =>
+            var productDivisions = _productData.GetAllProductDivisions();
+            var list = productDivisions.Select(pd =>
                                             new SelectListItem
                                             {
                                                 Value = pd.Id.ToString(),
@@ -63,11 +61,7 @@ namespace DAERP.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                ProductDivisionModel selectedProductDivision = _db.ProductDivisions.AsNoTracking()
-                        .Include(pd => pd.ProductKind)
-                        .Include(pd => pd.ProductMaterial)
-                        .Where(pd => pd.Id == productViewModel.ProductDivisionId)
-                        .FirstOrDefault();
+                ProductDivisionModel selectedProductDivision = _productData.GetProductDivisionBy(productViewModel.ProductDivisionId);
                 ProductModel product = new ProductModel()
                 {
                     ProductColorDesign = productViewModel.ProductColorDesign,
@@ -82,11 +76,7 @@ namespace DAERP.Web.Controllers
                 CustomOperations.CreateAndAsignDesignationFor(product);
                 product.DateCreated = System.DateTime.Today;
                 product.DateLastModified = System.DateTime.Today;
-                _db.Add(product);
-                _db.Entry(product.ProductDivision).State = EntityState.Unchanged;
-                _db.Entry(product.ProductDivision.ProductKind).State = EntityState.Unchanged;
-                _db.Entry(product.ProductDivision.ProductMaterial).State = EntityState.Unchanged;
-                _db.SaveChanges();
+                _productData.AddProduct(product);
                 return RedirectToAction("Index");
             }
             CreateViewBagOfProductNames();
@@ -99,7 +89,7 @@ namespace DAERP.Web.Controllers
             {
                 return NotFound();
             }
-            var product = _db.Products.Where(p => p.Id == Id).Include(p => p.ProductDivision).FirstOrDefault();
+            ProductModel product = _productData.GetProductBy(Id);
             if (product == null)
             {
                 return NotFound();
@@ -111,24 +101,14 @@ namespace DAERP.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeletePost(int? Id)
         {
-            var product = _db.Products.Where(p => p.Id == Id)
-                    .Include(product => product.ProductStrap)
-                    .Include(product => product.ProductColorDesign)
-                    .Include(product => product.ProductDivision)
-                        .ThenInclude(pd => pd.ProductKind)
-                    .Include(product => product.ProductDivision)
-                        .ThenInclude(pd => pd.ProductMaterial)
-                    .FirstOrDefault();
+            ProductModel product = _productData.GetProductWithChildModelsIncludedBy(Id);
             if (product == null)
             {
                 return NotFound();
             }
             else
             {
-                _db.ProductColorDesigns.Remove(product.ProductColorDesign);
-                _db.ProductStraps.Remove(product.ProductStrap);
-                _db.Products.Remove(product);
-                _db.SaveChanges();
+                _productData.RemoveProduct(product);
                 return RedirectToAction("Index");
             }
         }
@@ -140,7 +120,7 @@ namespace DAERP.Web.Controllers
             {
                 return NotFound();
             }
-            var product = _db.Products.Where(p => p.Id == Id).Include(p => p.ProductDivision).FirstOrDefault();
+            ProductModel product = _productData.GetProductBy(Id);
             if (product == null)
             {
                 return NotFound();
@@ -155,26 +135,13 @@ namespace DAERP.Web.Controllers
         {
             //if (ModelState.IsValid)
             //{
-            var oldProduct = _db.Products.AsNoTracking().Where(p => p.Id == updatedProduct.Id)
-               .Include(product => product.ProductStrap)
-               .Include(product => product.ProductColorDesign)
-               .Include(product => product.ProductDivision)
-                   .ThenInclude(pd => pd.ProductKind)
-               .Include(product => product.ProductDivision)
-                   .ThenInclude(pd => pd.ProductMaterial)
-                .FirstOrDefault();
-            var updatedProductDivision = _db.ProductDivisions.AsNoTracking().Where(pd => pd.Id == updatedProduct.ProductDivision.Id)
-                .Include(pd => pd.ProductKind)
-                .Include(pd => pd.ProductMaterial)
-                .FirstOrDefault();
+            ProductModel oldProduct = _productData.GetProductWithChildModelsIncludedBy(updatedProduct.Id);
+            ProductDivisionModel updatedProductDivision = _productData.GetProductDivisionWithChildModelsIncludedBy(updatedProduct.ProductDivision.Id);
             updatedProduct.ProductDivision = updatedProductDivision;
             updatedProduct.DateCreated = oldProduct.DateCreated;
             CustomOperations.CreateAndAsignDesignationFor(updatedProduct);
             updatedProduct.DateLastModified = System.DateTime.Today;
-            _db.Update(updatedProduct.ProductColorDesign);
-            _db.Update(updatedProduct.ProductStrap);
-            _db.Products.Update(updatedProduct);
-            _db.SaveChanges();
+            _productData.UpdateProduct(updatedProduct);
             return RedirectToAction("Index");
             //}
             //CreateViewBagOfProductNames();

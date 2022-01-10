@@ -1,4 +1,5 @@
-﻿using DesignAliAPI.Models;
+﻿
+using DAApi.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -8,7 +9,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DesignAliAPI.Controllers
+namespace DAApi.Controllers
 {
     public class HomeController : Controller
     {

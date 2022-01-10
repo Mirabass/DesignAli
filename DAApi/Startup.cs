@@ -1,4 +1,3 @@
-using DesignAliAPI.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -18,8 +17,9 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.IO;
 using DADataManager.Library.DataAccess;
+using DAApi.Data;
 
-namespace DesignAliAPI
+namespace DAApi
 {
     public class Startup
     {

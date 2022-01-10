@@ -54,12 +54,13 @@ namespace DADataManager.Library.DataAccess
             }
         }
 
-        public void SaveData<T>(string storedProcedure, T parameters, string connectionStringName)
+        public object SaveData<T>(string storedProcedure, T parameters, string connectionStringName)
         {
             using (IDbConnection connection = new SqlConnection(GetConnectionString(connectionStringName)))
             {
-                connection.Execute(storedProcedure, parameters,
+                var output = connection.Execute(storedProcedure, parameters,
                     commandType: CommandType.StoredProcedure);
+                return output;
             }
         }
     }

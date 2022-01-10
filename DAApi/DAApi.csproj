@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <UserSecretsId>aspnet-DesignAliAPI-CA3E656A-3F33-4CC3-A6A3-7ED2AA33C967</UserSecretsId>
+    <UserSecretsId>aspnet-DAApi-CA3E656A-3F33-4CC3-A6A3-7ED2AA33C967</UserSecretsId>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>

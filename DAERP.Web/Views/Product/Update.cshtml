@@ -1,0 +1,230 @@
+﻿@model DAERP.Web.ViewModels.ProductViewModel
+<form method="post" asp-action="Update">
+    <input asp-for="Id" hidden />
+    <div class="p-3">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group row">
+            <h2 class="text-black-50 pl-3">Upravit výrobek</h2>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <!-- Výrobek -->
+                <div class="form-group row border p-2 shadow rounded">
+                    <div class="col-12">
+                        <div class="row p-3">
+                            <div class="col text-info">
+                                Výrobek
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="col-sm">
+                                    <label asp-for="ProductDivisionId"></label>
+                                </div>
+                                <div class="col-sm">
+                                    @Html.DropDownListFor(product => product.ProductDivisionId, this.ViewBag.ProductNames as SelectList,
+                                        new { id = "ProductNames", @class = "selectProductDivision show-tick form-control" })
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="col-sm">
+                                    <label asp-for="Design"></label>
+                                </div>
+                                <div class="col-sm">
+                                    <input asp-for="Design" class="form-control"/>
+                                    <span asp-validation-for="Design" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="col-sm">
+                                    <label asp-for="EAN"></label>
+                                </div>
+                                <div class="col-sm">
+                                    <input asp-for="EAN" class="form-control"/>
+                                    <span asp-validation-for="EAN" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Barevné provedení -->
+                <div class="form-group row border p-2 shadow rounded">
+                    <div class="col-12">
+                        <div class="row p-3">
+                            <div class="col text-info">
+                                Barevné provedení
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="col-sm">
+                                    <label asp-for="ProductColorDesign.Quantity"></label>
+                                </div>
+                                <div class="col-sm">
+                                    <input asp-for="ProductColorDesign.Quantity" class="form-control"/>
+                                    <span asp-validation-for="ProductColorDesign.Quantity" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="col-sm">
+                                    <label asp-for="ProductColorDesign.Orientation"></label>
+                                </div>
+                                <div class="col-sm">
+                                    <input asp-for="ProductColorDesign.Orientation" class="form-control"/>
+                                    <span asp-validation-for="ProductColorDesign.Orientation" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="col-sm">
+                                    <label asp-for="ProductColorDesign.MainPartRAL"></label>
+                                </div>
+                                <div class="col-sm">
+                                    <input asp-for="ProductColorDesign.MainPartRAL" class="form-control"/>
+                                    <span asp-validation-for="ProductColorDesign.MainPartRAL" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="col-sm">
+                                    <label asp-for="ProductColorDesign.MainPartColorName"></label>
+                                </div>
+                                <div class="col-sm">
+                                    <input asp-for="ProductColorDesign.MainPartColorName" class="form-control"/>
+                                    <span asp-validation-for="ProductColorDesign.MainPartColorName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="col-sm">
+                                    <label asp-for="ProductColorDesign.PocketRAL"></label>
+                                </div>
+                                <div class="col-sm">
+                                    <input asp-for="ProductColorDesign.PocketRAL" class="form-control"/>
+                                    <span asp-validation-for="ProductColorDesign.PocketRAL" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="col-sm">
+                                    <label asp-for="ProductColorDesign.PocketColorName"></label>
+                                </div>
+                                <div class="col-sm">
+                                    <input asp-for="ProductColorDesign.PocketColorName" class="form-control"/>
+                                    <span asp-validation-for="ProductColorDesign.PocketColorName" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Popruh / ucha -->
+                <div class="form-group row border p-2 shadow rounded">
+                    <div class="col-12">
+                        <div class="row p-3">
+                            <div class="col text-info">
+                                Popruh / ucha
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="col-sm">
+                                    <label asp-for="ProductStrap.Type"></label>
+                                </div>
+                                <div class="col-sm">
+                                    <input asp-for="ProductStrap.Type" class="form-control"/>
+                                    <span asp-validation-for="ProductStrap.Type" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="col-sm">
+                                    <label asp-for="ProductStrap.Material"></label>
+                                </div>
+                                <div class="col-sm">
+                                    <input asp-for="ProductStrap.Material" class="form-control"/>
+                                    <span asp-validation-for="ProductStrap.Material" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="col-sm">
+                                    <label asp-for="ProductStrap.Length"></label>
+                                </div>
+                                <div class="col-sm">
+                                    <input asp-for="ProductStrap.Length" class="form-control"/>
+                                    <span asp-validation-for="ProductStrap.Length" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="col-sm">
+                                    <label asp-for="ProductStrap.Width"></label>
+                                </div>
+                                <div class="col-sm">
+                                    <input asp-for="ProductStrap.Width" class="form-control"/>
+                                    <span asp-validation-for="ProductStrap.Width" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="col-sm">
+                                    <label asp-for="ProductStrap.RAL"></label>
+                                </div>
+                                <div class="col-sm">
+                                    <input asp-for="ProductStrap.RAL" class="form-control"/>
+                                    <span asp-validation-for="ProductStrap.RAL" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="col-sm">
+                                    <label asp-for="ProductStrap.ColorName"></label>
+                                </div>
+                                <div class="col-sm">
+                                    <input asp-for="ProductStrap.ColorName" class="form-control"/>
+                                    <span asp-validation-for="ProductStrap.ColorName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="col-sm">
+                                    <label asp-for="ProductStrap.Attachment"></label>
+                                </div>
+                                <div class="col-sm">
+                                    <input asp-for="ProductStrap.Attachment" class="form-control"/>
+                                    <span asp-validation-for="ProductStrap.Attachment" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Motiv -->
+                <div class="form-group row border p-2 shadow rounded">
+                    <div class="col-sm-3">
+                        <div class="col-sm">
+                            <label asp-for="Motive"></label>
+                        </div>
+                        <div class="col-sm">
+                            <input asp-for="Motive" class="form-control"/>
+                            <span asp-validation-for="Motive" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Doplňky -->
+                <div class="form-group row border p-2 shadow rounded">
+                    <div class="col-sm-3">
+                        <div class="col-sm">
+                            <label asp-for="Accessories"></label>
+                        </div>
+                        <div class="col-sm">
+                            <input asp-for="Accessories" class="form-control"/>
+                            <span asp-validation-for="Accessories" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group row justify-content-around p-2">
+                    <div class="col-sm-3 p-2">
+                        <input type="submit" class="btn btn-info w-75" value="Potvrdit změny" />
+                    </div>
+                    <div class="col-sm-3 p-2">
+                        <a class="btn btn-danger w-75" asp-action="Index">Vrátit se</a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+</form>

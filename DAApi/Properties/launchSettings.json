@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "DesignAliAPI": {
+    "DAApi": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,

@@ -1,6 +1,6 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
-using DADesktopUI.Models;
+using DADesktopUI.Library.Models;
 
 namespace DADesktopUI.Library.Api
 {

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 
-namespace DesignAliAPI.Data.Migrations
+namespace DAApi.Data.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {

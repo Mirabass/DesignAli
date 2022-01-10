@@ -1,7 +1,7 @@
-﻿using DADataManager.Library.DataAccess;
+﻿using DAApi.Data;
+using DAApi.Models;
+using DADataManager.Library.DataAccess;
 using DADataManager.Library.Models;
-using DesignAliAPI.Data;
-using DesignAliAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace DesignAliAPI.Controllers
+namespace DAApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

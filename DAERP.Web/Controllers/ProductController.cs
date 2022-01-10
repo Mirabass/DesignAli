@@ -9,30 +9,27 @@ using DAERP.DAL.Services;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Authorization;
 using DAERP.Web.ViewModels;
+using DAERP.DAL.DataAccess;
 
 namespace DAERP.Web.Controllers
 {
     [Authorize]
     public class ProductController : Controller
     {
+        private readonly IProductData _productData;
         private readonly ApplicationDbContext _db;
         private readonly IColorProvider _colorProvider;
 
-        public ProductController(ApplicationDbContext db, IColorProvider colorProvider)
+        public ProductController(ApplicationDbContext db, IColorProvider colorProvider, IProductData productData)
         {
             _db = db;
             _colorProvider = colorProvider;
+            _productData = productData;
         }
 
         public IActionResult Index()
         {
-            IEnumerable<ProductModel> products = _db.Products
-                .Include(product => product.ProductStrap)
-                .Include(product => product.ProductColorDesign)
-                .Include(product => product.ProductDivision)
-                    .ThenInclude(pd => pd.ProductKind)
-                .Include(product => product.ProductDivision)
-                    .ThenInclude(pd => pd.ProductMaterial);
+            IEnumerable<ProductModel> products = _productData.GetAllProductsChildModelsIncluded();
             foreach (ProductModel product in products)
             {
                 product.ProductColorDesign.MainPartColorHex = _colorProvider.GetHexFromRal(product.ProductColorDesign.MainPartRAL);

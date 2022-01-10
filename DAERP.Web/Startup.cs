@@ -1,4 +1,5 @@
 using DAERP.DAL.Data;
+using DAERP.DAL.DataAccess;
 using DAERP.DAL.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -35,7 +36,9 @@ namespace DAERP.Web
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<UserDbContext>();
 
+            // Personal services:
             services.AddSingleton<IColorProvider, ColorProvider>();
+            services.AddTransient<IProductData, ProductData>();
 
             services.AddControllersWithViews();
         }

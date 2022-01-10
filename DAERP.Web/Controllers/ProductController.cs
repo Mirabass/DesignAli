@@ -119,27 +119,29 @@ namespace DAERP.Web.Controllers
             {
                 return NotFound();
             }
+            ProductViewModel productViewModel = _mapper.Map<ProductViewModel>(product);
             CreateViewBagOfProductNames();
-            return View(product);
+            return View(productViewModel);
         }
         // POST-Update
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update(ProductModel updatedProduct)
+        public IActionResult Update(ProductViewModel productViewModel)
         {
-            //if (ModelState.IsValid)
-            //{
-            ProductModel oldProduct = _productData.GetProductWithChildModelsIncludedBy(updatedProduct.Id);
-            ProductDivisionModel updatedProductDivision = _productData.GetProductDivisionWithChildModelsIncludedBy(updatedProduct.ProductDivision.Id);
-            updatedProduct.ProductDivision = updatedProductDivision;
-            updatedProduct.DateCreated = oldProduct.DateCreated;
-            CustomOperations.CreateAndAsignDesignationFor(updatedProduct);
-            updatedProduct.DateLastModified = System.DateTime.Today;
-            _productData.UpdateProduct(updatedProduct);
-            return RedirectToAction("Index");
-            //}
-            //CreateViewBagOfProductNames();
-            //return View(product);
+            if (ModelState.IsValid)
+            {
+                ProductModel oldProduct = _productData.GetProductWithChildModelsIncludedBy(productViewModel.Id);
+                ProductDivisionModel updatedProductDivision = _productData.GetProductDivisionWithChildModelsIncludedBy(productViewModel.ProductDivisionId);
+                ProductModel updatedProduct = _mapper.Map<ProductModel>(productViewModel);
+                updatedProduct.ProductDivision = updatedProductDivision;
+                updatedProduct.DateCreated = oldProduct.DateCreated;
+                CustomOperations.CreateAndAsignDesignationFor(updatedProduct);
+                updatedProduct.DateLastModified = System.DateTime.Today;
+                _productData.UpdateProduct(updatedProduct);
+                return RedirectToAction("Index");
+            }
+            CreateViewBagOfProductNames();
+            return View(productViewModel);
         }
     }
 }

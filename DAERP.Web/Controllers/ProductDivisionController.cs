@@ -38,5 +38,35 @@ namespace DAERP.Web.Controllers
             }
             return View(productDivision);
         }
+        // Get-Delete
+        public IActionResult Delete(int? Id)
+        {
+            if (Id == null || Id == 0)
+            {
+                return NotFound();
+            }
+            ProductDivisionModel productDivision = _productData.GetProductDivisionWithChildModelsIncludedBy(Id);
+            if (productDivision == null)
+            {
+                return NotFound();
+            }
+            return View(productDivision);
+        }
+        // POST-Delete
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeletePost(int? Id)
+        {
+            ProductDivisionModel productDivision = _productData.GetProductDivisionWithChildModelsIncludedBy(Id);
+            if (productDivision == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                _productData.RemoveProductDivision(productDivision);
+                return RedirectToAction("Index");
+            }
+        }
     }
 }

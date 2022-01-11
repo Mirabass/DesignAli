@@ -76,7 +76,7 @@ namespace DAERP.DAL.DataAccess
             _db.SaveChanges();
         }
 
-        public ProductDivisionModel GetProductDivisionWithChildModelsIncludedBy(int id)
+        public ProductDivisionModel GetProductDivisionWithChildModelsIncludedBy(int? id)
         {
             var productDivision = _db.ProductDivisions.AsNoTracking().Where(pd => pd.Id == id)
                 .Include(pd => pd.ProductKind)
@@ -109,6 +109,14 @@ namespace DAERP.DAL.DataAccess
         public void AddProductDivision(ProductDivisionModel productDivision)
         {
             _db.Add(productDivision);
+            _db.SaveChanges();
+        }
+
+        public void RemoveProductDivision(ProductDivisionModel productDivision)
+        {
+            _db.ProductMaterials.Remove(productDivision.ProductMaterial);
+            _db.ProductKinds.Remove(productDivision.ProductKind);
+            _db.ProductDivisions.Remove(productDivision);
             _db.SaveChanges();
         }
     }

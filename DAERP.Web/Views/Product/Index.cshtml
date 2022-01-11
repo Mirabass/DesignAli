@@ -3,6 +3,7 @@
     ViewData["Title"] = "Products";
 }
 
+
 <div class="container-fluid p-3">
     <h2 class="text-primary">Číselník výrobků</h2>
     <br />
@@ -66,14 +67,16 @@
                    {
                        <tr>
                            <td>
-                               <div class="row">
-                                   <div class="col p-1">
-                                       <a asp-controller="Product" asp-action="Update" asp-route-Id="@product.Id" class="btn btn-primary mx-1">Upravit</a>
-                                   </div>
-                                   <div class="col p-1">
-                                       <a asp-controller="Product" asp-action="Delete" asp-route-Id="@product.Id" class="btn btn-danger mx-1">Odstranit</a>
-                                   </div>
-                               </div>
+                                <div class="row">
+                                    <div class="col text-nowrap">
+                                        <a asp-controller="Product" asp-action="Update" asp-route-Id="@product.Id" class="btn btn-primary mx-1">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-controller="Product" asp-action="Delete" asp-route-Id="@product.Id" class="btn mx-1 bg-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                     </div>
+                                </div>
                            </td>
 
                            <td>@product.Designation</td>

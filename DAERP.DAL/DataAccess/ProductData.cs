@@ -119,5 +119,11 @@ namespace DAERP.DAL.DataAccess
             _db.ProductDivisions.Remove(productDivision);
             _db.SaveChanges();
         }
+
+        public void UpdateProductDivision(ProductDivisionModel productDivision)
+        {
+            _db.Update(productDivision);
+            _db.SaveChanges();
+        }
     }
 }

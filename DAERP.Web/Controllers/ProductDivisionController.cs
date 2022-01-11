@@ -68,5 +68,34 @@ namespace DAERP.Web.Controllers
                 return RedirectToAction("Index");
             }
         }
+        // GET-Update
+        public IActionResult Update(int? Id)
+        {
+            if (Id == null || Id == 0)
+            {
+                return NotFound();
+            }
+            ProductDivisionModel productDivision = _productData.GetProductDivisionWithChildModelsIncludedBy(Id);
+            if (productDivision == null)
+            {
+                return NotFound();
+            }
+            return View(productDivision);
+        }
+        // POST-Update
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Update(ProductDivisionModel productDivision)
+        {
+            if (ModelState.IsValid)
+            {
+                ProductDivisionModel oldProductDivision = _productData.GetProductDivisionWithChildModelsIncludedBy(productDivision.Id);
+                productDivision.DateCreated = oldProductDivision.DateCreated;
+                productDivision.DateLastModified = System.DateTime.Today;
+                _productData.UpdateProductDivision(productDivision);
+                return RedirectToAction("Index");
+            }
+            return View(productDivision);
+        }
     }
 }

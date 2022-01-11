@@ -18,5 +18,6 @@ namespace DAERP.DAL.DataAccess
         string GetProductDivisionNameBy(int productDivisionId);
         void AddProductDivision(ProductDivisionModel productDivision);
         void RemoveProductDivision(ProductDivisionModel productDivision);
+        void UpdateProductDivision(ProductDivisionModel productDivision);
     }
 }

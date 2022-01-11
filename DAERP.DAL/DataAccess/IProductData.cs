@@ -13,6 +13,7 @@ namespace DAERP.DAL.DataAccess
         ProductModel GetProductWithChildModelsIncludedBy(int? id);
         void RemoveProduct(ProductModel product);
         ProductDivisionModel GetProductDivisionWithChildModelsIncludedBy(int id);
+        IEnumerable<ProductDivisionModel> GetAllProductDivisionsWithChildModelsIncluded();
         void UpdateProduct(ProductModel updatedProduct);
         string GetProductDivisionNameBy(int productDivisionId);
     }

@@ -97,5 +97,13 @@ namespace DAERP.DAL.DataAccess
         {
             return GetAllProductDivisions().Where(pd => pd.Id == productDivisionId).Select(pd => pd.Name).FirstOrDefault();
         }
+
+        public IEnumerable<ProductDivisionModel> GetAllProductDivisionsWithChildModelsIncluded()
+        {
+            IEnumerable<ProductDivisionModel> productDivisions = _db.ProductDivisions
+                    .Include(pd => pd.ProductKind)
+                    .Include(pd => pd.ProductMaterial);
+            return productDivisions;
+        }
     }
 }

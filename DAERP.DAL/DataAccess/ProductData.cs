@@ -105,5 +105,11 @@ namespace DAERP.DAL.DataAccess
                     .Include(pd => pd.ProductMaterial);
             return productDivisions;
         }
+
+        public void AddProductDivision(ProductDivisionModel productDivision)
+        {
+            _db.Add(productDivision);
+            _db.SaveChanges();
+        }
     }
 }

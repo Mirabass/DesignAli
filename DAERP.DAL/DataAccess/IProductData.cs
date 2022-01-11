@@ -16,5 +16,6 @@ namespace DAERP.DAL.DataAccess
         IEnumerable<ProductDivisionModel> GetAllProductDivisionsWithChildModelsIncluded();
         void UpdateProduct(ProductModel updatedProduct);
         string GetProductDivisionNameBy(int productDivisionId);
+        void AddProductDivision(ProductDivisionModel productDivision);
     }
 }

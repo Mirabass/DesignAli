@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAERP.BL.Models.Product
@@ -26,5 +27,7 @@ namespace DAERP.BL.Models.Product
         public ProductKindModel ProductKind { get; set; }
         [Required]
         public ProductMaterialModel ProductMaterial { get; set; }
+        public DateTime DateCreated { get; set; }
+        public DateTime DateLastModified { get; set; }
     }
 }

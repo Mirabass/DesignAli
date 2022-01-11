@@ -13,52 +13,50 @@
            <table class="table table-bordered table-striped table-responsive" style="width:unset;text-align:center;word-wrap:normal">
                <thead>
                    <tr>
-                       <th>
-                           <a class="btn btn-primary" asp-controller="Product" asp-action="Create">Vytvoř nový výrobek</a>
+                       <th rowspan="2" style="vertical-align:middle;width:9%">
+                           <a class="btn btn-primary" asp-controller="Product" asp-action="Create">
+                               <i class="fas fa-plus"></i>
+                           </a>
                        </th>
-                       <th colspan="4" style="background-color:lightyellow">
+                       <th id="productHeader" colspan="4">
                            Výrobek
                        </th>
-                       <th colspan="8" style="background-color:lightblue">
+                       <th id="colorDesign" colspan="8">
                            Barevné provedení
                        </th>
-                       <th colspan="8" style="background-color:lightgray">
+                       <th id="strap" colspan="8">
                            Popruh / ucha
                        </th>
-                       <th style="background-color:lightsalmon">
+                       <th id="motive" rowspan="2" style="vertical-align:middle">
                            Motiv
                        </th>
-                       <th style="background-color:lightpink">
+                       <th id="accessories" rowspan="2" style="vertical-align:middle">
                            Doplňky
                        </th>
                    </tr>
                    <tr>
-                       <th style="width:9%"></th>
-                       <th style="background-color:lightyellow">Číslo výrobku</th>
-                       <th style="background-color:lightyellow">EAN</th>
-                       <th style="background-color:lightyellow">Název výrobku</th>
-                       <th style="background-color:lightyellow">Typ výrobku</th>
+                       <th id="productHeader">Číslo výrobku</th>
+                       <th id="productHeader">EAN</th>
+                       <th id="productHeader">Název výrobku</th>
+                       <th id="productHeader">Typ výrobku</th>
 
-                       <th style="background-color:lightblue">Počet</th>
-                       <th style="background-color:lightblue">Orientace</th>
-                       <th style="background-color:lightblue">RAL</th>
-                       <th style="background-color:lightblue">Barva základní části</th>
-                       <th style="background-color:lightblue">Vzor</th>
-                       <th style="background-color:lightblue">RAL</th>
-                       <th style="background-color:lightblue">Barva dna, kapsy</th>
-                       <th style="background-color:lightblue">Vzor</th>
+                       <th id="colorDesign">Počet</th>
+                       <th id="colorDesign">Orientace</th>
+                       <th id="colorDesign">RAL</th>
+                       <th id="colorDesign">Barva základní části</th>
+                       <th id="colorDesign">Vzor</th>
+                       <th id="colorDesign">RAL</th>
+                       <th id="colorDesign">Barva dna, kapsy</th>
+                       <th id="colorDesign">Vzor</th>
 
-                       <th style="background-color:lightgray">Typ</th>
-                       <th style="background-color:lightgray">Materiál</th>
-                       <th style="background-color:lightgray">Délka [mm]</th>
-                       <th style="background-color:lightgray">Šířka [mm]</th>
-                       <th style="background-color:lightgray">RAL</th>
-                       <th style="background-color:lightgray">Barva</th>
-                       <th style="background-color:lightgray">Vzor</th>
-                       <th style="background-color:lightgray">Uchycení</th>
-                       
-                       <th style="background-color:lightsalmon"></th>
-                       <th style="background-color:lightpink"></th>
+                       <th id="strap">Typ</th>
+                       <th id="strap">Materiál</th>
+                       <th id="strap">Délka [mm]</th>
+                       <th id="strap">Šířka [mm]</th>
+                       <th id="strap">RAL</th>
+                       <th id="strap">Barva</th>
+                       <th id="strap">Vzor</th>
+                       <th id="strap">Uchycení</th>
                    </tr>
                </thead>
 

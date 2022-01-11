@@ -2,20 +2,25 @@
 for details on configuring this project to bundle and minify static web assets. */
 
 /* Personal styles */
-.btn {
-    background-color: DodgerBlue;
-    border: none;
-    color: white;
-    padding: 12px 16px;
-    font-size: 16px;
-    cursor: pointer;
+#productHeader {
+    background-color: lightyellow;
 }
 
-    /* Darker background on mouse-over */
-    .btn:hover {
-        background-color: RoyalBlue;
-    }
+#colorDesign {
+    background-color: lightblue;
+}
 
+#strap {
+    background-color: lightgray;
+}
+
+#motive {
+    background-color: lightsalmon;
+}
+
+#accessories {
+    background-color: lightpink;
+}
 
 a.navbar-brand {
   white-space: normal;

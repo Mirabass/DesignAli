@@ -5,14 +5,169 @@
 }
 
 
+<div class="container-fluid p-3">
+    <h2 class="text-primary">01.00.01 - Číselník odběratelů</h2>
+    <br />
  @if (Model.Count() > 0)
    {
-       <table>
-       @foreach (var customer in Model)
-        {
-            <tr>
-                <td>@customer.Name</td>
-            </tr>
-        }
+   <div>
+       <table class="table table-bordered table-striped table-responsive" style="width:unset;text-align:center;word-wrap:normal">
+           <thead>
+               <tr>
+                   <th rowspan="2" style="vertical-align:middle;width:6%">
+                       <a class="btn btn-primary" asp-controller="Customer" asp-action="Create">
+                           <i class="fas fa-plus"></i>
+                       </a>
+                   </th>
+                   <th id="productHeader" colspan="4">
+                       Odběratel
+                   </th>
+                   <th id="colorDesign" colspan="7">
+                       Sídlo firmy
+                   </th>
+                   <th id="strap" colspan="5">
+                       Hlavní nastavení
+                   </th>
+                   <th id="motive" colspan="14">
+                       Dodací a fakturační údaje - DF
+                   </th>
+                   <th id="accessories" colspan="5">
+                       Místo dodání - MD
+                   </th>
+                   <th id="colorDesign" colspan="11">
+                       Smlouva
+                   </th>
+                   <th id="productHeader" rowspan="2" style="vertical-align:middle">
+                       @Html.LabelFor(m => m.FirstOrDefault().Comment)
+                   </th>
+               </tr>
+               <tr>
+                   <th id="productHeader">@Html.LabelFor(m => m.FirstOrDefault().Designation)</th>
+                   <th id="productHeader">@Html.LabelFor(m => m.FirstOrDefault().State)</th>
+                   <th id="productHeader">@Html.LabelFor(m => m.FirstOrDefault().Name)</th>
+                   <th id="productHeader">@Html.LabelFor(m => m.FirstOrDefault().Franchise)</th>
+
+                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().SFName)</th>
+                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().SFStreetAndNo)</th>
+                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().SFZIP)</th>
+                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().SFCity)</th>
+                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().SFCountry)</th>
+                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().SFIN)</th>
+                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().SFTIN)</th>
+
+                   <th id="strap">@Html.LabelFor(m => m.FirstOrDefault().ProvisionFor60PercentValue)</th>
+                   <th id="strap">@Html.LabelFor(m => m.FirstOrDefault().FVDiscountPercentValue)</th>
+                   <th id="strap">@Html.LabelFor(m => m.FirstOrDefault().Maturity)</th>
+                   <th id="strap">@Html.LabelFor(m => m.FirstOrDefault().CurrencyCode)</th>
+                   <th id="strap">@Html.LabelFor(m => m.FirstOrDefault().RoundPriceWithVAT)</th>
+
+                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFName)</th>
+                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFContactPerson)</th>
+                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFStreetAndNo)</th>
+                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFZIP)</th>
+                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFCity)</th>
+                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFCountry)</th>
+                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFPhone)</th>
+                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFMobile)</th>
+                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFEmail)</th>
+                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFIN)</th>
+                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFTIN)</th>
+                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFBank)</th>
+                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFAccountNumber)</th>
+                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFBIC)</th>
+
+                   <th id="accessories">@Html.LabelFor(m => m.FirstOrDefault().MDName)</th>
+                   <th id="accessories">@Html.LabelFor(m => m.FirstOrDefault().MDContactPerson)</th>
+                   <th id="accessories">@Html.LabelFor(m => m.FirstOrDefault().MDStreetAndNo)</th>
+                   <th id="accessories">@Html.LabelFor(m => m.FirstOrDefault().MDZIP)</th>
+                   <th id="accessories">@Html.LabelFor(m => m.FirstOrDefault().MDCity)</th>
+
+                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().ContractDANumber)</th>
+                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().ContractONumber)</th>
+                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().ContractContent)</th>
+                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().ContractPoPro)</th>
+                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().ContractPoUm)</th>
+                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().ContractDateSigned)</th>
+                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().ContractDateFrom)</th>
+                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().ContractDateTo)</th>
+                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().ContractRent)</th>
+                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().ContractPeriod)</th>
+                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().ContractProvisionPercentValue)</th>
+               </tr>
+            </thead>
+            <tbody>
+               @foreach (var customer in Model)
+                {
+                    <tr>
+                        <td>
+                            <div class="row">
+                                <div class="col text-nowrap">
+                                    <a asp-controller="Customer" asp-action="Update" asp-route-Id="@customer.Id" class="btn btn-primary mx-1">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a asp-controller="Customer" asp-action="Delete" asp-route-Id="@customer.Id" class="btn mx-1 bg-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                    </div>
+                            </div>
+                        </td>
+                        <td>@customer.Designation</td>
+                        <td>@customer.State</td>
+                        <td>@customer.Name</td>
+                        <td>@customer.Franchise</td>
+
+                        <td>@customer.SFName</td>
+                        <td>@customer.SFStreetAndNo</td>
+                        <td>@customer.SFZIP</td>
+                        <td>@customer.SFCity</td>
+                        <td>@customer.SFCountry</td>
+                        <td>@customer.SFIN</td>
+                        <td>@customer.SFTIN</td>
+
+                        <td>@customer.ProvisionFor60PercentValue</td>
+                        <td>@customer.FVDiscountPercentValue</td>
+                        <td>@customer.Maturity</td>
+                        <td>@customer.CurrencyCode</td>
+                        <td>@customer.RoundPriceWithVAT</td>
+
+                        <td>@customer.DFName</td>
+                        <td>@customer.DFContactPerson</td>
+                        <td>@customer.DFStreetAndNo</td>
+                        <td>@customer.DFZIP</td>
+                        <td>@customer.DFCity</td>
+                        <td>@customer.DFCountry</td>
+                        <td>@customer.DFPhone</td>
+                        <td>@customer.DFMobile</td>
+                        <td>@customer.DFEmail</td>
+                        <td>@customer.DFIN</td>
+                        <td>@customer.DFTIN</td>
+                        <td>@customer.DFBank</td>
+                        <td>@customer.DFAccountNumber</td>
+                        <td>@customer.DFBIC</td>
+
+                        <td>@customer.MDName</td>
+                        <td>@customer.MDContactPerson</td>
+                        <td>@customer.MDStreetAndNo</td>
+                        <td>@customer.MDZIP</td>
+                        <td>@customer.MDCity</td>
+
+                        <td>@customer.ContractDANumber</td>
+                        <td>@customer.ContractONumber</td>
+                        <td>@customer.ContractContent</td>
+                        <td>@customer.ContractPoPro</td>
+                        <td>@customer.ContractPoUm</td>
+                        <td>@customer.ContractDateSigned</td>
+                        <td>@customer.ContractDateFrom</td>
+                        <td>@customer.ContractDateTo</td>
+                        <td>@customer.ContractRent</td>
+                        <td>@customer.ContractPeriod</td>
+                        <td>@customer.ContractProvisionPercentValue</td>
+
+                        <td>@customer.Comment</td>
+                    </tr>
+                }
+            </tbody>
         </table>
+   </div>
    }
+</div>

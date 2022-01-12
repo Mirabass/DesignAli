@@ -3,6 +3,7 @@ using DAERP.DAL.DataAccess;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DAERP.Web.Controllers
 {
@@ -50,6 +51,17 @@ namespace DAERP.Web.Controllers
             {
                 return NotFound();
             }
+            List<ProductModel> productsWithThisDivision = _productData.GetProductsBy(productDivision).ToList();
+            if (productsWithThisDivision.Count > 0)
+            {
+                string productDesignations = "";
+                foreach (ProductModel product in productsWithThisDivision)
+                {
+                    productDesignations += product.Designation;
+                    productDesignations += "\n";
+                }
+                return Content("Není možné smazat toto rozdělení výrobku kvůli následujícím výrobkům: \n" + productDesignations);
+            }
             return View(productDivision);
         }
         // POST-Delete
@@ -79,6 +91,17 @@ namespace DAERP.Web.Controllers
             if (productDivision == null)
             {
                 return NotFound();
+            }
+            List<ProductModel> productsWithThisDivision = _productData.GetProductsBy(productDivision).ToList();
+            if (productsWithThisDivision.Count > 0)
+            {
+                string productDesignations = "";
+                foreach (ProductModel product in productsWithThisDivision)
+                {
+                    productDesignations += product.Designation;
+                    productDesignations += "\n";
+                }
+                return Content("Není možné upravit toto rozdělení výrobku kvůli následujícím výrobkům: \n" + productDesignations);
             }
             return View(productDivision);
         }

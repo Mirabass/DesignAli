@@ -19,5 +19,6 @@ namespace DAERP.DAL.DataAccess
         void AddProductDivision(ProductDivisionModel productDivision);
         void RemoveProductDivision(ProductDivisionModel productDivision);
         void UpdateProductDivision(ProductDivisionModel productDivision);
+        IEnumerable<ProductModel> GetProductsBy(ProductDivisionModel productDivision);
     }
 }

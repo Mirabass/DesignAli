@@ -70,9 +70,9 @@ namespace DAERP.DAL.DataAccess
 
         public void RemoveProduct(ProductModel product)
         {
+            _db.Products.Remove(product);
             _db.ProductColorDesigns.Remove(product.ProductColorDesign);
             _db.ProductStraps.Remove(product.ProductStrap);
-            _db.Products.Remove(product);
             _db.SaveChanges();
         }
 
@@ -114,9 +114,9 @@ namespace DAERP.DAL.DataAccess
 
         public void RemoveProductDivision(ProductDivisionModel productDivision)
         {
+            _db.ProductDivisions.Remove(productDivision);
             _db.ProductMaterials.Remove(productDivision.ProductMaterial);
             _db.ProductKinds.Remove(productDivision.ProductKind);
-            _db.ProductDivisions.Remove(productDivision);
             _db.SaveChanges();
         }
 
@@ -124,6 +124,11 @@ namespace DAERP.DAL.DataAccess
         {
             _db.Update(productDivision);
             _db.SaveChanges();
+        }
+
+        public IEnumerable<ProductModel> GetProductsBy(ProductDivisionModel productDivision)
+        {
+            return _db.Products.Where(p => p.ProductDivision == productDivision);
         }
     }
 }

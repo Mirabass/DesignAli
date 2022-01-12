@@ -4,14 +4,16 @@ using DAERP.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DAERP.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220112120857_InitialCustomer")]
+    partial class InitialCustomer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,13 +37,13 @@ namespace DAERP.DAL.Migrations
                     b.Property<string>("ContractDANumber")
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<DateTime?>("ContractDateFrom")
+                    b.Property<DateTime>("ContractDateFrom")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("ContractDateSigned")
+                    b.Property<DateTime>("ContractDateSigned")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("ContractDateTo")
+                    b.Property<DateTime>("ContractDateTo")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ContractONumber")
@@ -56,10 +58,10 @@ namespace DAERP.DAL.Migrations
                     b.Property<string>("ContractPoUm")
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<decimal?>("ContractProvisionPercentValue")
+                    b.Property<decimal>("ContractProvisionPercentValue")
                         .HasColumnType("decimal(5,2)");
 
-                    b.Property<decimal?>("ContractRent")
+                    b.Property<decimal>("ContractRent")
                         .HasColumnType("money");
 
                     b.Property<string>("CurrencyCode")
@@ -109,10 +111,10 @@ namespace DAERP.DAL.Migrations
                     b.Property<string>("DFZIP")
                         .HasColumnType("nvarchar(6)");
 
-                    b.Property<DateTime?>("DateCreated")
+                    b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DateLastModified")
+                    b.Property<DateTime>("DateLastModified")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Designation")

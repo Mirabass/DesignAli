@@ -1,4 +1,5 @@
-﻿using DAERP.BL.Models.Product;
+﻿using DAERP.BL.Models;
+using DAERP.BL.Models.Product;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAERP.DAL.Data
@@ -16,5 +17,6 @@ namespace DAERP.DAL.Data
         public DbSet<ProductKindModel> ProductKinds { get; set; }
         public DbSet<ProductMaterialModel> ProductMaterials { get; set; }
         public DbSet<ProductStrapModel> ProductStraps { get; set; }
+        public DbSet<CustomerModel> Customers { get; set; }
     }
 }

@@ -70,13 +70,13 @@ namespace DAERP.DAL.DataAccess
 
         public void RemoveProduct(ProductModel product)
         {
+            _db.Products.Remove(product);
             _db.ProductColorDesigns.Remove(product.ProductColorDesign);
             _db.ProductStraps.Remove(product.ProductStrap);
-            _db.Products.Remove(product);
             _db.SaveChanges();
         }
 
-        public ProductDivisionModel GetProductDivisionWithChildModelsIncludedBy(int id)
+        public ProductDivisionModel GetProductDivisionWithChildModelsIncludedBy(int? id)
         {
             var productDivision = _db.ProductDivisions.AsNoTracking().Where(pd => pd.Id == id)
                 .Include(pd => pd.ProductKind)
@@ -96,6 +96,39 @@ namespace DAERP.DAL.DataAccess
         public string GetProductDivisionNameBy(int productDivisionId)
         {
             return GetAllProductDivisions().Where(pd => pd.Id == productDivisionId).Select(pd => pd.Name).FirstOrDefault();
+        }
+
+        public IEnumerable<ProductDivisionModel> GetAllProductDivisionsWithChildModelsIncluded()
+        {
+            IEnumerable<ProductDivisionModel> productDivisions = _db.ProductDivisions
+                    .Include(pd => pd.ProductKind)
+                    .Include(pd => pd.ProductMaterial);
+            return productDivisions;
+        }
+
+        public void AddProductDivision(ProductDivisionModel productDivision)
+        {
+            _db.Add(productDivision);
+            _db.SaveChanges();
+        }
+
+        public void RemoveProductDivision(ProductDivisionModel productDivision)
+        {
+            _db.ProductDivisions.Remove(productDivision);
+            _db.ProductMaterials.Remove(productDivision.ProductMaterial);
+            _db.ProductKinds.Remove(productDivision.ProductKind);
+            _db.SaveChanges();
+        }
+
+        public void UpdateProductDivision(ProductDivisionModel productDivision)
+        {
+            _db.Update(productDivision);
+            _db.SaveChanges();
+        }
+
+        public IEnumerable<ProductModel> GetProductsBy(ProductDivisionModel productDivision)
+        {
+            return _db.Products.Where(p => p.ProductDivision == productDivision);
         }
     }
 }

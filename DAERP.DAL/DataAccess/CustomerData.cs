@@ -1,5 +1,6 @@
 ﻿using DAERP.BL.Models;
 using DAERP.DAL.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace DAERP.DAL.DataAccess
 
         public CustomerModel GetCustomerBy(int? id)
         {
-            return _db.Customers.Where(c => c.Id == id).FirstOrDefault();
+            return _db.Customers.AsNoTracking().Where(c => c.Id == id).FirstOrDefault();
         }
 
         public void RemoveCustomer(CustomerModel customer)

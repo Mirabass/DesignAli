@@ -29,5 +29,6 @@ namespace DAERP.BL.Models.Product
         public ProductMaterialModel ProductMaterial { get; set; }
         public DateTime DateCreated { get; set; }
         public DateTime DateLastModified { get; set; }
+
     }
 }

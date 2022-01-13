@@ -11,6 +11,13 @@ namespace DAERP.DAL.Data
         {
 
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<CustomerProductModel>()
+                .HasKey(cp => new { cp.CustomerId, cp.ProductId });
+        }
+
         public DbSet<ProductModel> Products { get; set; }
         public DbSet<ProductColorDesignModel> ProductColorDesigns { get; set; }
         public DbSet<ProductDivisionModel> ProductDivisions { get; set; }
@@ -18,5 +25,6 @@ namespace DAERP.DAL.Data
         public DbSet<ProductMaterialModel> ProductMaterials { get; set; }
         public DbSet<ProductStrapModel> ProductStraps { get; set; }
         public DbSet<CustomerModel> Customers { get; set; }
+        public DbSet<CustomerProductModel> CustomersProducts { get; set; }
     }
 }

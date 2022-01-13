@@ -178,5 +178,7 @@ namespace DAERP.BL.Models
         public string Comment { get; set; }
         public DateTime? DateCreated { get; set; }
         public DateTime? DateLastModified { get; set; }
+
+        public IList<CustomerProductModel> CustomerProducts { get; set; }
     }
 }

@@ -36,5 +36,7 @@ namespace DAERP.BL.Models.Product
         public DateTime DateCreated { get; set; }
         [Required]
         public DateTime DateLastModified { get; set; }
+
+        public IList<CustomerProductModel> CustomerProducts { get; set; }
     }
 }

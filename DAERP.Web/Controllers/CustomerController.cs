@@ -1,10 +1,12 @@
 ﻿using DAERP.BL.Models;
 using DAERP.DAL.DataAccess;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
 namespace DAERP.Web.Controllers
 {
+    [Authorize]
     public class CustomerController : Controller
     {
         private ICustomerData _customerData;
@@ -12,12 +14,14 @@ namespace DAERP.Web.Controllers
         {
             _customerData = customerData;
         }
+        [Authorize(Roles = "Admin,Manager,Cashier")]
         public IActionResult Index()
         {
             IEnumerable<CustomerModel> customers = _customerData.GetAllCustomers();
             return View(customers);
         }
         // GET-Create
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Create()
         {
             return View();
@@ -25,6 +29,7 @@ namespace DAERP.Web.Controllers
         // POST-Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Create(CustomerModel customer)
         {
             if (ModelState.IsValid)
@@ -37,6 +42,7 @@ namespace DAERP.Web.Controllers
             return View(customer);
         }
         // Get-Delete
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Delete(int? Id)
         {
             if (Id == null || Id == 0)
@@ -53,6 +59,7 @@ namespace DAERP.Web.Controllers
         // POST-Delete
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult DeletePost(int? Id)
         {
             CustomerModel customer = _customerData.GetCustomerBy(Id);
@@ -67,6 +74,7 @@ namespace DAERP.Web.Controllers
             }
         }
         // GET-Update
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Update(int? Id)
         {
             if (Id == null || Id == 0)
@@ -83,6 +91,7 @@ namespace DAERP.Web.Controllers
         // POST-Update
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Update(CustomerModel customer)
         {
             if (ModelState.IsValid)

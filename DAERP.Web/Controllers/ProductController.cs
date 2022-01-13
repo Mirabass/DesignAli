@@ -26,7 +26,7 @@ namespace DAERP.Web.Controllers
             _productData = productData;
             _mapper = mapper;
         }
-
+        [Authorize(Roles = "Admin,Manager,Cashier")]
         public IActionResult Index()
         {
             IEnumerable<ProductModel> products = _productData.GetAllProductsWithChildModelsIncluded();
@@ -39,6 +39,7 @@ namespace DAERP.Web.Controllers
             return View(products);
         }
         // GET-Create
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Create()
         {
             CreateViewBagOfProductNames();
@@ -60,6 +61,7 @@ namespace DAERP.Web.Controllers
         // POST-Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Create(ProductViewModel productViewModel)
         {
             if (ModelState.IsValid)
@@ -77,6 +79,7 @@ namespace DAERP.Web.Controllers
             return View(productViewModel);
         }
         // Get-Delete
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Delete(int? Id)
         {
             if (Id == null || Id == 0)
@@ -95,6 +98,7 @@ namespace DAERP.Web.Controllers
         // POST-Delete
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult DeletePost(int? Id)
         {
             ProductModel product = _productData.GetProductWithChildModelsIncludedBy(Id);
@@ -110,6 +114,7 @@ namespace DAERP.Web.Controllers
         }
 
         // GET-Update
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Update(int? Id)
         {
             if (Id == null || Id == 0)
@@ -128,6 +133,7 @@ namespace DAERP.Web.Controllers
         // POST-Update
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Update(ProductViewModel productViewModel)
         {
             if (ModelState.IsValid)

@@ -15,12 +15,14 @@ namespace DAERP.Web.Controllers
         {
             _productData = productData;
         }
+        [Authorize(Roles = "Admin,Manager,Cashier")]
         public IActionResult Index()
         {
             IEnumerable<ProductDivisionModel> productDivisions = _productData.GetAllProductDivisionsWithChildModelsIncluded();
             return View(productDivisions);
         }
         // GET-Create
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Create()
         {
             return View();
@@ -28,6 +30,7 @@ namespace DAERP.Web.Controllers
         // POST-Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Create(ProductDivisionModel productDivision)
         {
             if (ModelState.IsValid)
@@ -40,6 +43,7 @@ namespace DAERP.Web.Controllers
             return View(productDivision);
         }
         // Get-Delete
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Delete(int? Id)
         {
             if (Id == null || Id == 0)
@@ -67,6 +71,7 @@ namespace DAERP.Web.Controllers
         // POST-Delete
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult DeletePost(int? Id)
         {
             ProductDivisionModel productDivision = _productData.GetProductDivisionWithChildModelsIncludedBy(Id);
@@ -81,6 +86,7 @@ namespace DAERP.Web.Controllers
             }
         }
         // GET-Update
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Update(int? Id)
         {
             if (Id == null || Id == 0)
@@ -108,6 +114,7 @@ namespace DAERP.Web.Controllers
         // POST-Update
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Update(ProductDivisionModel productDivision)
         {
             if (ModelState.IsValid)

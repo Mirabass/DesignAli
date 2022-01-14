@@ -1,4 +1,5 @@
 ﻿using DAERP.BL.Models;
+using DAERP.BL.Models.Product;
 using DAERP.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -17,8 +18,17 @@ namespace DAERP.DAL.DataAccess
             _db = db;
         }
 
-        public void AddCustomer(CustomerModel customer)
+        public async Task AddCustomerAsync(CustomerModel customer)
         {
+            customer.CustomerProducts = new List<CustomerProductModel>();
+            await _db.Products.ForEachAsync(p =>
+            {
+                customer.CustomerProducts.Add(new CustomerProductModel()
+                {
+                    ProductId = p.Id,
+                    CustomerId = customer.Id
+                });
+            });
             _db.Customers.Add(customer);
             _db.SaveChanges();
         }
@@ -35,6 +45,8 @@ namespace DAERP.DAL.DataAccess
 
         public void RemoveCustomer(CustomerModel customer)
         {
+            var customerProductToRemove = _db.CustomersProducts.Where(cp => cp.Customer == customer);
+            _db.CustomersProducts.RemoveRange(customerProductToRemove);
             _db.Customers.Remove(customer);
             _db.SaveChanges();
         }

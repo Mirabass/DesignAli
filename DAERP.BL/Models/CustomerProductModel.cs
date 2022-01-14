@@ -19,6 +19,7 @@ namespace DAERP.BL.Models
         public int ProductId { get; set; }
         [Required]
         public ProductModel Product { get; set; }
-        public int AmountInStock { get; set; }
+        [Required]
+        public int AmountInStock { get; set; } = 0;
     }
 }

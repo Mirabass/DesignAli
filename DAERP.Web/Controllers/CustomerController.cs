@@ -3,6 +3,8 @@ using DAERP.DAL.DataAccess;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DAERP.Web.Controllers
 {
@@ -10,9 +12,11 @@ namespace DAERP.Web.Controllers
     public class CustomerController : Controller
     {
         private ICustomerData _customerData;
-        public CustomerController(ICustomerData customerData)
+        private ICustomerProductData _customerProductData;
+        public CustomerController(ICustomerData customerData, ICustomerProductData customerProductData)
         {
             _customerData = customerData;
+            _customerProductData = customerProductData;
         }
         [Authorize(Roles = "Admin,Manager,Cashier")]
         public IActionResult Index()
@@ -30,13 +34,13 @@ namespace DAERP.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Manager")]
-        public IActionResult Create(CustomerModel customer)
+        public async Task<IActionResult> Create(CustomerModel customer)
         {
             if (ModelState.IsValid)
             {
                 customer.DateCreated = System.DateTime.Today;
                 customer.DateLastModified = System.DateTime.Today;
-                _customerData.AddCustomer(customer);
+                await _customerData.AddCustomerAsync(customer);
                 return RedirectToAction("Index");
             }
             return View(customer);
@@ -53,6 +57,16 @@ namespace DAERP.Web.Controllers
             if (customer == null)
             {
                 return NotFound();
+            }
+            List<CustomerProductModel> productsInStock = _customerProductData.GetProductsInStockOfCustomerBy(Id).ToList();
+            if (productsInStock.Count > 0)
+            {
+                string productsInStockMessage = "";
+                productsInStock.ForEach(p =>
+                {
+                    productsInStockMessage += p.Product.Designation + ": " + p.AmountInStock + "\n";
+                });
+                return Content("Není možné smazat tohoto odběratele, protože má naskladněny následující výrobky:\n" + productsInStockMessage);
             }
             return View(customer);
         }

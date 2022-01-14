@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Authorization;
 using DAERP.Web.ViewModels;
 using DAERP.DAL.DataAccess;
 using AutoMapper;
+using DAERP.BL.Models;
+using System.Threading.Tasks;
 
 namespace DAERP.Web.Controllers
 {
@@ -17,14 +19,16 @@ namespace DAERP.Web.Controllers
     public class ProductController : Controller
     {
         private readonly IProductData _productData;
+        private readonly ICustomerProductData _customerProductData;
         private readonly IColorProvider _colorProvider;
         private readonly IMapper _mapper;
 
-        public ProductController(IColorProvider colorProvider, IProductData productData, IMapper mapper)
+        public ProductController(IColorProvider colorProvider, IProductData productData, IMapper mapper, ICustomerProductData customerProductData)
         {
             _colorProvider = colorProvider;
             _productData = productData;
             _mapper = mapper;
+            _customerProductData = customerProductData;
         }
         [Authorize(Roles = "Admin,Manager,Cashier")]
         public IActionResult Index()
@@ -62,7 +66,7 @@ namespace DAERP.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Manager")]
-        public IActionResult Create(ProductViewModel productViewModel)
+        public async Task<IActionResult> Create(ProductViewModel productViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -72,7 +76,7 @@ namespace DAERP.Web.Controllers
                 CustomOperations.CreateAndAsignDesignationFor(product);
                 product.DateCreated = System.DateTime.Today;
                 product.DateLastModified = System.DateTime.Today;
-                _productData.AddProduct(product);
+                await _productData.AddProduct(product);
                 return RedirectToAction("Index");
             }
             CreateViewBagOfProductNames();
@@ -90,6 +94,16 @@ namespace DAERP.Web.Controllers
             if (product == null)
             {
                 return NotFound();
+            }
+            List<CustomerProductModel> customersWithStock = _customerProductData.GetCustomersWithStockOfProductBy(Id).ToList();
+            if (customersWithStock.Count > 0)
+            {
+                string customersWithStockMessage = "";
+                customersWithStock.ForEach(p =>
+                {
+                    customersWithStockMessage += p.Customer.Designation + ": " + p.AmountInStock + "\n";
+                });
+                return Content("Není možné smazat tento výrobek, protože ho mají naskladněny následující odběratelé:\n" + customersWithStockMessage);
             }
             ProductViewModel productViewModel = _mapper.Map<ProductViewModel>(product);
             ViewBag.ProductName = _productData.GetProductDivisionNameBy(product.ProductDivision.Id);

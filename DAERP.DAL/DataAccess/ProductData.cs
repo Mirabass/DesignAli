@@ -1,4 +1,5 @@
-﻿using DAERP.BL.Models.Product;
+﻿using DAERP.BL.Models;
+using DAERP.BL.Models.Product;
 using DAERP.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -42,12 +43,23 @@ namespace DAERP.DAL.DataAccess
             return productDivision;
         }
 
-        public void AddProduct(ProductModel product)
+        public async Task AddProduct(ProductModel product)
         {
+            product.CustomerProducts = new List<CustomerProductModel>();
+            await _db.Customers.ForEachAsync(c =>
+            {
+                product.CustomerProducts.Add(new CustomerProductModel()
+                {
+                    ProductId = product.Id,
+                    CustomerId = c.Id
+                });
+            });
+
             _db.Add(product);
             _db.Entry(product.ProductDivision).State = EntityState.Unchanged;
             _db.Entry(product.ProductDivision.ProductKind).State = EntityState.Unchanged;
             _db.Entry(product.ProductDivision.ProductMaterial).State = EntityState.Unchanged;
+
             _db.SaveChanges();
         }
 

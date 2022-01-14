@@ -1,12 +1,14 @@
 ﻿using DAERP.BL.Models;
+using DAERP.BL.Models.Product;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DAERP.DAL.DataAccess
 {
     public interface ICustomerData
     {
         IEnumerable<CustomerModel> GetAllCustomers();
-        void AddCustomer(CustomerModel customer);
+        Task AddCustomerAsync(CustomerModel customer);
         CustomerModel GetCustomerBy(int? id);
         void RemoveCustomer(CustomerModel customer);
         void UpdateCustomer(CustomerModel customer);

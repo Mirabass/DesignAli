@@ -45,6 +45,7 @@ namespace DAERP.Web
             services.AddSingleton<IColorProvider, ColorProvider>();
             services.AddTransient<ICustomerData, CustomerData>();
             services.AddTransient<IProductData, ProductData>();
+            services.AddTransient<ICustomerProductData, CustomerProductData>();
 
             services.AddControllersWithViews();
         }

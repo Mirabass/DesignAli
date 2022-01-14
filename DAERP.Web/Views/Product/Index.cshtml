@@ -39,9 +39,13 @@
                        </th>
                    </tr>
                    <tr>
-                       <th id="productHeader">Číslo výrobku</th>
+                       <th id="productHeader">
+                           <a asp-action="Index" asp-route-sortOrder="@ViewData["DesignationSortParam"]">@Html.DisplayNameFor(model => model.Designation)</a>
+                       </th>
                        <th id="productHeader">EAN</th>
-                       <th id="productHeader">Název výrobku</th>
+                       <th id="productHeader">
+                           <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParam"]">@Html.DisplayNameFor(model => model.ProductDivision.Name)</a>
+                       </th>
                        <th id="productHeader">Typ výrobku</th>
 
                        <th id="colorDesign">Počet</th>

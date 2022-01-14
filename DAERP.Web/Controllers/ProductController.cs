@@ -12,6 +12,7 @@ using DAERP.DAL.DataAccess;
 using AutoMapper;
 using DAERP.BL.Models;
 using System.Threading.Tasks;
+using System;
 
 namespace DAERP.Web.Controllers
 {
@@ -31,14 +32,31 @@ namespace DAERP.Web.Controllers
             _customerProductData = customerProductData;
         }
         [Authorize(Roles = "Admin,Manager,Cashier")]
-        public IActionResult Index()
+        public IActionResult Index(string sortOrder)
         {
+            ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DesignationSortParam"] = sortOrder == "Designation" ? "designation_desc" : "Designation";
             IEnumerable<ProductModel> products = _productData.GetAllProductsWithChildModelsIncluded();
             foreach (ProductModel product in products)
             {
                 product.ProductColorDesign.MainPartColorHex = _colorProvider.GetHexFromRal(product.ProductColorDesign.MainPartRAL);
                 product.ProductColorDesign.PocketColorHex = _colorProvider.GetHexFromRal(product.ProductColorDesign.PocketRAL);
                 product.ProductStrap.ColorHex = _colorProvider.GetHexFromRal(product.ProductStrap.RAL);
+            }
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    products = products.OrderByDescending(p => p.ProductDivision.Name);
+                    break;
+                case "Designation":
+                    products = products.OrderBy(p => p.Designation);
+                    break;
+                case "designation_desc":
+                    products = products.OrderByDescending(p => p.Designation);
+                    break;
+                default:
+                    products = products.OrderBy(p => p.ProductDivision.Name);
+                    break;
             }
             return View(products);
         }

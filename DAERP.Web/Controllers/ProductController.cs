@@ -34,32 +34,41 @@ namespace DAERP.Web.Controllers
         [Authorize(Roles = "Admin,Manager,Cashier")]
         public IActionResult Index(string sortOrder)
         {
-            ViewData["NameSortParam"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewData["DesignationSortParam"] = sortOrder == "Designation" ? "designation_desc" : "Designation";
+            ViewData["CurrentSort"] = sortOrder;
             IEnumerable<ProductModel> products = _productData.GetAllProductsWithChildModelsIncluded();
-            foreach (ProductModel product in products)
+            if (products.Count() > 0)
             {
-                product.ProductColorDesign.MainPartColorHex = _colorProvider.GetHexFromRal(product.ProductColorDesign.MainPartRAL);
-                product.ProductColorDesign.PocketColorHex = _colorProvider.GetHexFromRal(product.ProductColorDesign.PocketRAL);
-                product.ProductStrap.ColorHex = _colorProvider.GetHexFromRal(product.ProductStrap.RAL);
-            }
-            switch (sortOrder)
-            {
-                case "name_desc":
-                    products = products.OrderByDescending(p => p.ProductDivision.Name);
-                    break;
-                case "Designation":
-                    products = products.OrderBy(p => p.Designation);
-                    break;
-                case "designation_desc":
-                    products = products.OrderByDescending(p => p.Designation);
-                    break;
-                default:
-                    products = products.OrderBy(p => p.ProductDivision.Name);
-                    break;
+                string defaultPropToSort = "Designation";
+                Helper.Helper.SetDataForSortingPurposes(ViewData, sortOrder, products.FirstOrDefault(), defaultPropToSort);
+                foreach (ProductModel product in products)
+                {
+                    
+                    product.ProductColorDesign.MainPartColorHex = _colorProvider.GetHexFromRal(product.ProductColorDesign.MainPartRAL);
+                    product.ProductColorDesign.PocketColorHex = _colorProvider.GetHexFromRal(product.ProductColorDesign.PocketRAL);
+                    product.ProductStrap.ColorHex = _colorProvider.GetHexFromRal(product.ProductStrap.RAL);
+                }
+                if (String.IsNullOrEmpty(sortOrder))
+                {
+                    sortOrder = defaultPropToSort;
+                }
+                bool descending = false;
+                if (sortOrder.EndsWith("_desc"))
+                {
+                    sortOrder = sortOrder.Substring(0, sortOrder.Length - 5);
+                    descending = true;
+                }
+                if (descending)
+                {
+                    products = products.OrderByDescending(e => DataOperations.GetPropertyValue(e, sortOrder));
+                }
+                else
+                {
+                    products = products.OrderBy(e => DataOperations.GetPropertyValue(e, sortOrder));
+                }
             }
             return View(products);
         }
+
         // GET-Create
         [Authorize(Roles = "Admin,Manager")]
         public IActionResult Create()

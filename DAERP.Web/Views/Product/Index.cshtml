@@ -44,9 +44,11 @@
                        </th>
                        <th id="productHeader">EAN</th>
                        <th id="productHeader">
-                           <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParam"]">@Html.DisplayNameFor(model => model.ProductDivision.Name)</a>
+                           <a asp-action="Index" asp-route-sortOrder="@ViewData["ProductDivisionNameSortParam"]">@Html.DisplayNameFor(model => model.ProductDivision.Name)</a>
                        </th>
-                       <th id="productHeader">Typ výrobku</th>
+                       <th id="productHeader">
+                           <a asp-action="Index" asp-route-sortOrder="@ViewData["ProductDivisionProductTypeSortParam"]">@Html.DisplayNameFor(model => model.ProductDivision.ProductType)</a>
+                       </th>
 
                        <th id="colorDesign">Počet</th>
                        <th id="colorDesign">Orientace</th>

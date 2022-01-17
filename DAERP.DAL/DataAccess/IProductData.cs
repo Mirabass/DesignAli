@@ -1,5 +1,6 @@
 ﻿using DAERP.BL.Models.Product;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DAERP.DAL.DataAccess

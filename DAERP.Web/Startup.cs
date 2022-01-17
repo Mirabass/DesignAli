@@ -43,6 +43,7 @@ namespace DAERP.Web
             services.AddAutoMapper(typeof(ProductProfile));
 
             services.AddSingleton<IColorProvider, ColorProvider>();
+            
             services.AddTransient<ICustomerData, CustomerData>();
             services.AddTransient<IProductData, ProductData>();
             services.AddTransient<ICustomerProductData, CustomerProductData>();

@@ -1,11 +1,26 @@
-﻿@model IEnumerable<DAERP.BL.Models.Product.ProductModel>
+﻿@model DAERP.Web.Helper.PaginatedList<DAERP.BL.Models.Product.ProductModel>
 @{
     ViewData["Title"] = "Products";
 }
 
 
 <div class="container-fluid p-3">
-    <h2 class="text-primary">02.00.02 - Číselník výrobků</h2>
+    <div class="col-12 col-md-12">
+        <div class="row">
+            <div class="col-12 col-md-6"><h2 class="text-primary">02.00.02 - Číselník výrobků</h2></div>
+            <div class="col-12 col-md-6">
+                <form asp-action="Index" method="get">
+                    <div class="form-actions no-color">
+                        <p>
+                            Prohledat výrobky: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                            <input type="submit" value="Filtrovat" class="btn btn-secondary" /> |
+                            <a class="btn btn-outline-warning" asp-action="Index">Zpět na celý seznam</a>
+                        </p>
+                    </div>
+                </form>
+        </div>
+        </div>
+    </div>
     <br />
     @if (Model.Count() > 0)
    {
@@ -32,41 +47,69 @@
                            Popruh / ucha
                        </th>
                        <th id="motive" rowspan="2" style="vertical-align:middle">
-                           Motiv
+                           <a asp-action="Index" asp-route-sortOrder="@ViewData["MotiveSortParam"]">@Html.DisplayNameFor(model => model.FirstOrDefault().Motive)</a>
                        </th>
                        <th id="accessories" rowspan="2" style="vertical-align:middle">
-                           Doplňky
+                           <a asp-action="Index" asp-route-sortOrder="@ViewData["AccessoriesSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.FirstOrDefault().Accessories)</a>
                        </th>
                    </tr>
                    <tr>
                        <th id="productHeader">
-                           <a asp-action="Index" asp-route-sortOrder="@ViewData["DesignationSortParam"]">@Html.DisplayNameFor(model => model.Designation)</a>
-                       </th>
-                       <th id="productHeader">EAN</th>
-                       <th id="productHeader">
-                           <a asp-action="Index" asp-route-sortOrder="@ViewData["ProductDivisionNameSortParam"]">@Html.DisplayNameFor(model => model.ProductDivision.Name)</a>
+                           <a asp-action="Index" asp-route-sortOrder="@ViewData["DesignationSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.FirstOrDefault().Designation)</a>
                        </th>
                        <th id="productHeader">
-                           <a asp-action="Index" asp-route-sortOrder="@ViewData["ProductDivisionProductTypeSortParam"]">@Html.DisplayNameFor(model => model.ProductDivision.ProductType)</a>
+                           <a asp-action="Index" asp-route-sortOrder="@ViewData["EANSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.FirstOrDefault().EAN)</a>
+                       </th>
+                       <th id="productHeader">
+                           <a asp-action="Index" asp-route-sortOrder="@ViewData["ProductDivisionNameSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.FirstOrDefault().ProductDivision.Name)</a>
+                       </th>
+                       <th id="productHeader">
+                           <a asp-action="Index" asp-route-sortOrder="@ViewData["ProductDivisionProductTypeSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.FirstOrDefault().ProductDivision.ProductType)</a>
                        </th>
 
-                       <th id="colorDesign">Počet</th>
-                       <th id="colorDesign">Orientace</th>
-                       <th id="colorDesign">RAL</th>
-                       <th id="colorDesign">Barva základní části</th>
+                       <th id="colorDesign">
+                           <a asp-action="Index" asp-route-sortOrder="@ViewData["ProductColorDesignQuantitySortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.FirstOrDefault().ProductColorDesign.Quantity)</a>
+                       </th>
+                       <th id="colorDesign">
+                           <a asp-action="Index" asp-route-sortOrder="@ViewData["ProductColorDesignOrientationSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.FirstOrDefault().ProductColorDesign.Orientation)</a>
+                       </th>
+                       <th id="colorDesign">
+                           <a asp-action="Index" asp-route-sortOrder="@ViewData["ProductColorDesignMainPartRALSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.FirstOrDefault().ProductColorDesign.MainPartRAL)</a>
+                       </th>
+                       <th id="colorDesign">
+                           <a asp-action="Index" asp-route-sortOrder="@ViewData["ProductColorDesignMainPartColorNameSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.FirstOrDefault().ProductColorDesign.MainPartColorName)</a>
+                       </th>
                        <th id="colorDesign">Vzor</th>
-                       <th id="colorDesign">RAL</th>
-                       <th id="colorDesign">Barva dna, kapsy</th>
+                       <th id="colorDesign">
+                           <a asp-action="Index" asp-route-sortOrder="@ViewData["ProductColorDesignPocketRALSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.FirstOrDefault().ProductColorDesign.PocketRAL)</a>
+                       </th>
+                       <th id="colorDesign">
+                           <a asp-action="Index" asp-route-sortOrder="@ViewData["ProductColorDesignPocketColorNameSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.FirstOrDefault().ProductColorDesign.PocketColorName)</a>
+                       </th>
                        <th id="colorDesign">Vzor</th>
 
-                       <th id="strap">Typ</th>
-                       <th id="strap">Materiál</th>
-                       <th id="strap">Délka [mm]</th>
-                       <th id="strap">Šířka [mm]</th>
-                       <th id="strap">RAL</th>
-                       <th id="strap">Barva</th>
+                       <th id="strap">
+                           <a asp-action="Index" asp-route-sortOrder="@ViewData["ProductStrapTypeSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.FirstOrDefault().ProductStrap.Type)</a>
+                       </th>
+                       <th id="strap">
+                           <a asp-action="Index" asp-route-sortOrder="@ViewData["ProductStrapMaterialSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.FirstOrDefault().ProductStrap.Material)</a>
+                       </th>
+                       <th id="strap">
+                           <a asp-action="Index" asp-route-sortOrder="@ViewData["ProductStrapLengthSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.FirstOrDefault().ProductStrap.Length)</a>
+                       </th>
+                       <th id="strap">
+                           <a asp-action="Index" asp-route-sortOrder="@ViewData["ProductStrapWidthSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.FirstOrDefault().ProductStrap.Width)</a>
+                       </th>
+                       <th id="strap">
+                           <a asp-action="Index" asp-route-sortOrder="@ViewData["ProductStrapRALSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.FirstOrDefault().ProductStrap.RAL)</a>
+                       </th>
+                       <th id="strap">
+                           <a asp-action="Index" asp-route-sortOrder="@ViewData["ProductStrapColorNameSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.FirstOrDefault().ProductStrap.ColorName)</a>
+                       </th>
                        <th id="strap">Vzor</th>
-                       <th id="strap">Uchycení</th>
+                       <th id="strap">
+                           <a asp-action="Index" asp-route-sortOrder="@ViewData["ProductStrapAttachmentSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">@Html.DisplayNameFor(model => model.FirstOrDefault().ProductStrap.Attachment)</a>
+                       </th>
                    </tr>
                </thead>
 
@@ -118,6 +161,30 @@
                </tbody>
 
            </table>
+       </div>
+       <div>
+            <div class="row">
+                @{
+                    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+                    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+                }
+                <div class="col p-2">
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-pageNumber="@(Model.PageIndex - 1)"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       class="btn btn-secondary @prevDisabled">
+                       <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-pageNumber="@(Model.PageIndex + 1)"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       class="btn btn-secondary @nextDisabled">
+                       <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
        </div>
    }
 </div>

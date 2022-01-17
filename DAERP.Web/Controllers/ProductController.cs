@@ -13,6 +13,7 @@ using AutoMapper;
 using DAERP.BL.Models;
 using System.Threading.Tasks;
 using System;
+using DAERP.Web.Helper;
 
 namespace DAERP.Web.Controllers
 {
@@ -32,10 +33,33 @@ namespace DAERP.Web.Controllers
             _customerProductData = customerProductData;
         }
         [Authorize(Roles = "Admin,Manager,Cashier")]
-        public IActionResult Index(string sortOrder)
+        public IActionResult Index(
+            string sortOrder,
+            string currentFilter,
+            string searchString,
+            int? pageNumber)
         {
             ViewData["CurrentSort"] = sortOrder;
+            ViewData["CurrentFilter"] = searchString;
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
             IEnumerable<ProductModel> products = _productData.GetAllProductsWithChildModelsIncluded();
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                string normalizedSearchString = searchString.Normalize(System.Text.NormalizationForm.FormD).ToUpper();
+                products = products.Where(p => 
+                    p.Designation.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString) ||
+                    p.EAN.ToString().Contains(normalizedSearchString) ||
+                    p.ProductDivision.Name.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString) ||
+                    p.ProductDivision.ProductType.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString)
+                );
+            }
             if (products.Count() > 0)
             {
                 string defaultPropToSort = "Designation";
@@ -66,7 +90,8 @@ namespace DAERP.Web.Controllers
                     products = products.OrderBy(e => DataOperations.GetPropertyValue(e, sortOrder));
                 }
             }
-            return View(products);
+            int pageSize = 15;
+            return View(PaginatedList<ProductModel>.Create(products, pageNumber ?? 1, pageSize));
         }
 
         // GET-Create

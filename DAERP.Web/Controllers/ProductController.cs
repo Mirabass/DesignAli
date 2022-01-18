@@ -34,13 +34,18 @@ namespace DAERP.Web.Controllers
         }
         [Authorize(Roles = "Admin,Manager,Cashier")]
         public IActionResult Index(
+            string currentSort,
             string sortOrder,
             string currentFilter,
             string searchString,
             int? pageNumber)
         {
+            if (sortOrder is null)
+            {
+                sortOrder = currentSort;
+            }
             ViewData["CurrentSort"] = sortOrder;
-            ViewData["CurrentFilter"] = searchString;
+            ViewData["CurrentFilter"] = searchString ?? currentFilter;
             if (searchString != null)
             {
                 pageNumber = 1;
@@ -90,7 +95,7 @@ namespace DAERP.Web.Controllers
                     products = products.OrderBy(e => DataOperations.GetPropertyValue(e, sortOrder));
                 }
             }
-            int pageSize = 15;
+            int pageSize = 12;
             return View(PaginatedList<ProductModel>.Create(products, pageNumber ?? 1, pageSize));
         }
 

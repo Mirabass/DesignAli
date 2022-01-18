@@ -163,6 +163,7 @@ namespace DAERP.BL.Models
         [Display(Name = "Do")]
         public DateTime? ContractDateTo { get; set; }
         [Display(Name = "Nájem")]
+        [DataType(DataType.Currency)]
         [Column(TypeName = "money")]
         public decimal? ContractRent { get; set; }
         [Display(Name = "Období")]

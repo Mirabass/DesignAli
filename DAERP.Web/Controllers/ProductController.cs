@@ -99,7 +99,22 @@ namespace DAERP.Web.Controllers
             int pageSize = 12;
             return View(PaginatedList<ProductModel>.Create(products, pageNumber ?? 1, pageSize));
         }
-
+        [HttpPost]
+        public JsonResult RetrieveProductImage(int? Id)
+        {
+            string notFoundResult = @"https://www.w3schools.com/images/lamp.jpg";
+            if (Id == null || Id == 0)
+            {
+                return Json(notFoundResult);
+            }
+            ProductImageModel productImage = _productData.GetProductImageBy(Id);
+            if (productImage == null)
+            {
+                return Json(notFoundResult);
+            }
+            string productImageDataURL = Helper.Helper.ConvertImageToURL(productImage.Image, productImage.Type);
+            return Json(productImageDataURL);
+        }
         // GET-Create
         [Authorize(Roles = "Admin,Manager")]
         public IActionResult Create()
@@ -139,6 +154,14 @@ namespace DAERP.Web.Controllers
                 MemoryStream ms = new MemoryStream();
                 file.CopyTo(ms);
                 img.Image = ms.ToArray();
+                string fileType = Path.GetExtension(file.FileName).Replace(".", String.Empty).ToUpper();
+                if (fileType != "PNG" || fileType != "JPG")
+                {
+                    ModelState.AddModelError("Invalid image file name","Invalid file name of image. Must be PNG or JPG.");
+                    CreateViewBagOfProductNames();
+                    return View(productViewModel);
+                }
+                img.Type = fileType;
                 ms.Close();
                 ms.Dispose();
                 product.ProductImage = img;

@@ -142,5 +142,13 @@ namespace DAERP.DAL.DataAccess
         {
             return _db.Products.Where(p => p.ProductDivision == productDivision);
         }
+
+        public ProductImageModel GetProductImageBy(int? productId)
+        {
+            var product = _db.Products
+                .Include(p => p.ProductImage)
+                .Where(p => p.Id == productId).FirstOrDefault();
+            return product.ProductImage;
+        }
     }
 }

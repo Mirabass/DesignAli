@@ -29,5 +29,12 @@ namespace DAERP.Web.Helper
             string prop_desc = prop + "_desc";
             return (prop, propParam, prop_desc);
         }
+
+        internal static string ConvertImageToURL(byte[] image, string imageType)
+        {
+            string imageBase64Data = Convert.ToBase64String(image);
+            string imageDataURL = string.Format($"data:image/{imageType};base64,{imageBase64Data}");
+            return imageDataURL;
+        }
     }
 }

@@ -11,27 +11,6 @@ namespace DAERP.DAL.Services
 {
     public static class DataOperations
     {
-        //public static void Sort<T>(this IEnumerable<T> list, string sortOrder, string defaultSortOrder)
-        //{
-        //    if (String.IsNullOrEmpty(sortOrder))
-        //    {
-        //        sortOrder = defaultSortOrder;
-        //    }
-        //    bool descending = false;
-        //    if (sortOrder.EndsWith("_desc"))
-        //    {
-        //        sortOrder = sortOrder.Substring(0, sortOrder.Length - 5);
-        //        descending = true;
-        //    }
-        //    if (descending)
-        //    {
-        //        list = list.OrderByDescending(e => GetPropertyValue(e, sortOrder));
-        //    }
-        //    else
-        //    {
-        //        list = list.OrderBy(e => GetPropertyValue(e, sortOrder));
-        //    }
-        //}
         public static object GetPropertyValue(object obj, string propertyName)
         {
             try

@@ -14,6 +14,7 @@ using DAERP.BL.Models;
 using System.Threading.Tasks;
 using System;
 using DAERP.Web.Helper;
+using System.IO;
 
 namespace DAERP.Web.Controllers
 {
@@ -133,6 +134,14 @@ namespace DAERP.Web.Controllers
                 CustomOperations.CreateAndAsignDesignationFor(product);
                 product.DateCreated = System.DateTime.Today;
                 product.DateLastModified = System.DateTime.Today;
+                ProductImageModel img = new ProductImageModel();
+                var file = Request.Form.Files.FirstOrDefault();
+                MemoryStream ms = new MemoryStream();
+                file.CopyTo(ms);
+                img.Image = ms.ToArray();
+                ms.Close();
+                ms.Dispose();
+                product.ProductImage = img;
                 await _productData.AddProduct(product);
                 return RedirectToAction("Index");
             }

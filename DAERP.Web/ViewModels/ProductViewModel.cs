@@ -33,5 +33,6 @@ namespace DAERP.Web.ViewModels
         [Display(Name = "Doplňky")]
         [Column(TypeName = "nvarchar(256)")]
         public string Accessories { get; set; }
+        public ProductImageModel ProductImage { get; set; }
     }
 }

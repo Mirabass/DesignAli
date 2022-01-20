@@ -1,29 +1,51 @@
 ﻿@model DAERP.Web.ViewModels.MultiDropDownListViewModel
-<link href="~/multiselect/example-styles.css" rel="stylesheet" />
-<div class="container">
-    <div class="card">
-        <div class="card-text text-center">
-            <h1>Multi Dropdownlist example</h1>
-        </div>
-        <form asp-controller="Home" asp-action="PostSelectedValues">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <select id="dropDownList-example" name="SelectedIds"
-                                asp-items="@Model.ItemList" multiple class="form-control"></select>
-                    </div>
-                </div>
+<link href="~/lib/bootstrap/bootstrap-multiselect/css/bootstrap-multiselect.css" rel="stylesheet" />
+
+<h2 class="text-primary">04.02.01 - Sklad výrobků</h2>
+<br />
+<div>
+    <div class="form-group row border p-2 shadow rounded justify-content-center">
+        <div class="row p-3">
+            <div class="col text-info">
+                Sklad výrobků dle odběratelů:
             </div>
-            <input type="submit" value="Save" class="btn btn-primary" />
-        </form>
+        </div>
+        <div class="row p-3">
+            <div class="col">
+                <form asp-controller="Stock" asp-action="PostSelectedCustomers">
+                    <div class="row">
+                        <div class="col">
+                            <select multiple="multiple" id="customersDropDown" name="SelectedIds"
+                            asp-items="@Model.ItemList"></select>
+                        </div>
+                        <div class="col">
+                            <input type="submit" value="Zobrazit stav skladu" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
+    
+
 
 @section Scripts{
-    <script src="~/multiselect/jquery.multi-select.js"></script>
+    <script src="/lib/bootstrap/bootstrap-multiselect/js/bootstrap-multiselect.js"></script>
     <script>
         $(document).ready(function () {
-            $('#dropDownList-example').multiSelect();
+            $('#customersDropDown').multiselect({
+                includeSelectAllOption: true,
+                selectAllValue: 'select-all-value',
+                selectAllText: 'Vybrat všechny',
+                enableCaseInsensitiveFiltering: true,
+                filterPlaceholder: 'Vyhledat...',
+                maxHeight: 200,
+                nonSelectedText: 'Zvolte odběratele!',
+                numberDisplayed: 4,
+                nSelectedText: ' vybraných odběratelů',
+                allSelectedText: 'Všichni odběratelé'
+            });
         });
     </script>
 

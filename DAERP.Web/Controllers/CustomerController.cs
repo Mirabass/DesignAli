@@ -58,7 +58,7 @@ namespace DAERP.Web.Controllers
             {
                 return NotFound();
             }
-            List<CustomerProductModel> productsInStock = _customerProductData.GetProductsInStockOfCustomerBy(Id).ToList();
+            List<CustomerProductModel> productsInStock = _customerProductData.GetProductsInStockOfCustomerWithChildModelsIncludedBy(Id).ToList();
             if (productsInStock.Count > 0)
             {
                 string productsInStockMessage = "";

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAERP.Web.ViewModels
 {
-    public class ProductViewModel
+    public class ProductCreateViewModel
     {
         /// <summary>
         /// The unique identifier for product model

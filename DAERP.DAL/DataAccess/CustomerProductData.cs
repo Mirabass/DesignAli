@@ -18,7 +18,7 @@ namespace DAERP.DAL.DataAccess
             _db = db;
         }
 
-        public IEnumerable<CustomerProductModel> GetCustomersWithStockOfProductBy(int? id)
+        public IEnumerable<CustomerProductModel> GetCustomersWithStockOfProductWithChildModelsIncludedBy(int? id)
         {
             var customersWithStockOfProduct = _db.Products
                                                 .Include(p => p.CustomerProducts)
@@ -29,7 +29,7 @@ namespace DAERP.DAL.DataAccess
             return customersWithStockOfProduct;
         }
 
-        public IEnumerable<CustomerProductModel> GetProductsInStockOfCustomerBy(int? id)
+        public IEnumerable<CustomerProductModel> GetProductsInStockOfCustomerWithChildModelsIncludedBy(int? id)
         {
             var productsInStockOfCustomer = _db.Customers
                                                 .Include(c => c.CustomerProducts)
@@ -38,6 +38,16 @@ namespace DAERP.DAL.DataAccess
                                                 .SelectMany(c => c.CustomerProducts)
                                                 .Where(cp => cp.AmountInStock > 0);
             return productsInStockOfCustomer;
+        }
+
+        public IEnumerable<CustomerProductModel> GetProductsInStockOfCustomersWithChildModelsIncludedBy(int[] customersIds)
+        {
+            var customerProducts = _db.CustomersProducts
+                .Include(cp => cp.Customer)
+                .Include(cp => cp.Product)
+                    .ThenInclude(p => p.ProductDivision)
+                .Where(cp => customersIds.ToList().Contains(cp.CustomerId));
+            return customerProducts;    
         }
     }
 }

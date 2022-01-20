@@ -139,7 +139,7 @@ namespace DAERP.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Manager")]
-        public async Task<IActionResult> Create(ProductViewModel productViewModel)
+        public async Task<IActionResult> Create(ProductCreateViewModel productViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -184,7 +184,7 @@ namespace DAERP.Web.Controllers
             {
                 return NotFound();
             }
-            List<CustomerProductModel> customersWithStock = _customerProductData.GetCustomersWithStockOfProductBy(Id).ToList();
+            List<CustomerProductModel> customersWithStock = _customerProductData.GetCustomersWithStockOfProductWithChildModelsIncludedBy(Id).ToList();
             if (customersWithStock.Count > 0)
             {
                 string customersWithStockMessage = "";
@@ -194,7 +194,7 @@ namespace DAERP.Web.Controllers
                 });
                 return Content("Není možné smazat tento výrobek, protože ho mají naskladněny následující odběratelé:\n" + customersWithStockMessage);
             }
-            ProductViewModel productViewModel = _mapper.Map<ProductViewModel>(product);
+            ProductCreateViewModel productViewModel = _mapper.Map<ProductCreateViewModel>(product);
             ViewBag.ProductName = _productData.GetProductDivisionNameBy(product.ProductDivision.Id);
             return View(productViewModel);
         }
@@ -229,7 +229,7 @@ namespace DAERP.Web.Controllers
             {
                 return NotFound();
             }
-            ProductViewModel productViewModel = _mapper.Map<ProductViewModel>(product);
+            ProductCreateViewModel productViewModel = _mapper.Map<ProductCreateViewModel>(product);
             CreateViewBagOfProductNames();
             return View(productViewModel);
         }
@@ -237,7 +237,7 @@ namespace DAERP.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Manager")]
-        public IActionResult Update(ProductViewModel productViewModel)
+        public IActionResult Update(ProductCreateViewModel productViewModel)
         {
             if (ModelState.IsValid)
             {

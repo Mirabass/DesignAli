@@ -9,7 +9,8 @@ namespace DAERP.DAL.DataAccess
 {
     public interface ICustomerProductData
     {
-        IEnumerable<CustomerProductModel> GetProductsInStockOfCustomerBy(int? id);
-        IEnumerable<CustomerProductModel> GetCustomersWithStockOfProductBy(int? id);
+        IEnumerable<CustomerProductModel> GetProductsInStockOfCustomerWithChildModelsIncludedBy(int? id);
+        IEnumerable<CustomerProductModel> GetCustomersWithStockOfProductWithChildModelsIncludedBy(int? id);
+        IEnumerable<CustomerProductModel> GetProductsInStockOfCustomersWithChildModelsIncludedBy(int[] customersIds);
     }
 }

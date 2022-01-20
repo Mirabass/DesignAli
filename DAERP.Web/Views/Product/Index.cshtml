@@ -116,7 +116,7 @@
                <tbody>
                    @foreach (var product in Model)
                    {
-                       <tr data-toggle="popover" id="@product.Id">
+                       <tr data-toggle="popover" data-trigger="hover" id="@product.Id">
                            <td>
                                 <div class="row">
                                     <div class="col text-nowrap">
@@ -192,24 +192,27 @@
 @section Scripts  
 {  
     <script type="text/javascript">
-    $(document).ready(async function(){
+    $('[data-toggle="popover"]').popover({
+        placement : 'bottom',
+        html : true,
+        content: function(){
+            var product_id = $(this).attr("id");
+            return load_image(product_id);
+        }
+    });
+    function load_image(product_id){
         $.ajax({
             type: 'POST',
             url: '@Url.Action("RetrieveProductImage")',
             dataType: 'json',
-            data: {Id: $('[data-toggle="popover"]').attr("id")},
-            success:  function (data){
-                      $('[data-toggle="popover"]').popover({
-                        placement : 'bottom',
-		                trigger : 'hover',
-                        html : true,
-                        content: '<img src="' + data + '" class="img-thumbnail" style="max-width:50%;height:auto">'
-                      });
+            data: {Id: product_id},
+            success:  function (response){
+                $('#toedit'+product_id).html('<img src="' + response + '" class="img-thumbnail" style="max-width:100%;height:auto">');
             },
-            error: function (data){
-                
+            error: function (response){
             }
         });
-    });
+        return '<div id="toedit'+ product_id +'">Loading...</div>';
+    }
     </script>
 }

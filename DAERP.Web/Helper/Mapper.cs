@@ -11,7 +11,8 @@ namespace DAERP.Web.Helper
     {
         public static List<ProductCustomersReadViewModel> ToProductCustomerReadViewModelListFrom(List<CustomerProductModel> customerProducts)
         {
-            List<int> orderOfCustomers = CreateOrderOfCustomers(customerProducts);
+            Dictionary<int,string> orderOfCustomers = CreateOrderOfCustomers(customerProducts);
+
             List<ProductModel> products = customerProducts
                 .Select(cp => cp.Product)
                 .GroupBy(p => p.Id)
@@ -20,25 +21,26 @@ namespace DAERP.Web.Helper
             List<ProductCustomersReadViewModel> viewList = new List<ProductCustomersReadViewModel>();
             products.ForEach(p => 
             {
-                List<int> customerStockAmounts = GetCustomerStockAmounts(orderOfCustomers, p, customerProducts);
+                Dictionary<int,int> customerStockAmounts = GetCustomerStockAmounts(orderOfCustomers, p, customerProducts);
                 viewList.Add(new ProductCustomersReadViewModel()
                 {
                     Product = p,
                     CustomerStockAmounts = customerStockAmounts,
-                    AmountInSelectedCustomersStocks = customerStockAmounts.Sum()
+                    AmountInSelectedCustomersStocks = customerStockAmounts.Values.Sum(),
+                    CustomersNames = orderOfCustomers
                 });
             });
             return viewList;
         }
 
-        private static List<int> GetCustomerStockAmounts(List<int> orderOfCustomers, ProductModel product, List<CustomerProductModel> customerProducts)
+        private static Dictionary<int,int> GetCustomerStockAmounts(Dictionary<int, string> orderOfCustomers, ProductModel product, List<CustomerProductModel> customerProducts)
         {
-            List<int> customerStockAmounts = new List<int>();
-            foreach (var customerId in orderOfCustomers)
+            Dictionary<int,int> customerStockAmounts = new Dictionary<int, int>();
+            foreach (var customer in orderOfCustomers)
             {
-                customerStockAmounts.Add(
+                customerStockAmounts.Add(customer.Key,
                     customerProducts
-                        .Where(cp => cp.Product == product && cp.CustomerId == customerId)
+                        .Where(cp => cp.Product == product && cp.CustomerId == customer.Key)
                         .Select(cp => cp.AmountInStock)
                         .FirstOrDefault()
                 );
@@ -46,14 +48,14 @@ namespace DAERP.Web.Helper
             return customerStockAmounts;
         }
 
-        private static List<int> CreateOrderOfCustomers(List<CustomerProductModel> customerProducts)
+        private static Dictionary<int,string> CreateOrderOfCustomers(List<CustomerProductModel> customerProducts)
         {
-            List<int> orderOfCustomers = new List<int>();
+            Dictionary<int, string> orderOfCustomers = new Dictionary<int, string>();
             customerProducts.ForEach(customerProduct =>
             {
-                if (orderOfCustomers.Contains(customerProduct.CustomerId) == false)
+                if (orderOfCustomers.Keys.Contains(customerProduct.CustomerId) == false)
                 {
-                    orderOfCustomers.Add(customerProduct.CustomerId);
+                    orderOfCustomers.Add(customerProduct.CustomerId, customerProduct.Customer.Designation + " " + customerProduct.Customer.Name);
                 }
             });
             return orderOfCustomers;

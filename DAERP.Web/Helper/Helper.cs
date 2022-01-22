@@ -1,6 +1,7 @@
 ﻿using DAERP.BL.Models.Product;
 using DAERP.DAL.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System;
 using System.Collections.Generic;
 
@@ -22,7 +23,13 @@ namespace DAERP.Web.Helper
                 }
             }
         }
-
+        internal static void SetDynamicDataForSortingPurposes(dynamic viewData, string sortOrder, List<string> dynamicNames)
+        {
+            foreach (var dynamicName in dynamicNames)
+            {
+                viewData[dynamicName + "SortParam"] = sortOrder == dynamicName ? dynamicName + "_desc" : dynamicName;
+            }
+        }
         private static (string prop, string propParam, string prop_desc) GetNeededStringsForSortingPurposes(string prop)
         {
             string propParam = prop.Replace(".", String.Empty) + "SortParam";
@@ -36,5 +43,7 @@ namespace DAERP.Web.Helper
             string imageDataURL = string.Format($"data:image/{imageType};base64,{imageBase64Data}");
             return imageDataURL;
         }
+
+
     }
 }

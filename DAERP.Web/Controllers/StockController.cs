@@ -44,7 +44,15 @@ namespace DAERP.Web.Controllers
         [HttpPost]
         public IActionResult PostSelectedCustomers(PostSelectedViewModel model)
         {
-            string customerIds = string.Join(";", model.SelectedIds);
+            string customerIds = null;
+            if (model.SelectedIds is not null)
+            {
+                customerIds = string.Join(";", model.SelectedIds);
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
             return RedirectToAction("Read", new RouteValueDictionary(
                 new { controller = "Stock", action = "Read", customersIds = customerIds }));
         }
@@ -57,7 +65,11 @@ namespace DAERP.Web.Controllers
             int? pageNumber)
         {
             ViewData["CustomersIds"] = customersIds;
-            int[] customersIdsInt = customersIds.Split(";").ToList().Select(int.Parse).ToList().ToArray();
+            int[] customersIdsInt = null;
+            if (customersIds is not null)
+            {
+                customersIdsInt = customersIds.Split(";").ToList().Select(int.Parse).ToList().ToArray();
+            }
             if (sortOrder is null)
             {
                 sortOrder = currentSort;
@@ -90,6 +102,7 @@ namespace DAERP.Web.Controllers
             {
                 string defaultPropToSort = "Product.Designation";
                 Helper.Helper.SetDataForSortingPurposes(ViewData, sortOrder, productCustomersViewModel.FirstOrDefault(), defaultPropToSort);
+                Helper.Helper.SetDynamicDataForSortingPurposes(ViewData, sortOrder, productCustomersViewModel.FirstOrDefault().CustomersNames.Values.ToList());
                 if (String.IsNullOrEmpty(sortOrder))
                 {
                     sortOrder = defaultPropToSort;
@@ -100,19 +113,41 @@ namespace DAERP.Web.Controllers
                     sortOrder = sortOrder.Substring(0, sortOrder.Length - 5);
                     descending = true;
                 }
-                if (descending)
+                if (DataOperations.IsSortingDynamic(sortOrder, productCustomersViewModel.FirstOrDefault().CustomersNames.Values.ToList()))
                 {
-                    productCustomersViewModel = productCustomersViewModel.OrderByDescending(e => DataOperations.GetPropertyValue(e, sortOrder))
-                        .ToList();
+                    SortDynamic(productCustomersViewModel, sortOrder, descending);
                 }
                 else
                 {
-                    productCustomersViewModel = productCustomersViewModel.OrderBy(e => DataOperations.GetPropertyValue(e, sortOrder))
-                        .ToList();
+                    if (descending)
+                    {
+                        productCustomersViewModel = productCustomersViewModel.OrderByDescending(e => DataOperations.GetPropertyValue(e, sortOrder))
+                            .ToList();
+                    }
+                    else
+                    {
+                        productCustomersViewModel = productCustomersViewModel.OrderBy(e => DataOperations.GetPropertyValue(e, sortOrder))
+                            .ToList();
+                    }
                 }
             }
             int pageSize = 12;
             return View(PaginatedList<ProductCustomersReadViewModel>.Create(productCustomersViewModel, pageNumber ?? 1, pageSize));
+        }
+
+        private void SortDynamic(List<ProductCustomersReadViewModel> productCustomersViewModel, string sortOrder, bool descending)
+        {
+            List<ProductCustomersReadViewModel> sortedList = new List<ProductCustomersReadViewModel>();
+            // chci seřadit List<ProductCustomersReadViewModel> podle MNOŽSTVÍ, které je součtem List<int> CustomerStockAmounts
+            if (descending)
+            {
+
+                //int indexOfCustomerName = productCustomersViewModel.FirstOrDefault().CustomersNames.IndexOf(sortOrder);
+            }
+            else
+            {
+
+            }
         }
     }
 }

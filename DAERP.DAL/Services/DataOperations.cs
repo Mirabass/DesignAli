@@ -64,5 +64,10 @@ namespace DAERP.DAL.Services
             }
             return parameters;
         }
+
+        public static bool IsSortingDynamic(string sortOrder, List<string> dynamicNames)
+        {
+            return dynamicNames.Contains(sortOrder);
+        }
     }
 }

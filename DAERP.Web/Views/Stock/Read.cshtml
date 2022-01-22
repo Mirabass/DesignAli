@@ -69,6 +69,14 @@
                            <a asp-action="Read" asp-route-sortOrder="@ViewData["AmountInSelectedCustomersStocksSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customersIds="@ViewData["CustomersIds"]">
                                @Html.DisplayNameFor(model => model.FirstOrDefault().AmountInSelectedCustomersStocks)</a>
                        </th>
+                       @foreach (var customerName in Model.FirstOrDefault().CustomersNames)
+                      {
+                          <th>
+                              <a asp-action="Read" asp-route-sortOrder="@ViewData[customerName + "SortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customersIds="@ViewData["CustomersIds"]">
+                                @customerName.Value
+                              </a>
+                          </th>
+                      }
                    </tr>
                 </thead>
                 <tbody>
@@ -81,6 +89,10 @@
                            <td>@productCustomers.Product.ProductDivision.Name</td>
                            <td>@productCustomers.Product.ProductDivision.ProductType</td>
                            <td>@productCustomers.AmountInSelectedCustomersStocks</td>
+                           @foreach (var customerStockAmount in productCustomers.CustomerStockAmounts)
+                          {
+                              <td>@customerStockAmount.Value</td>
+                          }
                        </tr>
                    }
                 </tbody>

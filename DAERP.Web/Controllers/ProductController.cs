@@ -155,7 +155,7 @@ namespace DAERP.Web.Controllers
                 file.CopyTo(ms);
                 img.Image = ms.ToArray();
                 string fileType = Path.GetExtension(file.FileName).Replace(".", String.Empty).ToUpper();
-                if (fileType != "PNG" || fileType != "JPG")
+                if ((fileType == "PNG" || fileType == "JPG") == false)
                 {
                     ModelState.AddModelError("Invalid image file name","Invalid file name of image. Must be PNG or JPG.");
                     CreateViewBagOfProductNames();

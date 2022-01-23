@@ -13,6 +13,7 @@ namespace DAERP.BL.Models.Product
         /// </summary>
         [Required]
         public int Id { get; set; }
+        [Display(Name = "Číslo výrobku")]
         [Required]
         [Column(TypeName ="nvarchar(15)")]
         public string Designation { get; set; }
@@ -28,8 +29,10 @@ namespace DAERP.BL.Models.Product
         [Required]
         [Column(TypeName = "numeric(4)")]
         public int Design { get; set; }
+        [Display(Name = "Motiv")]
         [Column(TypeName = "nvarchar(2048)")]
         public string Motive { get; set; }
+        [Display(Name = "Doplňky")]
         [Column(TypeName = "nvarchar(256)")]
         public string Accessories { get; set; }
         [Required]

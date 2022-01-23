@@ -22,6 +22,7 @@ namespace DAERP.DAL.DataAccess
             IEnumerable<ProductModel> products = _db.Products
                 .Include(product => product.ProductStrap)
                 .Include(product => product.ProductColorDesign)
+                .Include(product => product.ProductPrices)
                 .Include(product => product.ProductDivision)
                     .ThenInclude(pd => pd.ProductKind)
                 .Include(product => product.ProductDivision)
@@ -73,6 +74,7 @@ namespace DAERP.DAL.DataAccess
             return _db.Products.AsNoTracking().Where(p => p.Id == id)
                 .Include(product => product.ProductStrap)
                 .Include(product => product.ProductColorDesign)
+                .Include(product => product.ProductPrices)
                 .Include(product => product.ProductDivision)
                     .ThenInclude(pd => pd.ProductKind)
                 .Include(product => product.ProductDivision)
@@ -85,6 +87,7 @@ namespace DAERP.DAL.DataAccess
             _db.Products.Remove(product);
             _db.ProductColorDesigns.Remove(product.ProductColorDesign);
             _db.ProductStraps.Remove(product.ProductStrap);
+            _db.ProductPrices.Remove(product.ProductPrices);
             _db.SaveChanges();
         }
 
@@ -101,6 +104,7 @@ namespace DAERP.DAL.DataAccess
         {
             _db.Update(updatedProduct.ProductColorDesign);
             _db.Update(updatedProduct.ProductStrap);
+            _db.Update(updatedProduct.ProductPrices);
             _db.Products.Update(updatedProduct);
             _db.SaveChanges();
         }

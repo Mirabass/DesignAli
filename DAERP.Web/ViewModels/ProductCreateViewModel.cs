@@ -16,6 +16,9 @@ namespace DAERP.Web.ViewModels
         public string Designation { get; set; }
         [Required]
         public long EAN { get; set; }
+        [Required]
+        [Display(Name = "Cenění výrobku")]
+        public ProductPricesModel ProductPrices { get; set; }
         [Display(Name = "Název výrobku")]
         [Required]
         public int ProductDivisionId { get; set; }

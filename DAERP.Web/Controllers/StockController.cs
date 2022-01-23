@@ -73,7 +73,6 @@ namespace DAERP.Web.Controllers
                 searchString = currentFilter;
             }
             IEnumerable<CustomerProductModel> customerProducts = _customerData.GetCustomerProductsBy(customerId);
-            ViewData["StockSum"] = customerProducts.Select(cp => cp.AmountInStock).Sum();
             if (!String.IsNullOrEmpty(searchString))
             {
                 string normalizedSearchString = searchString.Normalize(System.Text.NormalizationForm.FormD).ToUpper();
@@ -84,6 +83,7 @@ namespace DAERP.Web.Controllers
                     cp.Product.ProductDivision.ProductType.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString)
                 );
             }
+            ViewData["StockSum"] = customerProducts.Select(cp => cp.AmountInStock).Sum();
             if (customerProducts.Count() > 0)
             {
                 string defaultPropToSort = "Product.Designation";

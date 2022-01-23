@@ -19,8 +19,10 @@ namespace DAERP.BL.Models.Product
         public string Designation { get; set; }
         [Required]
         public long EAN { get; set; }
-        //[Required]
+        [Required]
         public ProductDivisionModel ProductDivision { get; set; }
+        [Required]
+        public ProductPricesModel ProductPrices { get; set; }
         [Required]
         public ProductColorDesignModel ProductColorDesign { get; set; }
         [Required]

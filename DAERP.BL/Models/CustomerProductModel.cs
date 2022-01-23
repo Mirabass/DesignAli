@@ -22,5 +22,20 @@ namespace DAERP.BL.Models
         [Display(Name = "Množství ve skladu")]
         [Required]
         public int AmountInStock { get; set; } = 0;
+        [Required]
+        [Display(Name = "Cena - DL")]
+        [DataType(DataType.Currency)]
+        [Column(TypeName = "money")]
+        public decimal DeliveryNotePrice { get; set; } = 0;
+        [Required]
+        [Display(Name = "Cena - FV")]
+        [DataType(DataType.Currency)]
+        [Column(TypeName = "money")]
+        public decimal IssuedInvoicePrice { get; set; } = 0;
+        [Required]
+        [Display(Name = "Hodnota")]
+        [DataType(DataType.Currency)]
+        [Column(TypeName = "money")]
+        public decimal Value { get; set; } = 0;
     }
 }

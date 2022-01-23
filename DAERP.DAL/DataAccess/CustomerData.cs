@@ -43,6 +43,18 @@ namespace DAERP.DAL.DataAccess
             return _db.Customers.AsNoTracking().Where(c => c.Id == id).FirstOrDefault();
         }
 
+        public IEnumerable<CustomerProductModel> GetCustomerProductsBy(int customerId)
+        {
+            var output = _db.Customers
+                .Include(c => c.CustomerProducts).ThenInclude(cp => cp.Product).ThenInclude(p => p.ProductDivision)
+                .AsNoTracking()
+                .Where(c => c.Id == customerId)
+                .FirstOrDefault()
+                .CustomerProducts
+                .GroupBy(cp => cp.CustomerId).FirstOrDefault();
+            return output;
+        }
+
         public void RemoveCustomer(CustomerModel customer)
         {
             var customerProductToRemove = _db.CustomersProducts.Where(cp => cp.Customer == customer);

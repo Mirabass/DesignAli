@@ -7,7 +7,7 @@
     <div class="form-group row border p-2 shadow rounded justify-content-center">
         <div class="row p-3">
             <div class="col text-info">
-                Sklad výrobků u odběratele:
+                Sklad výrobků dle odběratelů:
             </div>
         </div>
         <div class="row p-3">
@@ -15,7 +15,7 @@
                 <form asp-controller="Stock" asp-action="PostSelectedCustomer">
                     <div class="row">
                         <div class="col">
-                            <select name="SelectedIds"
+                            <select multiple="multiple" id="customersDropDown" name="SelectedIds"
                             asp-items="@Model.ItemList"></select>
                         </div>
                         <div class="col">

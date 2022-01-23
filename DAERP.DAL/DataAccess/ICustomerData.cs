@@ -12,5 +12,6 @@ namespace DAERP.DAL.DataAccess
         CustomerModel GetCustomerBy(int? id);
         void RemoveCustomer(CustomerModel customer);
         void UpdateCustomer(CustomerModel customer);
+        IEnumerable<CustomerProductModel> GetCustomerProductsBy(int customerId);
     }
 }

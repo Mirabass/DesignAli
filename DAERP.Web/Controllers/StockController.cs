@@ -17,11 +17,9 @@ namespace DAERP.Web.Controllers
     public class StockController : Controller
     {
         private readonly ICustomerData _customerData;
-        private readonly ICustomerProductData _customerProductData;
-        public StockController(ICustomerData customerData, ICustomerProductData customerProductData)
+        public StockController(ICustomerData customerData)
         {
             _customerData = customerData;
-            _customerProductData = customerProductData;
         }
         [Authorize(Roles = "Admin,Manager,Cashier")]
         public IActionResult Index()
@@ -42,34 +40,24 @@ namespace DAERP.Web.Controllers
         }
         [Authorize(Roles = "Admin,Manager,Cashier")]
         [HttpPost]
-        public IActionResult PostSelectedCustomers(PostSelectedViewModel model)
+        public IActionResult PostSelectedCustomer(PostSelectedViewModel model)
         {
-            string customerIds = null;
-            if (model.SelectedIds is not null)
-            {
-                customerIds = string.Join(";", model.SelectedIds);
-            }
-            else
+            if (model.SelectedIds.Count() != 1)
             {
                 return RedirectToAction("Index");
             }
             return RedirectToAction("Read", new RouteValueDictionary(
-                new { controller = "Stock", action = "Read", customersIds = customerIds }));
+                new { controller = "Stock", action = "Read", customerId = model.SelectedIds.First() }));
         }
         [Authorize(Roles = "Admin,Manager,Cashier")]
-        public IActionResult Read(string customersIds,
+        public IActionResult Read(int customerId,
             string currentSort,
             string sortOrder,
             string currentFilter,
             string searchString,
             int? pageNumber)
         {
-            ViewData["CustomersIds"] = customersIds;
-            int[] customersIdsInt = null;
-            if (customersIds is not null)
-            {
-                customersIdsInt = customersIds.Split(";").ToList().Select(int.Parse).ToList().ToArray();
-            }
+            ViewData["CustomerId"] = customerId;
             if (sortOrder is null)
             {
                 sortOrder = currentSort;
@@ -84,25 +72,22 @@ namespace DAERP.Web.Controllers
             {
                 searchString = currentFilter;
             }
-            IEnumerable<CustomerProductModel> customerProducts = _customerProductData.GetProductsInStockOfCustomersWithChildModelsIncludedBy(customersIdsInt);
-            List<ProductCustomersReadViewModel> productCustomersViewModel = Mapper.ToProductCustomerReadViewModelListFrom(customerProducts.ToList());
+            IEnumerable<CustomerProductModel> customerProducts = _customerData.GetCustomerProductsBy(customerId);
+            ViewData["StockSum"] = customerProducts.Select(cp => cp.AmountInStock).Sum();
             if (!String.IsNullOrEmpty(searchString))
             {
                 string normalizedSearchString = searchString.Normalize(System.Text.NormalizationForm.FormD).ToUpper();
-                productCustomersViewModel = productCustomersViewModel.Where(pc =>
-                    pc.Product.Designation.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString) ||
-                    pc.Product.EAN.ToString().Contains(normalizedSearchString) ||
-                    pc.Product.ProductDivision.Name.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString) ||
-                    pc.Product.ProductDivision.ProductType.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString) ||
-                    pc.AmountInSelectedCustomersStocks.ToString().Contains(normalizedSearchString)
-                ).ToList();
+                customerProducts = customerProducts.Where(cp =>
+                    cp.Product.Designation.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString) ||
+                    cp.Product.EAN.ToString().Contains(normalizedSearchString) ||
+                    cp.Product.ProductDivision.Name.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString) ||
+                    cp.Product.ProductDivision.ProductType.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString)
+                );
             }
-            ViewData["StockAmountSum"] = productCustomersViewModel.Select(vm => vm.AmountInSelectedCustomersStocks).Sum();
-            if (productCustomersViewModel.Count > 0)
+            if (customerProducts.Count() > 0)
             {
                 string defaultPropToSort = "Product.Designation";
-                Helper.Helper.SetDataForSortingPurposes(ViewData, sortOrder, productCustomersViewModel.FirstOrDefault(), defaultPropToSort);
-                Helper.Helper.SetDynamicDataForSortingPurposes(ViewData, sortOrder, productCustomersViewModel.FirstOrDefault().CustomersNames.Values.ToList());
+                Helper.Helper.SetDataForSortingPurposes(ViewData, sortOrder, customerProducts.FirstOrDefault(), defaultPropToSort);
                 if (String.IsNullOrEmpty(sortOrder))
                 {
                     sortOrder = defaultPropToSort;
@@ -113,41 +98,20 @@ namespace DAERP.Web.Controllers
                     sortOrder = sortOrder.Substring(0, sortOrder.Length - 5);
                     descending = true;
                 }
-                if (DataOperations.IsSortingDynamic(sortOrder, productCustomersViewModel.FirstOrDefault().CustomersNames.Values.ToList()))
+                if (descending)
                 {
-                    SortDynamic(productCustomersViewModel, sortOrder, descending);
+                    customerProducts = customerProducts.OrderByDescending(e => DataOperations.GetPropertyValue(e, sortOrder))
+                        .ToList();
                 }
                 else
                 {
-                    if (descending)
-                    {
-                        productCustomersViewModel = productCustomersViewModel.OrderByDescending(e => DataOperations.GetPropertyValue(e, sortOrder))
-                            .ToList();
-                    }
-                    else
-                    {
-                        productCustomersViewModel = productCustomersViewModel.OrderBy(e => DataOperations.GetPropertyValue(e, sortOrder))
-                            .ToList();
-                    }
+                    customerProducts = customerProducts.OrderBy(e => DataOperations.GetPropertyValue(e, sortOrder))
+                        .ToList();
                 }
             }
             int pageSize = 12;
-            return View(PaginatedList<ProductCustomersReadViewModel>.Create(productCustomersViewModel, pageNumber ?? 1, pageSize));
+            return View(PaginatedList<CustomerProductModel>.Create(customerProducts, pageNumber ?? 1, pageSize));
         }
 
-        private void SortDynamic(List<ProductCustomersReadViewModel> productCustomersViewModel, string sortOrder, bool descending)
-        {
-            List<ProductCustomersReadViewModel> sortedList = new List<ProductCustomersReadViewModel>();
-            // chci seřadit List<ProductCustomersReadViewModel> podle MNOŽSTVÍ, které je součtem List<int> CustomerStockAmounts
-            if (descending)
-            {
-
-                //int indexOfCustomerName = productCustomersViewModel.FirstOrDefault().CustomersNames.IndexOf(sortOrder);
-            }
-            else
-            {
-
-            }
-        }
     }
 }

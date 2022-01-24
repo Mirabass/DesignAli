@@ -84,6 +84,7 @@ namespace DAERP.Web.Controllers
                 );
             }
             ViewData["StockSum"] = customerProducts.Select(cp => cp.AmountInStock).Sum();
+            ViewData["StockValueSum"] = customerProducts.Select(cp => cp.Value).Sum();
             if (customerProducts.Count() > 0)
             {
                 string defaultPropToSort = "Product.Designation";

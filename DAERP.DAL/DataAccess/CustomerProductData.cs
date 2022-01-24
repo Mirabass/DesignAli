@@ -21,10 +21,10 @@ namespace DAERP.DAL.DataAccess
         public IEnumerable<CustomerProductModel> GetCustomersWithStockOfProductWithChildModelsIncludedBy(int? id)
         {
             var customersWithStockOfProduct = _db.Products
-                                                .Include(p => p.CustomerProducts)
+                                                .Include(p => p.ProductCustomers)
                                                     .ThenInclude(cp => cp.Customer)
                                                 .Where(p => p.Id == id)
-                                                .SelectMany(p => p.CustomerProducts)
+                                                .SelectMany(p => p.ProductCustomers)
                                                 .Where(cp => cp.AmountInStock > 0);
             return customersWithStockOfProduct;
         }

@@ -22,5 +22,8 @@ namespace DAERP.BL.Models.Product
         [Column(TypeName = "money")]
         [Required]
         public decimal OperatedSellingPrice { get; set; } = 0;
+        [Display(Name = "Zisk")]
+        [Column(TypeName = "decimal(4,1)")]
+        public decimal GainPercentValue { get; set; } = 0;
     }
 }

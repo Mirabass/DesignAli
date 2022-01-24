@@ -29,8 +29,8 @@ namespace DAERP.DAL.DataAccess
                     CustomerId = customer.Id
                 });
             });
-            _db.Customers.Add(customer);
-            _db.SaveChanges();
+            await _db.Customers.AddAsync(customer);
+            await _db.SaveChangesAsync();
         }
 
         public IEnumerable<CustomerModel> GetAllCustomers()
@@ -46,7 +46,12 @@ namespace DAERP.DAL.DataAccess
         public IEnumerable<CustomerProductModel> GetCustomerProductsBy(int customerId)
         {
             var output = _db.Customers
-                .Include(c => c.CustomerProducts).ThenInclude(cp => cp.Product).ThenInclude(p => p.ProductDivision)
+                .Include(c => c.CustomerProducts)
+                    .ThenInclude(cp => cp.Product)
+                        .ThenInclude(p => p.ProductDivision)
+                .Include(c => c.CustomerProducts)
+                    .ThenInclude(cp => cp.Product)
+                        .ThenInclude(p => p.ProductPrices)
                 .AsNoTracking()
                 .Where(c => c.Id == customerId)
                 .FirstOrDefault()
@@ -67,6 +72,29 @@ namespace DAERP.DAL.DataAccess
         {
             _db.Customers.Update(customer);
             _db.SaveChanges();
+        }
+
+        public async Task UpdateCustomerProductsPrices(CustomerModel customer)
+        {
+            await _db.CustomersProducts
+                .Include(cp => cp.Product)
+                    .ThenInclude(cp => cp.ProductPrices)
+                .Include(cp => cp.Customer)
+                .Where(cp => cp.CustomerId == customer.Id)
+                .ForEachAsync(pc =>
+                {
+                    pc.DeliveryNotePrice = BL.PriceCalculation.DeliveryNotePrice(
+                        pc.Product.ProductPrices.GainPercentValue,
+                        pc.Customer.ProvisionFor60PercentValue,
+                        pc.Product.ProductPrices.OperatedCostPrice);
+                    pc.IssuedInvoicePrice = BL.PriceCalculation.IssuedInvoicePrice(
+                        pc.DeliveryNotePrice,
+                        pc.Customer.FVDiscountPercentValue);
+                    pc.Value = BL.PriceCalculation.StockValue(
+                        pc.AmountInStock,
+                        pc.DeliveryNotePrice);
+                });
+            await _db.SaveChangesAsync();
         }
     }
 }

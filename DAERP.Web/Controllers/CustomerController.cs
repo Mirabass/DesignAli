@@ -41,6 +41,7 @@ namespace DAERP.Web.Controllers
                 customer.DateCreated = System.DateTime.Today;
                 customer.DateLastModified = System.DateTime.Today;
                 await _customerData.AddCustomerAsync(customer);
+                await _customerData.UpdateCustomerProductsPrices(customer);
                 return RedirectToAction("Index");
             }
             return View(customer);
@@ -106,7 +107,7 @@ namespace DAERP.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Manager")]
-        public IActionResult Update(CustomerModel customer)
+        public async Task<IActionResult> Update(CustomerModel customer)
         {
             if (ModelState.IsValid)
             {
@@ -114,6 +115,7 @@ namespace DAERP.Web.Controllers
                 customer.DateCreated = oldCustomer.DateCreated;
                 customer.DateLastModified = System.DateTime.Today;
                 _customerData.UpdateCustomer(customer);
+                await _customerData.UpdateCustomerProductsPrices(customer);
                 return RedirectToAction("Index");
             }
             return View(customer);

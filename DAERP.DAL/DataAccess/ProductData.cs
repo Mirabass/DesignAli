@@ -44,26 +44,47 @@ namespace DAERP.DAL.DataAccess
             return productDivision;
         }
 
-        public async Task AddProduct(ProductModel product)
+        public async Task AddProductAsync(ProductModel product)
         {
-            product.CustomerProducts = new List<CustomerProductModel>();
+            product.ProductCustomers = new List<CustomerProductModel>();
             await _db.Customers.ForEachAsync(c =>
             {
-                product.CustomerProducts.Add(new CustomerProductModel()
+                product.ProductCustomers.Add(new CustomerProductModel()
                 {
                     ProductId = product.Id,
                     CustomerId = c.Id
                 });
             });
 
-            _db.Add(product);
+            await _db.AddAsync(product);
             _db.Entry(product.ProductDivision).State = EntityState.Unchanged;
             _db.Entry(product.ProductDivision.ProductKind).State = EntityState.Unchanged;
             _db.Entry(product.ProductDivision.ProductMaterial).State = EntityState.Unchanged;
 
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
         }
-
+        public async Task UpdateProductCustomersPricesAsync(ProductModel product)
+        {
+            await _db.CustomersProducts
+                .Include(cp => cp.Product)
+                    .ThenInclude(cp => cp.ProductPrices)
+                .Include(cp => cp.Customer)
+                .Where(cp => cp.ProductId == product.Id)
+                .ForEachAsync(pc =>
+                {
+                    pc.DeliveryNotePrice = BL.PriceCalculation.DeliveryNotePrice(
+                        pc.Product.ProductPrices.GainPercentValue,
+                        pc.Customer.ProvisionFor60PercentValue,
+                        pc.Product.ProductPrices.OperatedCostPrice);
+                    pc.IssuedInvoicePrice = BL.PriceCalculation.IssuedInvoicePrice(
+                        pc.DeliveryNotePrice,
+                        pc.Customer.FVDiscountPercentValue);
+                    pc.Value = BL.PriceCalculation.StockValue(
+                        pc.AmountInStock,
+                        pc.DeliveryNotePrice);
+                });
+            await _db.SaveChangesAsync();
+        }
         public ProductModel GetProductBy(int? id)
         {
             return _db.Products.Where(p => p.Id == id).Include(p => p.ProductDivision).FirstOrDefault();
@@ -154,5 +175,7 @@ namespace DAERP.DAL.DataAccess
                 .Where(p => p.Id == productId).FirstOrDefault();
             return product.ProductImage;
         }
+
+
     }
 }

@@ -4,14 +4,16 @@ using DAERP.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DAERP.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220124084411_productPricesUpdate002")]
+    partial class productPricesUpdate002
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,7 +59,7 @@ namespace DAERP.DAL.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<decimal?>("ContractProvisionPercentValue")
-                        .HasColumnType("decimal(8,2)");
+                        .HasColumnType("decimal(5,2)");
 
                     b.Property<decimal?>("ContractRent")
                         .HasColumnType("money");

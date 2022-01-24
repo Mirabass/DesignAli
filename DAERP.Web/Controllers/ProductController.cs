@@ -165,7 +165,9 @@ namespace DAERP.Web.Controllers
                 ms.Close();
                 ms.Dispose();
                 product.ProductImage = img;
-                await _productData.AddProduct(product);
+                product.ProductPrices.GainPercentValue = BL.PriceCalculation.GainPercentValue(product.ProductPrices.OperatedCostPrice, product.ProductPrices.OperatedSellingPrice);
+                await _productData.AddProductAsync(product);
+                await _productData.UpdateProductCustomersPricesAsync(product);
                 return RedirectToAction("Index");
             }
             CreateViewBagOfProductNames();
@@ -237,7 +239,7 @@ namespace DAERP.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Manager")]
-        public IActionResult Update(ProductCreateViewModel productViewModel)
+        public async Task<IActionResult> Update(ProductCreateViewModel productViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -248,7 +250,9 @@ namespace DAERP.Web.Controllers
                 updatedProduct.DateCreated = oldProduct.DateCreated;
                 CustomOperations.CreateAndAsignDesignationFor(updatedProduct);
                 updatedProduct.DateLastModified = System.DateTime.Today;
+                updatedProduct.ProductPrices.GainPercentValue = BL.PriceCalculation.GainPercentValue(updatedProduct.ProductPrices.OperatedCostPrice, updatedProduct.ProductPrices.OperatedSellingPrice);
                 _productData.UpdateProduct(updatedProduct);
+                await _productData.UpdateProductCustomersPricesAsync(updatedProduct);
                 return RedirectToAction("Index");
             }
             CreateViewBagOfProductNames();

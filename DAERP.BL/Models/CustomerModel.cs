@@ -170,7 +170,7 @@ namespace DAERP.BL.Models
         [Column (TypeName = "nvarchar(256)")]
         public string ContractPeriod { get; set; }
         [Display(Name = "Provize")]
-        [Column(TypeName = "decimal(5,2)")]
+        [Column(TypeName = "decimal(8,2)")]
         public decimal? ContractProvisionPercentValue { get; set; }
         #endregion
 

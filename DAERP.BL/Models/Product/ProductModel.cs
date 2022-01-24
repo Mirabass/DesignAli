@@ -42,7 +42,7 @@ namespace DAERP.BL.Models.Product
         [Required]
         public DateTime DateLastModified { get; set; }
 
-        public IList<CustomerProductModel> CustomerProducts { get; set; }
+        public IList<CustomerProductModel> ProductCustomers { get; set; }
         [Display(Name = "Obrázek")]
         public ProductImageModel ProductImage { get; set; }
     }

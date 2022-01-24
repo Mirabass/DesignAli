@@ -40,7 +40,10 @@
                        <th id="productHeader" colspan="4">
                            Výrobek
                        </th>
-                       <th colspan=1>
+                       <th id="strap" colspan="3">
+                           Ceny výrobku
+                       </th>
+                       <th colspan="4">
                            @Model.FirstOrDefault().Customer.Designation 
                            @Model.FirstOrDefault().Customer.Name
                        </th>
@@ -62,9 +65,38 @@
                            <a asp-action="Read" asp-route-sortOrder="@ViewData["ProductProductDivisionProductTypeSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
                                @Html.DisplayNameFor(model => model.FirstOrDefault().Product.ProductDivision.ProductType)</a>
                        </th>
+
+                       <th id="strap">
+                           <a asp-action="Read" asp-route-sortOrder="@ViewData["ProductProductPricesOperatedCostPriceSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
+                               @Html.DisplayNameFor(model => model.FirstOrDefault().Product.ProductPrices.OperatedCostPrice)</a>
+                       </th>
+                       <th id="strap">
+                           <a asp-action="Read" asp-route-sortOrder="@ViewData["ProductProductPricesOperatedSellingPriceSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
+                               @Html.DisplayNameFor(model => model.FirstOrDefault().Product.ProductPrices.OperatedSellingPrice)</a>
+                       </th>
+                       <th id="strap">
+                           <a asp-action="Read" asp-route-sortOrder="@ViewData["ProductProductPricesGainPercentValueSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
+                               @Html.DisplayNameFor(model => model.FirstOrDefault().Product.ProductPrices.GainPercentValue)</a>
+                       </th>
+
                        <th>
                            <a asp-action="Read" asp-route-sortOrder="@ViewData["AmountInStockSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
                                @Html.DisplayNameFor(model => model.FirstOrDefault().AmountInStock) (@ViewData["StockSum"])
+                           </a>
+                       </th>
+                       <th>
+                           <a asp-action="Read" asp-route-sortOrder="@ViewData["DeliveryNotePriceSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
+                               @Html.DisplayNameFor(model => model.FirstOrDefault().DeliveryNotePrice)
+                           </a>
+                       </th>
+                       <th>
+                           <a asp-action="Read" asp-route-sortOrder="@ViewData["IssuedInvoicePriceSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
+                               @Html.DisplayNameFor(model => model.FirstOrDefault().IssuedInvoicePrice)
+                           </a>
+                       </th>
+                       <th>
+                           <a asp-action="Read" asp-route-sortOrder="@ViewData["ValueSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
+                               @Html.DisplayNameFor(model => model.FirstOrDefault().Value) (@ViewData["StockValueSum"])
                            </a>
                        </th>
                    </tr>
@@ -77,7 +109,15 @@
                            <td>@customerProduct.Product.EAN</td>
                            <td>@customerProduct.Product.ProductDivision.Name</td>
                            <td>@customerProduct.Product.ProductDivision.ProductType</td>
+
+                           <td>@customerProduct.Product.ProductPrices.OperatedCostPrice</td>
+                           <td>@customerProduct.Product.ProductPrices.OperatedSellingPrice</td>
+                           <td>@customerProduct.Product.ProductPrices.GainPercentValue</td>
+
                            <td>@customerProduct.AmountInStock</td>
+                           <td>@customerProduct.DeliveryNotePrice</td>
+                           <td>@customerProduct.IssuedInvoicePrice</td>
+                           <td>@customerProduct.Value</td>
                        </tr>
                    }
                 </tbody>
@@ -90,7 +130,7 @@
                     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
                 }
                 <div class="col p-2">
-                    <a asp-action="Index"
+                    <a asp-action="Read"
                        asp-route-sortOrder="@ViewData["CurrentSort"]"
                        asp-route-pageNumber="@(Model.PageIndex - 1)"
                        asp-route-currentFilter="@ViewData["CurrentFilter"]"
@@ -98,7 +138,7 @@
                        class="btn btn-secondary @prevDisabled">
                        <i class="fas fa-arrow-left"></i>
                     </a>
-                    <a asp-action="Index"
+                    <a asp-action="Read"
                        asp-route-sortOrder="@ViewData["CurrentSort"]"
                        asp-route-pageNumber="@(Model.PageIndex + 1)"
                        asp-route-currentFilter="@ViewData["CurrentFilter"]"

@@ -60,7 +60,7 @@
                                </th>
                                <th id="productHeader">
                                    <a asp-action="Index" asp-route-sortOrder="@ViewData["AmountSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                       @Html.DisplayNameFor(model => model.FirstOrDefault().Amount)</a>
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().Amount)</a> <span class="badge badge-primary badge-pill">@ViewData["AmountSum"]</span>
                                </th>
                                <th id="productHeader">
                                    <a asp-action="Index" asp-route-sortOrder="@ViewData["CostPriceSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
@@ -68,11 +68,11 @@
                                </th>
                                <th id="productHeader">
                                    <a asp-action="Index" asp-route-sortOrder="@ViewData["ValueWithoutVATSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                       @Html.DisplayNameFor(model => model.FirstOrDefault().ValueWithoutVAT)</a>
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().ValueWithoutVAT)</a> <span class="badge badge-primary badge-pill">@ViewData["ValueWithoutVATSum"]</span>
                                </th>
                                <th id="productHeader">
                                    <a asp-action="Index" asp-route-sortOrder="@ViewData["ValueWithVATSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                       @Html.DisplayNameFor(model => model.FirstOrDefault().ValueWithVAT)</a>
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().ValueWithVAT)</a> <span class="badge badge-primary badge-pill">@ViewData["ValueWithVATSum"]</span>
                                </th>
                            </tr>
                         </thead>

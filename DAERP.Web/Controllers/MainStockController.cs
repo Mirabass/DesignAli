@@ -55,6 +55,9 @@ namespace DAERP.Web.Controllers
                     pr.ValueWithoutVAT.ToString().Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString)
                 );
             }
+            ViewData["AmountSum"] = productReceipts.Select(pr => pr.Amount).Sum();
+            ViewData["ValueWithoutVATSum"] = productReceipts.Select(pr => pr.ValueWithoutVAT).Sum();
+            ViewData["ValueWithVATSum"] = productReceipts.Select(pr => pr.ValueWithVAT).Sum();
             if (productReceipts.Count() > 0)
             {
                 string defaultPropToSort = "Product.Designation";

@@ -7,148 +7,170 @@
     <div class="col-12 col-md-12">
         <div class="row">
             <div class="col-12 col-md-6"><h2 class="text-primary">04.02.01 - Sklad výrobků - stav</h2></div>
-                <div class="col-12 col-md-6">
-                    <form asp-action="Read" method="get">
-                        <div class="form-actions no-color">
-                            <p>
-                                Prohledat výrobky: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
-                                <input type="hidden" name="CustomerId" value="@ViewData["CustomerId"]" />
-                                <input type="hidden" name="CurrentSort" value="@ViewData["CurrentSort"]" />
-                                <input type="submit" value="Filtrovat" class="btn btn-secondary"/> |
-                                <a class="btn btn-outline-warning"
-                                asp-action="Read"
-                                asp-route-currentSort="@ViewData["CurrentSort"]"
-                                asp-route-customerId="@ViewData["CustomerId"]">Zpět na celý seznam</a>
-                            </p>
-                        </div>
-                    </form>
-                </div>
+            <div class="col-12 col-md-6">
+                <form asp-action="Read" method="get">
+                    <div class="form-actions no-color">
+                        <p>
+                            Prohledat výrobky: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                            <input type="hidden" name="CustomerId" value="@ViewData["CustomerId"]" />
+                            <input type="hidden" name="CurrentSort" value="@ViewData["CurrentSort"]" />
+                            <input type="submit" value="Filtrovat" class="btn btn-secondary"/> |
+                            <a class="btn btn-outline-warning"
+                            asp-action="Read"
+                            asp-route-currentSort="@ViewData["CurrentSort"]"
+                            asp-route-customerId="@ViewData["CustomerId"]">Zpět na celý seznam</a>
+                        </p>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
     <br />
 
      @if (Model.Count() > 0)
     {
-        <div>
-            <table
-            class="table table-bordered table-striped table-responsive"
-            data-filter-control="true"
-            data-show-search-clear-button="true"
-            style="width:unset;text-align:center;word-wrap:normal">
-               <thead>
-                   <tr>
-                       <th id="productHeader" colspan="4">
-                           Výrobek
-                       </th>
-                       <th id="strap" colspan="3">
-                           Ceny výrobku
-                       </th>
-                       <th colspan="4">
-                           @Model.FirstOrDefault().Customer.Designation 
-                           @Model.FirstOrDefault().Customer.Name
-                       </th>
-                   </tr>
-                   <tr>
-                       <th id="productHeader">
-                           <a asp-action="Read" asp-route-sortOrder="@ViewData["ProductDesignationSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
-                               @Html.DisplayNameFor(model => model.FirstOrDefault().Product.Designation)</a>
-                       </th>
-                       <th id="productHeader">
-                           <a asp-action="Read" asp-route-sortOrder="@ViewData["ProductEANSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
-                               @Html.DisplayNameFor(model => model.FirstOrDefault().Product.EAN)</a>
-                       </th>
-                       <th id="productHeader">
-                           <a asp-action="Read" asp-route-sortOrder="@ViewData["ProductProductDivisionNameSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
-                               @Html.DisplayNameFor(model => model.FirstOrDefault().Product.ProductDivision.Name)</a>
-                       </th>
-                       <th id="productHeader">
-                           <a asp-action="Read" asp-route-sortOrder="@ViewData["ProductProductDivisionProductTypeSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
-                               @Html.DisplayNameFor(model => model.FirstOrDefault().Product.ProductDivision.ProductType)</a>
-                       </th>
-
-                       <th id="strap">
-                           <a asp-action="Read" asp-route-sortOrder="@ViewData["ProductProductPricesOperatedCostPriceSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
-                               @Html.DisplayNameFor(model => model.FirstOrDefault().Product.ProductPrices.OperatedCostPrice)</a>
-                       </th>
-                       <th id="strap">
-                           <a asp-action="Read" asp-route-sortOrder="@ViewData["ProductProductPricesOperatedSellingPriceSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
-                               @Html.DisplayNameFor(model => model.FirstOrDefault().Product.ProductPrices.OperatedSellingPrice)</a>
-                       </th>
-                       <th id="strap">
-                           <a asp-action="Read" asp-route-sortOrder="@ViewData["ProductProductPricesGainPercentValueSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
-                               @Html.DisplayNameFor(model => model.FirstOrDefault().Product.ProductPrices.GainPercentValue)</a>
-                       </th>
-
-                       <th>
-                           <a asp-action="Read" asp-route-sortOrder="@ViewData["AmountInStockSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
-                               @Html.DisplayNameFor(model => model.FirstOrDefault().AmountInStock) (@ViewData["StockSum"])
-                           </a>
-                       </th>
-                       <th>
-                           <a asp-action="Read" asp-route-sortOrder="@ViewData["DeliveryNotePriceSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
-                               @Html.DisplayNameFor(model => model.FirstOrDefault().DeliveryNotePrice)
-                           </a>
-                       </th>
-                       <th>
-                           <a asp-action="Read" asp-route-sortOrder="@ViewData["IssuedInvoicePriceSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
-                               @Html.DisplayNameFor(model => model.FirstOrDefault().IssuedInvoicePrice)
-                           </a>
-                       </th>
-                       <th>
-                           <a asp-action="Read" asp-route-sortOrder="@ViewData["ValueSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
-                               @Html.DisplayNameFor(model => model.FirstOrDefault().Value) (@ViewData["StockValueSum"])
-                           </a>
-                       </th>
-                   </tr>
-                </thead>
-                <tbody>
-                   @foreach (var customerProduct in Model)
-                   {
-                       <tr data-toggle="popover" data-trigger="hover" id="@customerProduct.Product.Id">
-                           <td>@customerProduct.Product.Designation</td>
-                           <td>@customerProduct.Product.EAN</td>
-                           <td>@customerProduct.Product.ProductDivision.Name</td>
-                           <td>@customerProduct.Product.ProductDivision.ProductType</td>
-
-                           <td>@customerProduct.Product.ProductPrices.OperatedCostPrice</td>
-                           <td>@customerProduct.Product.ProductPrices.OperatedSellingPrice</td>
-                           <td>@customerProduct.Product.ProductPrices.GainPercentValue</td>
-
-                           <td>@customerProduct.AmountInStock</td>
-                           <td>@customerProduct.DeliveryNotePrice</td>
-                           <td>@customerProduct.IssuedInvoicePrice</td>
-                           <td>@customerProduct.Value</td>
-                       </tr>
-                   }
-                </tbody>
-            </table>
-        </div>
-        <div>
+        <div class="col-12">
             <div class="row">
-                @{
-                    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-                    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
-                }
-                <div class="col p-2">
-                    <a asp-action="Read"
-                       asp-route-sortOrder="@ViewData["CurrentSort"]"
-                       asp-route-pageNumber="@(Model.PageIndex - 1)"
-                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                       asp-route-customerId="@ViewData["CustomerId"]"
-                       class="btn btn-secondary @prevDisabled">
-                       <i class="fas fa-arrow-left"></i>
-                    </a>
-                    <a asp-action="Read"
-                       asp-route-sortOrder="@ViewData["CurrentSort"]"
-                       asp-route-pageNumber="@(Model.PageIndex + 1)"
-                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                       asp-route-customerId="@ViewData["CustomerId"]"
-                       class="btn btn-secondary @nextDisabled">
-                       <i class="fas fa-arrow-right"></i>
-                    </a>
+                <div class="col-xl-8 col-12">
+                    <table
+                    class="table table-bordered table-striped table-responsive"
+                    data-filter-control="true"
+                    data-show-search-clear-button="true"
+                    style="width:unset;text-align:center;word-wrap:normal">
+                       <thead>
+                           <tr>
+                               <th id="productHeader" colspan="4">
+                                   Výrobek
+                               </th>
+                               <th id="strap" colspan="3">
+                                   Ceny výrobku
+                               </th>
+                               <th colspan="4">
+                                   @Model.FirstOrDefault().Customer.Designation 
+                                   @Model.FirstOrDefault().Customer.Name
+                               </th>
+                           </tr>
+                           <tr>
+                               <th id="productHeader">
+                                   <a asp-action="Read" asp-route-sortOrder="@ViewData["ProductDesignationSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().Product.Designation)</a>
+                               </th>
+                               <th id="productHeader">
+                                   <a asp-action="Read" asp-route-sortOrder="@ViewData["ProductEANSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().Product.EAN)</a>
+                               </th>
+                               <th id="productHeader">
+                                   <a asp-action="Read" asp-route-sortOrder="@ViewData["ProductProductDivisionNameSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().Product.ProductDivision.Name)</a>
+                               </th>
+                               <th id="productHeader">
+                                   <a asp-action="Read" asp-route-sortOrder="@ViewData["ProductProductDivisionProductTypeSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().Product.ProductDivision.ProductType)</a>
+                               </th>
+
+                               <th id="strap">
+                                   <a asp-action="Read" asp-route-sortOrder="@ViewData["ProductProductPricesOperatedCostPriceSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().Product.ProductPrices.OperatedCostPrice)</a>
+                               </th>
+                               <th id="strap">
+                                   <a asp-action="Read" asp-route-sortOrder="@ViewData["ProductProductPricesOperatedSellingPriceSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().Product.ProductPrices.OperatedSellingPrice)</a>
+                               </th>
+                               <th id="strap">
+                                   <a asp-action="Read" asp-route-sortOrder="@ViewData["ProductProductPricesGainPercentValueSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().Product.ProductPrices.GainPercentValue)</a>
+                               </th>
+
+                               <th>
+                                   <a asp-action="Read" asp-route-sortOrder="@ViewData["AmountInStockSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().AmountInStock) <span class="badge badge-primary badge-pill">@ViewData["StockSum"]</span>
+                                   </a>
+                               </th>
+                               <th>
+                                   <a asp-action="Read" asp-route-sortOrder="@ViewData["DeliveryNotePriceSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().DeliveryNotePrice)
+                                   </a>
+                               </th>
+                               <th>
+                                   <a asp-action="Read" asp-route-sortOrder="@ViewData["IssuedInvoicePriceSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().IssuedInvoicePrice)
+                                   </a>
+                               </th>
+                               <th>
+                                   <a asp-action="Read" asp-route-sortOrder="@ViewData["ValueSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]" asp-route-customerId="@ViewData["CustomerId"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().Value) <span class="badge badge-primary badge-pill">@ViewData["StockValueSum"]</span>
+                                   </a>
+                               </th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           @foreach (var customerProduct in Model)
+                           {
+                               <tr data-toggle="popover" data-trigger="hover" id="@customerProduct.Product.Id">
+                                   <td>@customerProduct.Product.Designation</td>
+                                   <td>@customerProduct.Product.EAN</td>
+                                   <td>@customerProduct.Product.ProductDivision.Name</td>
+                                   <td>@customerProduct.Product.ProductDivision.ProductType</td>
+
+                                   <td>@customerProduct.Product.ProductPrices.OperatedCostPrice</td>
+                                   <td>@customerProduct.Product.ProductPrices.OperatedSellingPrice</td>
+                                   <td>@customerProduct.Product.ProductPrices.GainPercentValue</td>
+
+                                   <td>@customerProduct.AmountInStock</td>
+                                   <td>@customerProduct.DeliveryNotePrice</td>
+                                   <td>@customerProduct.IssuedInvoicePrice</td>
+                                   <td>@customerProduct.Value</td>
+                               </tr>
+                           }
+                        </tbody>
+                    </table>
+                    <div>
+                        <div class="row">
+                            @{
+                                var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+                                var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+                            }
+                            <div class="col p-2">
+                                <a asp-action="Read"
+                                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                   asp-route-pageNumber="@(Model.PageIndex - 1)"
+                                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                   asp-route-customerId="@ViewData["CustomerId"]"
+                                   class="btn btn-secondary @prevDisabled">
+                                   <i class="fas fa-arrow-left"></i>
+                                </a>
+                                <a asp-action="Read"
+                                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                   asp-route-pageNumber="@(Model.PageIndex + 1)"
+                                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                   asp-route-customerId="@ViewData["CustomerId"]"
+                                   class="btn btn-secondary @nextDisabled">
+                                   <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                   </div>
+                </div>
+                <div class="col-xl-4 col-12">
+                    <form asp-action="ProductMove" method="post">
+                        <ul class="list-group">
+                          <li class="list-group-item d-flex justify-content-between align-items-center" data-toggle="popover" data-trigger="hover" id="27">
+                              <div >
+                                  002-05-01/0005 | JANA | Kabelka | 6100.00
+                                  <span class="badge badge-primary badge-pill">2</span>
+                              </div>
+                              <div class="float-right">
+                                  <span class="btn btn-primary"><i class="fas fa-plus"></i></span>
+                                  <span class="btn btn-secondary"><i class="fas fa-minus"></i></span>
+                                  <span class="btn btn-danger"><i class="fas fa-trash"></i></span>
+                              </div>
+                          </li>
+                        </ul>
+                    </form>
                 </div>
             </div>
-       </div>
+        </div>
+
     }
 </div>
 

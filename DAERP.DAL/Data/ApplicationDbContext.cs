@@ -1,4 +1,5 @@
 ﻿using DAERP.BL.Models;
+using DAERP.BL.Models.Movements;
 using DAERP.BL.Models.Product;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,5 +29,6 @@ namespace DAERP.DAL.Data
         public DbSet<ProductImageModel> ProductImages { get; set; }
         public DbSet<CustomerModel> Customers { get; set; }
         public DbSet<CustomerProductModel> CustomersProducts { get; set; }
+        public DbSet<ProductReceiptModel> ProductReceipts { get; set; }
     }
 }

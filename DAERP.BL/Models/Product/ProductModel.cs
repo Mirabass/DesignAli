@@ -45,5 +45,11 @@ namespace DAERP.BL.Models.Product
         public IList<CustomerProductModel> ProductCustomers { get; set; }
         [Display(Name = "Obrázek")]
         public ProductImageModel ProductImage { get; set; }
+        [Display(Name = "Množství ve skladě Design Ali")]
+        public int MainStockAmount { get; set; } = 0;
+        [Display(Name = "Hodnota ve skladě Design Ali")]
+        [DataType(DataType.Currency)]
+        [Column(TypeName = "money")]
+        public decimal MainStockValue { get; set; } = 0;
     }
 }

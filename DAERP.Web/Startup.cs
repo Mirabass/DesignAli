@@ -46,6 +46,7 @@ namespace DAERP.Web
             
             services.AddTransient<ICustomerData, CustomerData>();
             services.AddTransient<IProductData, ProductData>();
+            services.AddTransient<IProductReceiptData, ProductReceiptData>();
             services.AddTransient<ICustomerProductData, CustomerProductData>();
 
             services.AddControllersWithViews();

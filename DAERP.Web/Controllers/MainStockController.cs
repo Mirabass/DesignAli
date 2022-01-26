@@ -99,38 +99,71 @@ namespace DAERP.Web.Controllers
             string currentFilter,
             string searchString,
             int? pageNumber,
-            int? addSelected)
+            int? addSelected,
+            int? removeSelected)
         {
-            var var1 = TempData["SelectedProductsIds"];
-            var var2 = var1 as int[];
-            var var3 = TempData["SelectedProductAmounts"];
-            var var4 = var3 as int[];
-            TempData.Clear();
-            IEnumerable<ProductModel> products = _productData.GetAllProductsWithChildModelsIncluded();
-            ProductReceiptCreateViewModel newViewModel = new ProductReceiptCreateViewModel()
+            var selectedProductsIds = TempData["SelectedProductsIds"] as int[];
+            var selectedProductAmounts = TempData["SelectedProductAmounts"] as int[];
+            List<SelectedProduct> selectedProducts = new List<SelectedProduct>();
+            if (selectedProductsIds is not null)
             {
-                Products = PaginatedList<ProductModel>.Create(products, 1, 12),
-                SelectedProducts = new List<SelectedProduct>()
+                for (int i = 0; i < selectedProductsIds.Length; i++)
                 {
-                    new SelectedProduct()
+                    int id = selectedProductsIds[i];
+                    int amount = selectedProductAmounts[i];
+                    ProductModel product = _productData.GetProductBy(id);
+                    SelectedProduct selectedProduct = new SelectedProduct()
                     {
-                        Product = products.ElementAt(0),
-                        Amount = 2
-                    },
-                    new SelectedProduct()
+                        Product = product,
+                        Amount = amount
+                    };
+                    selectedProducts.Add(selectedProduct);
+                }
+            }
+            TempData.Clear();
+            if (addSelected is not null)
+            {
+                if (selectedProducts.Select(sp => sp.Product.Id).ToList().Contains((int)addSelected))
+                {
+                    selectedProducts.Where(sp => sp.Product.Id == (int)addSelected).FirstOrDefault().Amount += 1;
+                }
+                else
+                {
+                    ProductModel product = _productData.GetProductBy(addSelected);
+                    selectedProducts.Add(new SelectedProduct()
                     {
-                        Product = products.ElementAt(2),
+                        Product = product,
                         Amount = 1
-                    },
-                    new SelectedProduct()
+                    });
+                }
+            }
+            if (removeSelected is not null)
+            {
+                if (selectedProducts.Select(sp => sp.Product.Id).ToList().Contains((int)removeSelected))
+                {
+                    SelectedProduct selectedProduct = selectedProducts.Where(sp => sp.Product.Id == (int)removeSelected).FirstOrDefault();
+                    if (selectedProducts.Where(sp => sp.Product.Id == (int)removeSelected).FirstOrDefault().Amount == 1)
                     {
-                        Product = products.ElementAt(4),
-                        Amount = 3
+                        selectedProducts.Remove(selectedProduct);
+                    }
+                    else
+                    {
+                        selectedProducts.Where(sp => sp.Product.Id == (int)removeSelected).FirstOrDefault().Amount -= 1;
                     }
                 }
+                else
+                {
+                    // TODO: add error
+                }
+            }
+            IEnumerable<ProductModel> products = _productData.GetAllProductsWithChildModelsIncluded();
+            ProductReceiptCreateViewModel productReceiptCreateViewModel = new ProductReceiptCreateViewModel()
+            {
+                Products = PaginatedList<ProductModel>.Create(products, 1, 12),
+                SelectedProducts = selectedProducts
             };
 
-            return View(newViewModel);
+            return View(productReceiptCreateViewModel);
         }
 
     }

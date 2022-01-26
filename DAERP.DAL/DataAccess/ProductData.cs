@@ -87,7 +87,11 @@ namespace DAERP.DAL.DataAccess
         }
         public ProductModel GetProductBy(int? id)
         {
-            return _db.Products.Where(p => p.Id == id).Include(p => p.ProductDivision).FirstOrDefault();
+            return _db.Products
+                .Where(p => p.Id == id)
+                .Include(p => p.ProductDivision)
+                .Include(p => p.ProductPrices)
+                .FirstOrDefault();
         }
 
         public ProductModel GetProductWithChildModelsIncludedBy(int? id)

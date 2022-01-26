@@ -8,6 +8,7 @@ namespace DAERP.BL
 {
     public static class PriceCalculation
     {
+        private static readonly decimal _percentageVAT = 21.0m;
         private static readonly decimal _percentageMinimalGain = 22.0m;
         public static decimal DeliveryNotePrice(decimal percentageGain, decimal percentageProvision, decimal costPrice)
         {
@@ -37,6 +38,12 @@ namespace DAERP.BL
             {
                 return (operatedSellingPrice / operatedCostPrice - 1) * 100.0m;
             }
+        }
+
+        public static decimal IncreaseOfVAT(decimal valueWithoutVAT)
+        {
+            decimal VAT = _percentageVAT / 100.0m;
+            return valueWithoutVAT * (1 + VAT);
         }
 
         public static decimal IssuedInvoicePrice(decimal deliveryNotePrice, decimal invoiceDiscountPercentValue)

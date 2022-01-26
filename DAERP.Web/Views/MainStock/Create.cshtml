@@ -164,7 +164,13 @@
                                              asp-route-sortOrder="@ViewData["CurrentSort"]"
                                              asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                                 <i class="fas fa-minus"></i></a></span>
-                                      <span class="btn btn-danger"><i class="fas fa-trash"></i></span>
+                                      <span>
+                                          <a class="btn btn-danger"
+                                             asp-action="Create"
+                                             asp-route-removeAllSelected="@selectedProduct.Product.Id"
+                                             asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                             asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                                <i class="fas fa-trash"></i></a></span>
                                   </div>
                               </li>
                             }

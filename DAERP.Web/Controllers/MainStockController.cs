@@ -1,7 +1,9 @@
 ﻿using DAERP.BL.Models.Movements;
+using DAERP.BL.Models.Product;
 using DAERP.DAL.DataAccess;
 using DAERP.DAL.Services;
 using DAERP.Web.Helper;
+using DAERP.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -14,9 +16,11 @@ namespace DAERP.Web.Controllers
     public class MainStockController : Controller
     {
         private readonly IProductReceiptData _productReceiptData;
-        public MainStockController(IProductReceiptData productReceiptData)
+        private readonly IProductData _productData;
+        public MainStockController(IProductReceiptData productReceiptData, IProductData productData)
         {
             _productReceiptData = productReceiptData;
+            _productData = productData;
         }
         [Authorize(Roles = "Admin,Manager,Cashier")]
         public IActionResult Index(
@@ -86,5 +90,48 @@ namespace DAERP.Web.Controllers
             int pageSize = 12;
             return View(PaginatedList<ProductReceiptModel>.Create(productReceipts, pageNumber ?? 1, pageSize));
         }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin,Manager,Cashier")]
+        public IActionResult Create(
+            string currentSort,
+            string sortOrder,
+            string currentFilter,
+            string searchString,
+            int? pageNumber,
+            int? addSelected)
+        {
+            var var1 = TempData["SelectedProductsIds"];
+            var var2 = var1 as int[];
+            var var3 = TempData["SelectedProductAmounts"];
+            var var4 = var3 as int[];
+            TempData.Clear();
+            IEnumerable<ProductModel> products = _productData.GetAllProductsWithChildModelsIncluded();
+            ProductReceiptCreateViewModel newViewModel = new ProductReceiptCreateViewModel()
+            {
+                Products = PaginatedList<ProductModel>.Create(products, 1, 12),
+                SelectedProducts = new List<SelectedProduct>()
+                {
+                    new SelectedProduct()
+                    {
+                        Product = products.ElementAt(0),
+                        Amount = 2
+                    },
+                    new SelectedProduct()
+                    {
+                        Product = products.ElementAt(2),
+                        Amount = 1
+                    },
+                    new SelectedProduct()
+                    {
+                        Product = products.ElementAt(4),
+                        Amount = 3
+                    }
+                }
+            };
+
+            return View(newViewModel);
+        }
+
     }
 }

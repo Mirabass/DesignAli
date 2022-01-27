@@ -1,5 +1,7 @@
 ﻿using DAERP.BL.Models.Product;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace DAERP.DAL.DataAccess
 {
@@ -8,7 +10,7 @@ namespace DAERP.DAL.DataAccess
         IEnumerable<ProductModel> GetAllProductsWithChildModelsIncluded();
         IEnumerable<ProductDivisionModel> GetAllProductDivisions();
         ProductDivisionModel GetProductDivisionBy(int productDivisionId);
-        void AddProduct(ProductModel product);
+        Task AddProductAsync(ProductModel product);
         ProductModel GetProductBy(int? id);
         ProductModel GetProductWithChildModelsIncludedBy(int? id);
         void RemoveProduct(ProductModel product);
@@ -20,5 +22,7 @@ namespace DAERP.DAL.DataAccess
         void RemoveProductDivision(ProductDivisionModel productDivision);
         void UpdateProductDivision(ProductDivisionModel productDivision);
         IEnumerable<ProductModel> GetProductsBy(ProductDivisionModel productDivision);
+        ProductImageModel GetProductImageBy(int? productId);
+        Task UpdateProductCustomersPricesAsync(ProductModel product);
     }
 }

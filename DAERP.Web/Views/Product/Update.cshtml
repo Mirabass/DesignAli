@@ -1,4 +1,4 @@
-﻿@model DAERP.Web.ViewModels.ProductViewModel
+﻿@model DAERP.Web.ViewModels.ProductCreateViewModel
 <form method="post" asp-action="Update">
     <input asp-for="Id" hidden />
     <div class="p-3">
@@ -42,6 +42,36 @@
                                 <div class="col">
                                     <input asp-for="EAN" class="form-control"/>
                                     <span asp-validation-for="EAN" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Ceny -->
+                <div class="form-group row border p-2 shadow rounded">
+                    <div class="col-12">
+                        <div class="row p-3">
+                            <div class="col text-info">
+                                Ceny
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ProductPrices.OperatedCostPrice"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ProductPrices.OperatedCostPrice" class="form-control"/>
+                                    <span asp-validation-for="ProductPrices.OperatedCostPrice" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ProductPrices.OperatedSellingPrice"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ProductPrices.OperatedSellingPrice" class="form-control"/>
+                                    <span asp-validation-for="ProductPrices.OperatedSellingPrice" class="text-danger"></span>
                                 </div>
                             </div>
                         </div>

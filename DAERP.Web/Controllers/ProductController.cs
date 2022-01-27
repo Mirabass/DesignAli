@@ -10,6 +10,11 @@ using Microsoft.AspNetCore.Authorization;
 using DAERP.Web.ViewModels;
 using DAERP.DAL.DataAccess;
 using AutoMapper;
+using DAERP.BL.Models;
+using System.Threading.Tasks;
+using System;
+using DAERP.Web.Helper;
+using System.IO;
 
 namespace DAERP.Web.Controllers
 {
@@ -17,28 +22,101 @@ namespace DAERP.Web.Controllers
     public class ProductController : Controller
     {
         private readonly IProductData _productData;
+        private readonly ICustomerProductData _customerProductData;
         private readonly IColorProvider _colorProvider;
         private readonly IMapper _mapper;
 
-        public ProductController(IColorProvider colorProvider, IProductData productData, IMapper mapper)
+        public ProductController(IColorProvider colorProvider, IProductData productData, IMapper mapper, ICustomerProductData customerProductData)
         {
             _colorProvider = colorProvider;
             _productData = productData;
             _mapper = mapper;
+            _customerProductData = customerProductData;
         }
-
-        public IActionResult Index()
+        [Authorize(Roles = "Admin,Manager,Cashier")]
+        public IActionResult Index(
+            string currentSort,
+            string sortOrder,
+            string currentFilter,
+            string searchString,
+            int? pageNumber)
         {
-            IEnumerable<ProductModel> products = _productData.GetAllProductsWithChildModelsIncluded();
-            foreach (ProductModel product in products)
+            if (sortOrder is null)
             {
-                product.ProductColorDesign.MainPartColorHex = _colorProvider.GetHexFromRal(product.ProductColorDesign.MainPartRAL);
-                product.ProductColorDesign.PocketColorHex = _colorProvider.GetHexFromRal(product.ProductColorDesign.PocketRAL);
-                product.ProductStrap.ColorHex = _colorProvider.GetHexFromRal(product.ProductStrap.RAL);
+                sortOrder = currentSort;
             }
-            return View(products);
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["CurrentFilter"] = searchString ?? currentFilter;
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            IEnumerable<ProductModel> products = _productData.GetAllProductsWithChildModelsIncluded();
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                string normalizedSearchString = searchString.Normalize(System.Text.NormalizationForm.FormD).ToUpper();
+                products = products.Where(p => 
+                    p.Designation.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString) ||
+                    p.EAN.ToString().Contains(normalizedSearchString) ||
+                    p.ProductDivision.Name.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString) ||
+                    p.ProductDivision.ProductType.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString)
+                );
+            }
+            if (products.Count() > 0)
+            {
+                string defaultPropToSort = "Designation";
+                Helper.Helper.SetDataForSortingPurposes(ViewData, sortOrder, products.FirstOrDefault(), defaultPropToSort);
+                foreach (ProductModel product in products)
+                {
+                    
+                    product.ProductColorDesign.MainPartColorHex = _colorProvider.GetHexFromRal(product.ProductColorDesign.MainPartRAL);
+                    product.ProductColorDesign.PocketColorHex = _colorProvider.GetHexFromRal(product.ProductColorDesign.PocketRAL);
+                    product.ProductStrap.ColorHex = _colorProvider.GetHexFromRal(product.ProductStrap.RAL);
+                }
+                if (String.IsNullOrEmpty(sortOrder))
+                {
+                    sortOrder = defaultPropToSort;
+                }
+                bool descending = false;
+                if (sortOrder.EndsWith("_desc"))
+                {
+                    sortOrder = sortOrder.Substring(0, sortOrder.Length - 5);
+                    descending = true;
+                }
+                if (descending)
+                {
+                    products = products.OrderByDescending(e => DataOperations.GetPropertyValue(e, sortOrder));
+                }
+                else
+                {
+                    products = products.OrderBy(e => DataOperations.GetPropertyValue(e, sortOrder));
+                }
+            }
+            int pageSize = 12;
+            return View(PaginatedList<ProductModel>.Create(products, pageNumber ?? 1, pageSize));
+        }
+        [HttpPost]
+        public JsonResult RetrieveProductImage(int? Id)
+        {
+            string notFoundResult = @"https://www.w3schools.com/images/lamp.jpg";
+            if (Id == null || Id == 0)
+            {
+                return Json(notFoundResult);
+            }
+            ProductImageModel productImage = _productData.GetProductImageBy(Id);
+            if (productImage == null)
+            {
+                return Json(notFoundResult);
+            }
+            string productImageDataURL = Helper.Helper.ConvertImageToURL(productImage.Image, productImage.Type);
+            return Json(productImageDataURL);
         }
         // GET-Create
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Create()
         {
             CreateViewBagOfProductNames();
@@ -60,7 +138,8 @@ namespace DAERP.Web.Controllers
         // POST-Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(ProductViewModel productViewModel)
+        [Authorize(Roles = "Admin,Manager")]
+        public async Task<IActionResult> Create(ProductCreateViewModel productViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -70,13 +149,32 @@ namespace DAERP.Web.Controllers
                 CustomOperations.CreateAndAsignDesignationFor(product);
                 product.DateCreated = System.DateTime.Today;
                 product.DateLastModified = System.DateTime.Today;
-                _productData.AddProduct(product);
+                ProductImageModel img = new ProductImageModel();
+                var file = Request.Form.Files.FirstOrDefault();
+                MemoryStream ms = new MemoryStream();
+                file.CopyTo(ms);
+                img.Image = ms.ToArray();
+                string fileType = Path.GetExtension(file.FileName).Replace(".", String.Empty).ToUpper();
+                if ((fileType == "PNG" || fileType == "JPG") == false)
+                {
+                    ModelState.AddModelError("Invalid image file name","Invalid file name of image. Must be PNG or JPG.");
+                    CreateViewBagOfProductNames();
+                    return View(productViewModel);
+                }
+                img.Type = fileType;
+                ms.Close();
+                ms.Dispose();
+                product.ProductImage = img;
+                product.ProductPrices.GainPercentValue = BL.PriceCalculation.GainPercentValue(product.ProductPrices.OperatedCostPrice, product.ProductPrices.OperatedSellingPrice);
+                await _productData.AddProductAsync(product);
+                await _productData.UpdateProductCustomersPricesAsync(product);
                 return RedirectToAction("Index");
             }
             CreateViewBagOfProductNames();
             return View(productViewModel);
         }
         // Get-Delete
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Delete(int? Id)
         {
             if (Id == null || Id == 0)
@@ -88,13 +186,24 @@ namespace DAERP.Web.Controllers
             {
                 return NotFound();
             }
-            ProductViewModel productViewModel = _mapper.Map<ProductViewModel>(product);
+            List<CustomerProductModel> customersWithStock = _customerProductData.GetCustomersWithStockOfProductWithChildModelsIncludedBy(Id).ToList();
+            if (customersWithStock.Count > 0)
+            {
+                string customersWithStockMessage = "";
+                customersWithStock.ForEach(p =>
+                {
+                    customersWithStockMessage += p.Customer.Designation + ": " + p.AmountInStock + "\n";
+                });
+                return Content("Není možné smazat tento výrobek, protože ho mají naskladněny následující odběratelé:\n" + customersWithStockMessage);
+            }
+            ProductCreateViewModel productViewModel = _mapper.Map<ProductCreateViewModel>(product);
             ViewBag.ProductName = _productData.GetProductDivisionNameBy(product.ProductDivision.Id);
             return View(productViewModel);
         }
         // POST-Delete
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult DeletePost(int? Id)
         {
             ProductModel product = _productData.GetProductWithChildModelsIncludedBy(Id);
@@ -110,6 +219,7 @@ namespace DAERP.Web.Controllers
         }
 
         // GET-Update
+        [Authorize(Roles = "Admin,Manager")]
         public IActionResult Update(int? Id)
         {
             if (Id == null || Id == 0)
@@ -121,14 +231,15 @@ namespace DAERP.Web.Controllers
             {
                 return NotFound();
             }
-            ProductViewModel productViewModel = _mapper.Map<ProductViewModel>(product);
+            ProductCreateViewModel productViewModel = _mapper.Map<ProductCreateViewModel>(product);
             CreateViewBagOfProductNames();
             return View(productViewModel);
         }
         // POST-Update
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update(ProductViewModel productViewModel)
+        [Authorize(Roles = "Admin,Manager")]
+        public async Task<IActionResult> Update(ProductCreateViewModel productViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -139,7 +250,9 @@ namespace DAERP.Web.Controllers
                 updatedProduct.DateCreated = oldProduct.DateCreated;
                 CustomOperations.CreateAndAsignDesignationFor(updatedProduct);
                 updatedProduct.DateLastModified = System.DateTime.Today;
+                updatedProduct.ProductPrices.GainPercentValue = BL.PriceCalculation.GainPercentValue(updatedProduct.ProductPrices.OperatedCostPrice, updatedProduct.ProductPrices.OperatedSellingPrice);
                 _productData.UpdateProduct(updatedProduct);
+                await _productData.UpdateProductCustomersPricesAsync(updatedProduct);
                 return RedirectToAction("Index");
             }
             CreateViewBagOfProductNames();

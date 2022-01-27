@@ -1,0 +1,196 @@
+﻿@model DAERP.Web.ViewModels.ProductReceiptCreateViewModel
+@{
+    List<int> selectedProductIds = Model.SelectedProducts.Select(sp => sp.Product.Id).ToList();
+    List<int> selectedProductAmounts = Model.SelectedProducts.Select(sp => sp.Amount).ToList();
+    TempData["SelectedProductsIds"] = selectedProductIds;
+    TempData["SelectedProductAmounts"] = selectedProductAmounts;
+}
+<div class="container-fluid p-3">
+    <div class="col-12 col-md-12">
+        <div class="row">
+            <div class="col-12 col-md-6"><h2 class="text-primary">04.01.01 - Tvorba příjemky výrobků</h2></div>
+            <div class="col-12 col-md-6">
+                <form asp-action="Create" method="get">
+                    <div class="form-actions no-color">
+                        <p>
+                            Prohledat výrobky: <input type="text" name="SearchString" value="@Model.CurrentSearch" />
+                            <input type="submit" value="Filtrovat" class="btn btn-secondary"/> |
+                            <a class="btn btn-outline-warning"
+                                asp-action="Create"
+                                asp-route-currentSort="@ViewData["CurrentSort"]">
+                                Zpět na celý seznam</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br />
+
+     @if (Model.Products.Count() > 0)
+    {
+        <div class="col-12">
+            <div class="row">
+                <div class="col-xl-8 col-12">
+                    <table
+                    class="table table-bordered table-striped table-responsive"
+                    data-filter-control="true"
+                    data-show-search-clear-button="true"
+                    style="width:unset;text-align:center;word-wrap:normal">
+                       <thead>
+                           <tr>
+                               <th rowspan="2"></th>
+                               <th id="productHeader" colspan="4">
+                                   Výrobek
+                               </th>
+                               <th id="strap" colspan="1">
+                                   Ceny výrobku
+                               </th>
+                               <th colspan="2">
+                                   Stav na skladě Design Ali
+                               </th>
+                           </tr>
+                           <tr>
+                               <th id="productHeader">
+                                   <a asp-action="Create" asp-route-sortOrder="@ViewData["DesignationSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                       @Html.DisplayNameFor(model => model.Products.FirstOrDefault().Designation)</a>
+                               </th>
+                               <th id="productHeader">
+                                   <a asp-action="Create" asp-route-sortOrder="@ViewData["EANSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                       @Html.DisplayNameFor(model => model.Products.FirstOrDefault().EAN)</a>
+                               </th>
+                               <th id="productHeader">
+                                   <a asp-action="Create" asp-route-sortOrder="@ViewData["ProductDivisionNameSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                       @Html.DisplayNameFor(model => model.Products.FirstOrDefault().ProductDivision.Name)</a>
+                               </th>
+                               <th id="productHeader">
+                                   <a asp-action="Create" asp-route-sortOrder="@ViewData["ProductDivisionProductTypeSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                       @Html.DisplayNameFor(model => model.Products.FirstOrDefault().ProductDivision.ProductType)</a>
+                               </th>
+
+                               <th id="strap">
+                                   <a asp-action="Create" asp-route-sortOrder="@ViewData["ProductPricesOperatedCostPriceSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                       @Html.DisplayNameFor(model => model.Products.FirstOrDefault().ProductPrices.OperatedCostPrice)</a>
+                               </th>
+
+                               <th>
+                                   <a asp-action="Create" asp-route-sortOrder="@ViewData["MainStockAmountSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                       @Html.DisplayNameFor(model => model.Products.FirstOrDefault().MainStockAmount) <span class="badge badge-primary badge-pill">@ViewData["StockSum"]</span>
+                                   </a>
+                               </th>
+                               <th>
+                                   <a asp-action="Create" asp-route-sortOrder="@ViewData["MainStockValueSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                       @Html.DisplayNameFor(model => model.Products.FirstOrDefault().MainStockValue)
+                                   </a>
+                               </th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           @foreach (var product in Model.Products)
+                           {
+                               <tr data-toggle="popover" data-trigger="hover" id="@product.Id">
+                                   <td><a class="btn btn-primary"
+                                        asp-action="Create"
+                                        asp-route-addSelected="@product.Id"
+                                        asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                       <i class="fas fa-plus"></i></a></td>
+                                   <td>@product.Designation</td>
+                                   <td>@product.EAN</td>
+                                   <td>@product.ProductDivision.Name</td>
+                                   <td>@product.ProductDivision.ProductType</td>
+                                        
+                                   <td>@product.ProductPrices.OperatedCostPrice</td>
+
+                                   <td>@product.MainStockAmount</td>
+                                   <td>@product.MainStockValue</td>
+                               </tr>
+                           }
+                        </tbody>
+                    </table>
+                    <div>
+                        <div class="row">
+                            @{
+                                var prevDisabled = !Model.Products.HasPreviousPage ? "disabled" : "";
+                                var nextDisabled = !Model.Products.HasNextPage ? "disabled" : "";
+                            }
+                            <div class="col p-2">
+                                <a asp-action="Create"
+                                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                   asp-route-pageNumber="@(Model.Products.PageIndex - 1)"
+                                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                   class="btn btn-secondary @prevDisabled">
+                                   <i class="fas fa-arrow-left"></i>
+                                </a>
+                                <a asp-action="Create"
+                                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                   asp-route-pageNumber="@(Model.Products.PageIndex + 1)"
+                                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                   class="btn btn-secondary @nextDisabled">
+                                   <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                   </div>
+                </div>
+                <div class="col-xl-4 col-12">
+                    <form asp-action="CreatePost" method="post">
+                        <div class="col">
+                            <ul class="list-group">
+                                @foreach (var selectedProduct in Model.SelectedProducts)
+                                {
+                                  <li class="list-group-item d-flex justify-content-between align-items-center"
+                                    data-toggle="popover"
+                                    data-trigger="hover"
+                                    id="@selectedProduct.Product.Id">
+                                      <div >
+                                          @selectedProduct.Product.Designation | 
+                                          @selectedProduct.Product.ProductDivision.Name | 
+                                          @selectedProduct.Product.ProductDivision.ProductType | 
+                                          @selectedProduct.Product.ProductPrices.OperatedCostPrice
+                                          <span class="badge badge-primary badge-pill">@selectedProduct.Amount</span>
+                                      </div>
+                                      <div class="float-right">
+                                         <span>
+                                              <a class="btn btn-primary"
+                                                 asp-action="Create"
+                                                 asp-route-addSelected="@selectedProduct.Product.Id"
+                                                 asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                                 asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                                    <i class="fas fa-plus"></i></a></span>                               
+                                          <span>
+                                              <a class="btn btn-secondary"
+                                                 asp-action="Create"
+                                                 asp-route-removeSelected="@selectedProduct.Product.Id"
+                                                 asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                                 asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                                    <i class="fas fa-minus"></i></a></span>
+                                          <span>
+                                              <a class="btn btn-danger"
+                                                 asp-action="Create"
+                                                 asp-route-removeAllSelected="@selectedProduct.Product.Id"
+                                                 asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                                 asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                                    <i class="fas fa-trash"></i></a></span>
+                                      </div>
+                                  </li>
+                                }
+                            </ul>
+                        </div>
+                        <div class="row justify-content-between">
+                            <div class="col p-2 text-center align-content-center">
+                                <button type="submit" class="btn btn-lg btn-primary">
+                                <i class="fas fa-paper-plane"></i> Potvrdit příjemku výrobků</button>
+                            </div>
+                            <div class="col p-2 text-center">
+                                <a class="btn btn-lg btn-secondary" asp-action="Index">
+                                    <i class="fa fa-arrow-left"></i> Vrátit se na přehled příjemek</a>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+</div>

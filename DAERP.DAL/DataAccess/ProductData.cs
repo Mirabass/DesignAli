@@ -1,4 +1,5 @@
-﻿using DAERP.BL.Models.Product;
+﻿using DAERP.BL.Models;
+using DAERP.BL.Models.Product;
 using DAERP.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -21,6 +22,7 @@ namespace DAERP.DAL.DataAccess
             IEnumerable<ProductModel> products = _db.Products
                 .Include(product => product.ProductStrap)
                 .Include(product => product.ProductColorDesign)
+                .Include(product => product.ProductPrices)
                 .Include(product => product.ProductDivision)
                     .ThenInclude(pd => pd.ProductKind)
                 .Include(product => product.ProductDivision)
@@ -42,18 +44,54 @@ namespace DAERP.DAL.DataAccess
             return productDivision;
         }
 
-        public void AddProduct(ProductModel product)
+        public async Task AddProductAsync(ProductModel product)
         {
-            _db.Add(product);
+            product.ProductCustomers = new List<CustomerProductModel>();
+            await _db.Customers.ForEachAsync(c =>
+            {
+                product.ProductCustomers.Add(new CustomerProductModel()
+                {
+                    ProductId = product.Id,
+                    CustomerId = c.Id
+                });
+            });
+
+            await _db.AddAsync(product);
             _db.Entry(product.ProductDivision).State = EntityState.Unchanged;
             _db.Entry(product.ProductDivision.ProductKind).State = EntityState.Unchanged;
             _db.Entry(product.ProductDivision.ProductMaterial).State = EntityState.Unchanged;
-            _db.SaveChanges();
-        }
 
+            await _db.SaveChangesAsync();
+        }
+        public async Task UpdateProductCustomersPricesAsync(ProductModel product)
+        {
+            await _db.CustomersProducts
+                .Include(cp => cp.Product)
+                    .ThenInclude(cp => cp.ProductPrices)
+                .Include(cp => cp.Customer)
+                .Where(cp => cp.ProductId == product.Id)
+                .ForEachAsync(pc =>
+                {
+                    pc.DeliveryNotePrice = BL.PriceCalculation.DeliveryNotePrice(
+                        pc.Product.ProductPrices.GainPercentValue,
+                        pc.Customer.ProvisionFor60PercentValue,
+                        pc.Product.ProductPrices.OperatedCostPrice);
+                    pc.IssuedInvoicePrice = BL.PriceCalculation.IssuedInvoicePrice(
+                        pc.DeliveryNotePrice,
+                        pc.Customer.FVDiscountPercentValue);
+                    pc.Value = BL.PriceCalculation.StockValue(
+                        pc.AmountInStock,
+                        pc.DeliveryNotePrice);
+                });
+            await _db.SaveChangesAsync();
+        }
         public ProductModel GetProductBy(int? id)
         {
-            return _db.Products.Where(p => p.Id == id).Include(p => p.ProductDivision).FirstOrDefault();
+            return _db.Products
+                .Where(p => p.Id == id)
+                .Include(p => p.ProductDivision)
+                .Include(p => p.ProductPrices)
+                .FirstOrDefault();
         }
 
         public ProductModel GetProductWithChildModelsIncludedBy(int? id)
@@ -61,6 +99,7 @@ namespace DAERP.DAL.DataAccess
             return _db.Products.AsNoTracking().Where(p => p.Id == id)
                 .Include(product => product.ProductStrap)
                 .Include(product => product.ProductColorDesign)
+                .Include(product => product.ProductPrices)
                 .Include(product => product.ProductDivision)
                     .ThenInclude(pd => pd.ProductKind)
                 .Include(product => product.ProductDivision)
@@ -73,6 +112,7 @@ namespace DAERP.DAL.DataAccess
             _db.Products.Remove(product);
             _db.ProductColorDesigns.Remove(product.ProductColorDesign);
             _db.ProductStraps.Remove(product.ProductStrap);
+            _db.ProductPrices.Remove(product.ProductPrices);
             _db.SaveChanges();
         }
 
@@ -89,6 +129,7 @@ namespace DAERP.DAL.DataAccess
         {
             _db.Update(updatedProduct.ProductColorDesign);
             _db.Update(updatedProduct.ProductStrap);
+            _db.Update(updatedProduct.ProductPrices);
             _db.Products.Update(updatedProduct);
             _db.SaveChanges();
         }
@@ -130,5 +171,15 @@ namespace DAERP.DAL.DataAccess
         {
             return _db.Products.Where(p => p.ProductDivision == productDivision);
         }
+
+        public ProductImageModel GetProductImageBy(int? productId)
+        {
+            var product = _db.Products
+                .Include(p => p.ProductImage)
+                .Where(p => p.Id == productId).FirstOrDefault();
+            return product.ProductImage;
+        }
+
+
     }
 }

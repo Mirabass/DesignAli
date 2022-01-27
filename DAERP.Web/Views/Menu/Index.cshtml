@@ -5,11 +5,21 @@
 <div class="container p-3">
     <h1 class="text-primary">Menu</h1>
     <br />
-    <div class="list-group">
-         <a class="list-group-item list-group-item-action" asp-area="" asp-controller="Product" asp-action="Index">02.00.02 - Číselník výrobků</a>
-         <a class="list-group-item list-group-item-action" asp-area="" asp-controller="ProductDivision" asp-action="Index">02.00.03 - Názvy výrobků</a>
+    <div class="p-2">
+        <div class="list-group">
+            <a class="list-group-item list-group-item-action" asp-area="" asp-controller="Customer" asp-action="Index">01.00.01 - Číselník odběratelů</a>
+            <a class="list-group-item list-group-item-action" asp-area="" asp-controller="Product" asp-action="Index">02.00.02 - Číselník výrobků</a>
+            <a class="list-group-item list-group-item-action" asp-area="" asp-controller="ProductDivision" asp-action="Index">02.00.03 - Názvy výrobků</a>
+        </div>
     </div>
-    <div>
-        
+    <div class="p-2">
+        <label class="col-form-label">04. Sklad</label>
+        <div class="list-group">
+            <a class="list-group-item list-group-item-action" asp-area="" asp-controller="MainStock" asp-action="Index">04.01.01 - Stav skladu výrobků, <b>příjem výrobku</b></a>
+            <a class="list-group-item list-group-item-action" asp-area="" asp-controller="Stock" asp-action="Index">04.01.02 - Stav skladu výrobků u odběratele</a>
+            <div class="list-group-item list-group-item-action">04.01.03 - Stav skladu výrobku u odběratelů</div>
+            <div class="list-group-item list-group-item-action">04.02.03 - Tvorba <b>dodacího listu</b></div>
+            <div class="list-group-item list-group-item-action">04.02.04 - Tvorba <b>faktury vydané</b></div>
+        </div>
     </div>
 </div>

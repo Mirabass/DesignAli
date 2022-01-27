@@ -1,0 +1,480 @@
+﻿@model DAERP.BL.Models.CustomerModel
+<form method="post" asp-action="DeletePost">
+    <input asp-for="Id" hidden />
+    <div class="p-3">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group row">
+            <h2 class="text-black-50 pl-3">Odstranit odběratele</h2>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <!-- Odběratel -->
+                <div class="form-group row border p-2 shadow rounded">
+                    <div class="col-12">
+                        <div class="row p-3">
+                            <div class="col text-info">
+                                Odběratel
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="Designation"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="Designation" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="State"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="State" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="Name"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="Name" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="Franchise"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="Franchise" disabled class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Sídlo firmy -->
+                <div class="form-group row border p-2 shadow rounded">
+                    <div class="col-12">
+                        <div class="row p-3">
+                            <div class="col text-info">
+                                Sídlo firmy
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="SFName"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="SFName" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="SFStreetAndNo"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="SFStreetAndNo" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="SFZIP"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="SFZIP" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="SFCity"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="SFCity" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="SFCountry"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="SFCountry" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="SFIN"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="SFIN" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="SFTIN"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="SFTIN" disabled class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Hlavní nastavení -->
+                <div class="form-group row border p-2 shadow rounded">
+                    <div class="col-12">
+                        <div class="row p-3">
+                            <div class="col text-info">
+                                Hlavní nastavení
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ProvisionFor60PercentValue"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ProvisionFor60PercentValue" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="FVDiscountPercentValue"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="FVDiscountPercentValue" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="Maturity"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="Maturity" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="CurrencyCode"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="CurrencyCode" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="RoundPriceWithVAT"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="RoundPriceWithVAT" disabled class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Dodací a fakturační údaje - DF -->
+                <div class="form-group row border p-2 shadow rounded">
+                    <div class="col-12">
+                        <div class="row p-3">
+                            <div class="col text-info">
+                                Dodací a fakturační údaje - DF
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="DFName"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="DFName" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="DFContactPerson"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="DFContactPerson" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="DFStreetAndNo"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="DFStreetAndNo" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="DFZIP"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="DFZIP" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="DFCity"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="DFCity" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="DFCountry"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="DFCountry" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="DFPhone"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="DFPhone" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="DFMobile"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="DFMobile" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="DFEmail"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="DFEmail" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="DFIN"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="DFIN" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="DFTIN"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="DFTIN" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="DFBank"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="DFBank" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="DFAccountNumber"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="DFAccountNumber" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="DFBIC"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="DFBIC" disabled class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Místo dodání - MD -->
+                <div class="form-group row border p-2 shadow rounded">
+                    <div class="col-12">
+                        <div class="row p-3">
+                            <div class="col text-info">
+                                Místo dodání - MD
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="MDName"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="MDName" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="MDContactPerson"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="MDContactPerson" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="MDStreetAndNo"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="MDStreetAndNo" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="MDZIP"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="MDZIP" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="MDCity"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="MDCity" disabled class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Smlouva -->
+                <div class="form-group row border p-2 shadow rounded">
+                    <div class="col-12">
+                        <div class="row p-3">
+                            <div class="col text-info">
+                                Smlouva
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ContractDANumber"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ContractDANumber" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ContractONumber"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ContractONumber" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ContractContent"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ContractContent" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ContractPoPro"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ContractPoPro" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ContractPoUm"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ContractPoUm" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ContractDateSigned"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ContractDateSigned" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ContractDateFrom"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ContractDateFrom" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ContractDateTo"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ContractDateTo" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ContractRent"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ContractRent" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ContractPeriod"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ContractPeriod" disabled class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ContractProvisionPercentValue"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ContractProvisionPercentValue" disabled class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row border p-2 shadow rounded">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="col">
+                                    <label asp-for="Comment"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="Comment" disabled class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group row justify-content-around p-2">
+                    <div class="col-6">
+                        <input type="submit" class="btn btn-danger w-75" value="Odstranit odběratele" />
+                    </div>
+                    <div class="col-6">
+                        <a class="btn btn-success w-75" asp-action="Index">Vrátit se</a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+</form>

@@ -36,13 +36,18 @@ namespace DAERP.Web
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<UserDbContext>();
 
             // Personal services:
             services.AddAutoMapper(typeof(ProductProfile));
 
             services.AddSingleton<IColorProvider, ColorProvider>();
+            
+            services.AddTransient<ICustomerData, CustomerData>();
             services.AddTransient<IProductData, ProductData>();
+            services.AddTransient<IProductReceiptData, ProductReceiptData>();
+            services.AddTransient<ICustomerProductData, CustomerProductData>();
 
             services.AddControllersWithViews();
         }

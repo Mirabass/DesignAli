@@ -18,7 +18,7 @@ namespace DAERP.DAL.DataAccess
             _db = db;
         }
 
-        public void AddRangeOfProductReceiptsAsync(List<ProductReceiptModel> productReceipts)
+        public void AddRangeOfProductReceipts(List<ProductReceiptModel> productReceipts)
         {
             var receiptsThisYear = _db.ProductReceipts
                 .Where(pr => pr.DateCreated.Year == DateTime.Now.Year);
@@ -33,7 +33,7 @@ namespace DAERP.DAL.DataAccess
             string newNumber = DateTime.Now.ToString("yy") + "-" + CustomOperations.LeadingZeros(newOrderThisYear, 4);
             productReceipts.ForEach(pr =>
             {
-                pr.DateCreated = DateTime.Now;
+                pr.DateCreated = DateTime.Now.Date;
                 pr.OrderInCurrentYear = newOrderThisYear;
                 pr.Number = newNumber;
                 pr.ValueWithoutVAT = pr.Amount * pr.CostPrice;

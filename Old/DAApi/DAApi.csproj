@@ -26,6 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Old\API\DADataManager.Library\DADataManager.Library.csproj" />
+    <ProjectReference Include="..\DADataManager.Library\DADataManager.Library.csproj" />
   </ItemGroup>
 </Project>

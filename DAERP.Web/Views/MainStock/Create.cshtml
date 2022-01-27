@@ -1,4 +1,4 @@
-﻿@model DAERP.Web.ViewModels.ProductReceiptCreateViewModel
+﻿@model DAERP.Web.ViewModels.ProductsSelectionViewModel
 @{
     List<int> selectedProductIds = Model.SelectedProducts.Select(sp => sp.Product.Id).ToList();
     List<int> selectedProductAmounts = Model.SelectedProducts.Select(sp => sp.Amount).ToList();
@@ -13,7 +13,7 @@
                 <form asp-action="Create" method="get">
                     <div class="form-actions no-color">
                         <p>
-                            Prohledat výrobky: <input type="text" name="SearchString" value="@Model.CurrentSearch" />
+                            Prohledat výrobky: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
                             <input type="submit" value="Filtrovat" class="btn btn-secondary"/> |
                             <a class="btn btn-outline-warning"
                                 asp-action="Create"

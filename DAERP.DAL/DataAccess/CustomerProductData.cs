@@ -49,5 +49,12 @@ namespace DAERP.DAL.DataAccess
                 .Where(cp => customersIds.ToList().Contains(cp.CustomerId));
             return customerProducts;    
         }
+
+        public CustomerProductModel GetCustomerProductBy(int customerId, int productId)
+        {
+            return _db.CustomersProducts
+                .Where(cp => cp.CustomerId == customerId && cp.ProductId == productId)
+                .FirstOrDefault();
+        }
     }
 }

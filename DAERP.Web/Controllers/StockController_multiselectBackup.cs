@@ -101,8 +101,8 @@ namespace DAERP.Web.Controllers
             if (productCustomersViewModel.Count > 0)
             {
                 string defaultPropToSort = "Product.Designation";
-                Helper.Helper.SetDataForSortingPurposes(ViewData, sortOrder, productCustomersViewModel.FirstOrDefault(), defaultPropToSort);
-                Helper.Helper.SetDynamicDataForSortingPurposes(ViewData, sortOrder, productCustomersViewModel.FirstOrDefault().CustomersNames.Values.ToList());
+                Helper.StaticHelper.SetDataForSortingPurposes(ViewData, sortOrder, productCustomersViewModel.FirstOrDefault(), defaultPropToSort);
+                Helper.StaticHelper.SetDynamicDataForSortingPurposes(ViewData, sortOrder, productCustomersViewModel.FirstOrDefault().CustomersNames.Values.ToList());
                 if (String.IsNullOrEmpty(sortOrder))
                 {
                     sortOrder = defaultPropToSort;

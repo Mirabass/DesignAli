@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DAERP.BL.Models.Movements
 {
-    public class ProductReceiptModel
+    public class DeliveryNoteModel
     {
         [Required]
         public int Id { get; set; }
@@ -24,14 +24,27 @@ namespace DAERP.BL.Models.Movements
         public int ProductId { get; set; }
         [Required]
         public ProductModel Product { get; set; }
+        [ForeignKey("Customer")]
+        [Required]
+        public int CustomerId { get; set; }
+        [Required]
+        public CustomerModel Customer { get; set; }
         [Required]
         [Display(Name = "Množství")]
-        public int Amount { get; set; }
+        public int StartingAmount { get; set; }
+        [Display(Name = "Zbývá")]
         [Required]
-        [Display(Name = "Nákladová cena")]
+        public int Remains { get; set; }
+        [Required]
+        [Display(Name = "Cena - FV")]
         [DataType(DataType.Currency)]
         [Column(TypeName = "money")]
-        public decimal CostPrice { get; set; }
+        public decimal IssuedInvoicePrice { get; set; }
+        [Required]
+        [Display(Name = "Cena - DL")]
+        [DataType(DataType.Currency)]
+        [Column(TypeName = "money")]
+        public decimal DeliveryNotePrice { get; set; }
         [Required]
         [Display(Name = "Hodnota - DPH")]
         [DataType(DataType.Currency)]
@@ -42,5 +55,10 @@ namespace DAERP.BL.Models.Movements
         [DataType(DataType.Currency)]
         [Column(TypeName = "money")]
         public decimal ValueWithVAT { get; set; }
+        [Required]
+        [Display(Name = "Hodnota - DPH zbývá")]
+        [DataType(DataType.Currency)]
+        [Column(TypeName = "money")]
+        public decimal RemainValueWithoutVAT { get; set; }
     }
 }

@@ -2,6 +2,7 @@ using AutoMapper;
 using DAERP.DAL.Data;
 using DAERP.DAL.DataAccess;
 using DAERP.DAL.Services;
+using DAERP.Web.Helper;
 using DAERP.Web.ViewModels.Mapping;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -46,7 +47,9 @@ namespace DAERP.Web
             
             services.AddTransient<ICustomerData, CustomerData>();
             services.AddTransient<IProductData, ProductData>();
+            services.AddTransient<IProductSelectService, ProductSelectService>();
             services.AddTransient<IProductReceiptData, ProductReceiptData>();
+            services.AddTransient<IDeliveryNoteData, DeliveryNoteData>();
             services.AddTransient<ICustomerProductData, CustomerProductData>();
 
             services.AddControllersWithViews();

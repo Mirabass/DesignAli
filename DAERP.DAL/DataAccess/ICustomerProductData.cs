@@ -12,5 +12,6 @@ namespace DAERP.DAL.DataAccess
         IEnumerable<CustomerProductModel> GetProductsInStockOfCustomerWithChildModelsIncludedBy(int? id);
         IEnumerable<CustomerProductModel> GetCustomersWithStockOfProductWithChildModelsIncludedBy(int? id);
         IEnumerable<CustomerProductModel> GetProductsInStockOfCustomersWithChildModelsIncludedBy(int[] customersIds);
+        CustomerProductModel GetCustomerProductBy(int customerId, int productId);
     }
 }

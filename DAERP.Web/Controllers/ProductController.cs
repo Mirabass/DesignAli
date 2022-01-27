@@ -69,7 +69,7 @@ namespace DAERP.Web.Controllers
             if (products.Count() > 0)
             {
                 string defaultPropToSort = "Designation";
-                Helper.Helper.SetDataForSortingPurposes(ViewData, sortOrder, products.FirstOrDefault(), defaultPropToSort);
+                Helper.StaticHelper.SetDataForSortingPurposes(ViewData, sortOrder, products.FirstOrDefault(), defaultPropToSort);
                 foreach (ProductModel product in products)
                 {
                     
@@ -112,7 +112,7 @@ namespace DAERP.Web.Controllers
             {
                 return Json(notFoundResult);
             }
-            string productImageDataURL = Helper.Helper.ConvertImageToURL(productImage.Image, productImage.Type);
+            string productImageDataURL = Helper.StaticHelper.ConvertImageToURL(productImage.Image, productImage.Type);
             return Json(productImageDataURL);
         }
         // GET-Create
@@ -250,7 +250,10 @@ namespace DAERP.Web.Controllers
                 updatedProduct.DateCreated = oldProduct.DateCreated;
                 CustomOperations.CreateAndAsignDesignationFor(updatedProduct);
                 updatedProduct.DateLastModified = System.DateTime.Today;
-                updatedProduct.ProductPrices.GainPercentValue = BL.PriceCalculation.GainPercentValue(updatedProduct.ProductPrices.OperatedCostPrice, updatedProduct.ProductPrices.OperatedSellingPrice);
+                updatedProduct.ProductPrices.GainPercentValue =
+                    BL.PriceCalculation.GainPercentValue(updatedProduct.ProductPrices.OperatedCostPrice,
+                    updatedProduct.ProductPrices.OperatedSellingPrice);
+                updatedProduct.MainStockValue = updatedProduct.MainStockAmount * updatedProduct.ProductPrices.OperatedCostPrice;
                 _productData.UpdateProduct(updatedProduct);
                 await _productData.UpdateProductCustomersPricesAsync(updatedProduct);
                 return RedirectToAction("Index");

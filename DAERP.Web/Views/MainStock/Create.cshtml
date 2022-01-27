@@ -135,47 +135,59 @@
                 </div>
                 <div class="col-xl-4 col-12">
                     <form asp-action="CreatePost" method="post">
-                        <ul class="list-group">
-                            @foreach (var selectedProduct in Model.SelectedProducts)
-                            {
-                              <li class="list-group-item d-flex justify-content-between align-items-center"
-                                data-toggle="popover"
-                                data-trigger="hover"
-                                id="@selectedProduct.Product.Id">
-                                  <div >
-                                      @selectedProduct.Product.Designation | 
-                                      @selectedProduct.Product.ProductDivision.Name | 
-                                      @selectedProduct.Product.ProductDivision.ProductType | 
-                                      @selectedProduct.Product.ProductPrices.OperatedCostPrice
-                                      <span class="badge badge-primary badge-pill">@selectedProduct.Amount</span>
-                                  </div>
-                                  <div class="float-right">
-                                     <span>
-                                          <a class="btn btn-primary"
-                                             asp-action="Create"
-                                             asp-route-addSelected="@selectedProduct.Product.Id"
-                                             asp-route-sortOrder="@ViewData["CurrentSort"]"
-                                             asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                                <i class="fas fa-plus"></i></a></span>                               
-                                      <span>
-                                          <a class="btn btn-secondary"
-                                             asp-action="Create"
-                                             asp-route-removeSelected="@selectedProduct.Product.Id"
-                                             asp-route-sortOrder="@ViewData["CurrentSort"]"
-                                             asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                                <i class="fas fa-minus"></i></a></span>
-                                      <span>
-                                          <a class="btn btn-danger"
-                                             asp-action="Create"
-                                             asp-route-removeAllSelected="@selectedProduct.Product.Id"
-                                             asp-route-sortOrder="@ViewData["CurrentSort"]"
-                                             asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                                <i class="fas fa-trash"></i></a></span>
-                                  </div>
-                              </li>
-                            }
-                        </ul>
-                        <input type="submit" class="btn btn-lg"/>
+                        <div class="col">
+                            <ul class="list-group">
+                                @foreach (var selectedProduct in Model.SelectedProducts)
+                                {
+                                  <li class="list-group-item d-flex justify-content-between align-items-center"
+                                    data-toggle="popover"
+                                    data-trigger="hover"
+                                    id="@selectedProduct.Product.Id">
+                                      <div >
+                                          @selectedProduct.Product.Designation | 
+                                          @selectedProduct.Product.ProductDivision.Name | 
+                                          @selectedProduct.Product.ProductDivision.ProductType | 
+                                          @selectedProduct.Product.ProductPrices.OperatedCostPrice
+                                          <span class="badge badge-primary badge-pill">@selectedProduct.Amount</span>
+                                      </div>
+                                      <div class="float-right">
+                                         <span>
+                                              <a class="btn btn-primary"
+                                                 asp-action="Create"
+                                                 asp-route-addSelected="@selectedProduct.Product.Id"
+                                                 asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                                 asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                                    <i class="fas fa-plus"></i></a></span>                               
+                                          <span>
+                                              <a class="btn btn-secondary"
+                                                 asp-action="Create"
+                                                 asp-route-removeSelected="@selectedProduct.Product.Id"
+                                                 asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                                 asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                                    <i class="fas fa-minus"></i></a></span>
+                                          <span>
+                                              <a class="btn btn-danger"
+                                                 asp-action="Create"
+                                                 asp-route-removeAllSelected="@selectedProduct.Product.Id"
+                                                 asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                                 asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                                    <i class="fas fa-trash"></i></a></span>
+                                      </div>
+                                  </li>
+                                }
+                            </ul>
+                        </div>
+                        <div class="row justify-content-between">
+                            <div class="col p-2 text-center align-content-center">
+                                <button type="submit" class="btn btn-lg btn-primary">
+                                <i class="fas fa-paper-plane"></i> Potvrdit příjemku výrobků</button>
+                            </div>
+                            <div class="col p-2 text-center">
+                                <a class="btn btn-lg btn-secondary" asp-action="Index">
+                                    <i class="fa fa-arrow-left"></i> Vrátit se na přehled příjemek</a>
+                            </div>
+                        </div>
+
                     </form>
                 </div>
             </div>

@@ -65,7 +65,7 @@ namespace DAERP.Web.Controllers
             ViewData["ValueWithVATSum"] = productReceipts.Select(pr => pr.ValueWithVAT).Sum();
             if (productReceipts.Count() > 0)
             {
-                string defaultPropToSort = "Product.Designation";
+                string defaultPropToSort = "Number_desc";
                 Helper.Helper.SetDataForSortingPurposes(ViewData, sortOrder, productReceipts.FirstOrDefault(), defaultPropToSort);
                 if (String.IsNullOrEmpty(sortOrder))
                 {

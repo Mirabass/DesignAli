@@ -10,6 +10,26 @@ The second goal is the practical use of the product.
 In the first place, it is to serve as a product manager for a small business of member of my family. The goal is to allow employees who are assigned roles to log on. They will be able to work with materials and products, enter suppliers and customers, create delivery notes and invoices. Everything will be recorded and over time statistics will be generated.
 Secondly, the system can grow into an e-shop.
 
+In the solution of this application you will find several projects. I no longer develop some (WPF), but I kept them as my portfolio.
+Currently developed projects are DAERP:
+DAERP.Web - ASP.NET 5 base project
+DAERP.DAL - library including access layer data
+DAERP.BL - library including Business logic.
+The following is used in these projects:
+ASP NET 5 MVC,
+Microsoft Identity, Dependency injection,
+Entity framework Core,
+Automapper,
+Bootstrap 4,
+Font awesome
+
+Languages: C#, HTML, JS, Jquery, Ajax
+
+
+
+
+History - Old state:
+
 In its current state, this Solution is almost completely written according to the TimCoRetailManager course from the IAmTimCorey channel. Not copied. I went through the course and wrote the code myself (can be traced in commits). I tried not only to blindly describe everything that is written in this Solution, but also to understand it. The course was used mainly to create authorizations with roles, but the product will continue to be adapted to the needs of Design Ali.
 
 Application structure:

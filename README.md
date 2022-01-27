@@ -1,7 +1,7 @@
 # Design Ali
 Complex system for product management
 
-[image](https://user-images.githubusercontent.com/37962262/142641758-4a01396c-f976-426b-a9dc-a960410a816f.png)
+![image](https://user-images.githubusercontent.com/37962262/151333740-9e664616-5c79-4c2f-bf58-03401fc71aa9.png)
 
 This self-developed product has two deeper goals.
 The first is to publicly present my skills. If there is a company that is interested in me, this project can serve as my portfolio of experience.

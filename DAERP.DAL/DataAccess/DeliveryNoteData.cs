@@ -41,7 +41,11 @@ namespace DAERP.DAL.DataAccess
                 dn.ValueWithVAT = PriceCalculation.IncreaseOfVAT(dn.ValueWithoutVAT);
                 dn.Product.MainStockAmount -= dn.StartingAmount;
                 dn.Product.MainStockValue -= dn.StartingAmount * dn.Product.ProductPrices.OperatedCostPrice;
-                // TODO: productCustomer stock increase
+                var productCustomerStock = dn.Product.ProductCustomers
+                    .Where(pc => pc.CustomerId == dn.CustomerId)
+                    .FirstOrDefault();
+                productCustomerStock.AmountInStock += dn.StartingAmount;
+                productCustomerStock.Value += dn.StartingAmount * productCustomerStock.IssuedInvoicePrice;
             });
             _db.DeliveryNotes.AddRange(deliveryNotes);
             _db.SaveChanges();

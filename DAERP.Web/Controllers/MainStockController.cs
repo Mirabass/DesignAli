@@ -111,6 +111,7 @@ namespace DAERP.Web.Controllers
                 searchString, pageNumber, ViewData, products);
             List<SelectedProduct> selectedProducts = _productSelectService.Get(addSelected, removeSelected,
                 removeAllSelected, TempData, false);
+            selectedProducts.ForEach(sp => sp.Product = _productData.GetProductWithChildModelsIncludedBy(sp.Product.Id));
             ProductsSelectionViewModel productSelectionViewModel = new ProductsSelectionViewModel()
             {
                 Products = paginatedList,
@@ -125,6 +126,7 @@ namespace DAERP.Web.Controllers
         public IActionResult CreatePost()
         {
             List<SelectedProduct> selectedProducts = _productSelectService.Get(TempData);
+            int? lastOrderThisYear = GetProductReceiptLastOrderThisYear();
             List<ProductReceiptModel> productReceipts = new List<ProductReceiptModel>();
             foreach (SelectedProduct selectedProduct in selectedProducts)
             {
@@ -132,16 +134,34 @@ namespace DAERP.Web.Controllers
                 {
                     ProductId = selectedProduct.Product.Id,
                     Product = selectedProduct.Product,
-                    Amount = selectedProduct.Amount,
-                    CostPrice = selectedProduct.Product.ProductPrices.OperatedCostPrice
+                    Amount = selectedProduct.Amount
                 };
+                productReceipt.Fill(lastOrderThisYear);
                 productReceipts.Add(productReceipt);
+                var costPrice = _productData.GetProductWithChildModelsIncludedBy(selectedProduct.Product.Id).ProductPrices.OperatedCostPrice;
+                selectedProduct.Product.IncreaseMainStockOf(productReceipt.Amount, costPrice);
             }
             _productReceiptData.AddRangeOfProductReceipts(productReceipts);
+            var editedProducts = selectedProducts.Select(sp => sp.Product);
+            _productData.UpdateRangeOfProducts(editedProducts);
             TempData["SelectedProductsIds"] = null;
             TempData["SelectedProductAmounts"] = null;
             TempData.Clear();
             return RedirectToAction("Index");
+        }
+
+        private int? GetProductReceiptLastOrderThisYear()
+        {
+            var receiptsThisYear = _productReceiptData.GetProductReceipts()
+                    .Where(pr => pr.DateCreated.Year == DateTime.Now.Year);
+            int? lastOrderThisYear = null;
+            if (receiptsThisYear.Any())
+            {
+                lastOrderThisYear = receiptsThisYear
+                 .Select(pr => pr.OrderInCurrentYear)
+                 .Max();
+            }
+            return lastOrderThisYear;
         }
     }
 }

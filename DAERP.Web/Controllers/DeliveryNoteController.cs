@@ -124,7 +124,7 @@ namespace DAERP.Web.Controllers
             return RedirectToAction("Create", new RouteValueDictionary(
                 new { controller = "DeliveryNote", action = "Create", customerId = model.SelectedIds.First() }));
         }
-        public IActionResult Create(int customerId,
+        public IActionResult Create(int? customerId,
             string currentSort,
             string sortOrder,
             string currentFilter,
@@ -135,36 +135,56 @@ namespace DAERP.Web.Controllers
             int? removeAllSelected
             )
         {
+            if (customerId is null)
+            {
+                customerId = TempData["CustomerId"] as int?;
+            } 
+            TempData["CustomerId"] = null;
             IEnumerable<ProductModel> products = _productData.GetAllProductsWithChildModelsIncluded();
             products = products.Where(p => p.MainStockAmount > 0);
-            PaginatedList<ProductModel> paginatedList = StaticHelper.SortAndFilterProductsForSelectPurpose(currentSort, sortOrder, currentFilter,
-                searchString, pageNumber, ViewData, products);
             List<SelectedProduct> selectedProducts = _productSelectService.Get(addSelected, removeSelected,
                 removeAllSelected, TempData, true);
+            selectedProducts.ForEach(sp => sp.Product = _productData.GetProductWithChildModelsIncludedBy(sp.Product.Id));
+            DecreaseStockBySelectedProducts(products, selectedProducts);
+            PaginatedList<ProductModel> paginatedList =
+                StaticHelper.SortAndFilterProductsForSelectPurpose(currentSort, sortOrder, currentFilter,
+                searchString, pageNumber, ViewData, products);
             ProductsSelectionViewModel productSelectionViewModel = new ProductsSelectionViewModel()
             {
                 Products = paginatedList,
-                SelectedProducts = selectedProducts
+                SelectedProducts = selectedProducts,
+                Customer = _customerData.GetCustomerBy(customerId)
             };
-            ViewData["CustomerId"] = customerId;
             return View(productSelectionViewModel);
         }
+
+        private void DecreaseStockBySelectedProducts(IEnumerable<ProductModel> products, List<SelectedProduct> selectedProducts)
+        {
+            selectedProducts.ForEach(sp => {
+                var productInMainStock = products.Where(p => p.Id == sp.Product.Id).FirstOrDefault();
+                productInMainStock.MainStockAmount -= sp.Amount;
+                productInMainStock.MainStockValue -= sp.Amount * productInMainStock.ProductPrices.OperatedSellingPrice;
+            });
+        }
+
         [HttpPost]
         [Authorize(Roles = "Admin,Manager,Cashier")]
         [ValidateAntiForgeryToken]
-        public IActionResult CreatePost(int customerId)
+        public IActionResult CreatePost()
         {
+            int? customerId = TempData["CustomerId"] as int?;
+            TempData["CustomerId"] = null;
             List<SelectedProduct> selectedProducts = _productSelectService.Get(TempData);
             List<DeliveryNoteModel> deliveryNotes = new List<DeliveryNoteModel>();
             foreach (SelectedProduct selectedProduct in selectedProducts)
             {
-                CustomerProductModel customerProduct = _customerProductData.GetCustomerProductBy(customerId, selectedProduct.Product.Id);
+                CustomerProductModel customerProduct = _customerProductData.GetCustomerProductBy((int)customerId, selectedProduct.Product.Id);
                 DeliveryNoteModel deliveryNote = new DeliveryNoteModel()
                 {
                     ProductId = selectedProduct.Product.Id,
-                    Product = _productData.GetProductWithChildModelsIncludedBy(selectedProduct.Product.Id),
-                    CustomerId = customerId,
-                    Customer = _customerData.GetCustomerBy(customerId),
+                    Product = selectedProduct.Product,
+                    CustomerId = (int)customerId,
+                    //Customer = _customerData.GetCustomerBy(customerId),
                     StartingAmount = selectedProduct.Amount,
                     IssuedInvoicePrice = customerProduct.IssuedInvoicePrice,
                     DeliveryNotePrice = customerProduct.DeliveryNotePrice
@@ -172,6 +192,7 @@ namespace DAERP.Web.Controllers
                 deliveryNotes.Add(deliveryNote);
             }
             _deliveryNoteData.AddRangeOfDeliveryNotes(deliveryNotes);
+            _customerProductData.IncreaseStock(deliveryNotes);
             TempData["SelectedProductsIds"] = null;
             TempData["SelectedProductAmounts"] = null;
             TempData.Clear();

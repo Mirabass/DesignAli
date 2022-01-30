@@ -84,7 +84,7 @@ namespace DAERP.Web.Helper
             }
             else
             {
-                ProductModel product = _productData.GetProductBy(addSelected);
+                ProductModel product = _productData.GetProductWithChildModelsIncludedBy(addSelected);
                 _selectedProducts.Add(new SelectedProduct()
                 {
                     Product = product,

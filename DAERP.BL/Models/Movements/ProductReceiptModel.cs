@@ -42,5 +42,16 @@ namespace DAERP.BL.Models.Movements
         [DataType(DataType.Currency)]
         [Column(TypeName = "money")]
         public decimal ValueWithVAT { get; set; }
+
+        public void Fill(int? lastOrderThisYear)
+        {
+            int newOrderThisYear = (lastOrderThisYear ?? 0) + 1;
+            string newNumber = DateTime.Now.ToString("yy") + "-" + CustomOperations.LeadingZeros(newOrderThisYear, 4);
+            this.DateCreated = DateTime.Now.Date;
+            this.OrderInCurrentYear = newOrderThisYear;
+            this.Number = newNumber;
+            this.ValueWithoutVAT = this.Amount * this.CostPrice;
+            this.ValueWithVAT = PriceCalculation.IncreaseOfVAT(this.ValueWithoutVAT);
+        }
     }
 }

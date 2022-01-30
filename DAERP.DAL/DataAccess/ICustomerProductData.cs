@@ -1,4 +1,5 @@
 ﻿using DAERP.BL.Models;
+using DAERP.BL.Models.Movements;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +14,6 @@ namespace DAERP.DAL.DataAccess
         IEnumerable<CustomerProductModel> GetCustomersWithStockOfProductWithChildModelsIncludedBy(int? id);
         IEnumerable<CustomerProductModel> GetProductsInStockOfCustomersWithChildModelsIncludedBy(int[] customersIds);
         CustomerProductModel GetCustomerProductBy(int customerId, int productId);
+        void IncreaseStock(List<DeliveryNoteModel> deliveryNotes);
     }
 }

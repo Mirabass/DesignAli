@@ -20,7 +20,7 @@ namespace DAERP.DAL.DataAccess
 
         public void AddRangeOfDeliveryNotes(List<DeliveryNoteModel> deliveryNotes)
         {
-            var deliveryThisYear = _db.DeliveryNotes
+            var deliveryThisYear = _db.DeliveryNotes.AsNoTracking()
                 .Where(pr => pr.DateCreated.Year == DateTime.Now.Year);
             int? lastOrderThisYear = null;
             if (deliveryThisYear.Any())
@@ -41,12 +41,7 @@ namespace DAERP.DAL.DataAccess
                 dn.ValueWithVAT = PriceCalculation.IncreaseOfVAT(dn.ValueWithoutVAT);
                 dn.Product.MainStockAmount -= dn.StartingAmount;
                 dn.Product.MainStockValue -= dn.StartingAmount * dn.Product.ProductPrices.OperatedCostPrice;
-                var productCustomerStock = dn.Product.ProductCustomers
-                    .Where(pc => pc.CustomerId == dn.CustomerId)
-                    .FirstOrDefault();
-                productCustomerStock.AmountInStock += dn.StartingAmount;
-                productCustomerStock.Value += dn.StartingAmount * productCustomerStock.IssuedInvoicePrice;
-            });
+             });
             _db.DeliveryNotes.AddRange(deliveryNotes);
             _db.SaveChanges();
         }
@@ -55,8 +50,8 @@ namespace DAERP.DAL.DataAccess
         {
             return _db.DeliveryNotes
                 .Include(dn => dn.Product)
-                    .ThenInclude(p => p.ProductDivision)
-                .Include(dn => dn.Customer);
+                    .ThenInclude(p => p.ProductDivision).AsNoTracking()
+                .Include(dn => dn.Customer).AsNoTracking();
         }
     }
 }

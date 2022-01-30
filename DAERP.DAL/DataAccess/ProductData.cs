@@ -20,25 +20,26 @@ namespace DAERP.DAL.DataAccess
         public IEnumerable<ProductModel> GetAllProductsWithChildModelsIncluded()
         {
             IEnumerable<ProductModel> products = _db.Products
-                .Include(product => product.ProductStrap)
-                .Include(product => product.ProductColorDesign)
-                .Include(product => product.ProductPrices)
+                .Include(product => product.ProductStrap).AsNoTracking()
+                .Include(product => product.ProductColorDesign).AsNoTracking()
+                .Include(product => product.ProductPrices).AsNoTracking()
                 .Include(product => product.ProductDivision)
-                    .ThenInclude(pd => pd.ProductKind)
+                    .ThenInclude(pd => pd.ProductKind).AsNoTracking()
                 .Include(product => product.ProductDivision)
-                    .ThenInclude(pd => pd.ProductMaterial);
+                    .ThenInclude(pd => pd.ProductMaterial).AsNoTracking()
+                .Include(product => product.ProductCustomers).AsNoTracking();    
             return products;
         }
         public IEnumerable<ProductDivisionModel> GetAllProductDivisions()
         {
-            return _db.ProductDivisions;
+            return _db.ProductDivisions.AsNoTracking();
         }
 
         public ProductDivisionModel GetProductDivisionBy(int productDivisionId)
         {
-            ProductDivisionModel productDivision = _db.ProductDivisions.AsNoTracking()
-                .Include(pd => pd.ProductKind)
-                .Include(pd => pd.ProductMaterial)
+            ProductDivisionModel productDivision = _db.ProductDivisions
+                .Include(pd => pd.ProductKind).AsNoTracking()
+                .Include(pd => pd.ProductMaterial).AsNoTracking()
                 .Where(pd => pd.Id == productDivisionId)
                 .FirstOrDefault();
             return productDivision;
@@ -85,25 +86,19 @@ namespace DAERP.DAL.DataAccess
                 });
             await _db.SaveChangesAsync();
         }
-        public ProductModel GetProductBy(int? id)
-        {
-            return _db.Products
-                .Where(p => p.Id == id)
-                .Include(p => p.ProductDivision)
-                .Include(p => p.ProductPrices)
-                .FirstOrDefault();
-        }
 
         public ProductModel GetProductWithChildModelsIncludedBy(int? id)
         {
-            return _db.Products.AsNoTracking().Where(p => p.Id == id)
-                .Include(product => product.ProductStrap)
-                .Include(product => product.ProductColorDesign)
-                .Include(product => product.ProductPrices)
+            return _db.Products
+                .Include(product => product.ProductStrap).AsNoTracking()
+                .Include(product => product.ProductColorDesign).AsNoTracking()
+                .Include(product => product.ProductPrices).AsNoTracking()
                 .Include(product => product.ProductDivision)
-                    .ThenInclude(pd => pd.ProductKind)
+                    .ThenInclude(pd => pd.ProductKind).AsNoTracking()
                 .Include(product => product.ProductDivision)
-                    .ThenInclude(pd => pd.ProductMaterial)
+                    .ThenInclude(pd => pd.ProductMaterial).AsNoTracking()
+                .Include(product => product.ProductCustomers).AsNoTracking()
+                .Where(p => p.Id == id)
                 .FirstOrDefault();
         }
 
@@ -118,9 +113,10 @@ namespace DAERP.DAL.DataAccess
 
         public ProductDivisionModel GetProductDivisionWithChildModelsIncludedBy(int? id)
         {
-            var productDivision = _db.ProductDivisions.AsNoTracking().Where(pd => pd.Id == id)
-                .Include(pd => pd.ProductKind)
-                .Include(pd => pd.ProductMaterial)
+            var productDivision = _db.ProductDivisions
+                .Include(pd => pd.ProductKind).AsNoTracking()
+                .Include(pd => pd.ProductMaterial).AsNoTracking()
+                .Where(pd => pd.Id == id)
                 .FirstOrDefault();
             return productDivision;
         }
@@ -136,14 +132,17 @@ namespace DAERP.DAL.DataAccess
 
         public string GetProductDivisionNameBy(int productDivisionId)
         {
-            return GetAllProductDivisions().Where(pd => pd.Id == productDivisionId).Select(pd => pd.Name).FirstOrDefault();
+            return GetAllProductDivisions()
+                .Where(pd => pd.Id == productDivisionId)
+                .Select(pd => pd.Name).FirstOrDefault();
         }
 
         public IEnumerable<ProductDivisionModel> GetAllProductDivisionsWithChildModelsIncluded()
         {
             IEnumerable<ProductDivisionModel> productDivisions = _db.ProductDivisions
-                    .Include(pd => pd.ProductKind)
-                    .Include(pd => pd.ProductMaterial);
+                    .Include(pd => pd.ProductKind).AsNoTracking()
+                    .Include(pd => pd.ProductMaterial)
+                    .AsNoTracking();
             return productDivisions;
         }
 
@@ -169,7 +168,8 @@ namespace DAERP.DAL.DataAccess
 
         public IEnumerable<ProductModel> GetProductsBy(ProductDivisionModel productDivision)
         {
-            return _db.Products.Where(p => p.ProductDivision == productDivision);
+            return _db.Products.AsNoTracking()
+                .Where(p => p.ProductDivision == productDivision);
         }
 
         public ProductImageModel GetProductImageBy(int? productId)
@@ -180,6 +180,14 @@ namespace DAERP.DAL.DataAccess
             return product.ProductImage;
         }
 
+        public ProductModel GetProductBy(int id)
+        {
+            return _db.Products.Where(p => p.Id == id).FirstOrDefault();
+        }
 
+        public void UpdateRangeOfProducts(IEnumerable<ProductModel> editedProducts)
+        {
+            _db.Products.UpdateRange(editedProducts);
+        }
     }
 }

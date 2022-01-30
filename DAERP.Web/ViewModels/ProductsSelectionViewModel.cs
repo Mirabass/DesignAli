@@ -1,4 +1,5 @@
-﻿using DAERP.BL.Models.Movements;
+﻿using DAERP.BL.Models;
+using DAERP.BL.Models.Movements;
 using DAERP.BL.Models.Product;
 using DAERP.Web.Helper;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ namespace DAERP.Web.ViewModels
     {
         public PaginatedList<ProductModel> Products { get; set; }
         public List<SelectedProduct> SelectedProducts { get; set; }
+        public CustomerModel Customer { get; set; }
     }
     public class SelectedProduct
     {

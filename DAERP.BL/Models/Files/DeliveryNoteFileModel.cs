@@ -18,6 +18,10 @@ namespace DAERP.BL.Models.Files
         public int CustomerId { get; set; }
         public CustomerModel Customer { get; set; }
         public IEnumerable<DeliveryNoteModel> DeliveryNotes { get; set;}
+        public DeliveryNoteFileModel()
+        {
+            
+        }
         public DeliveryNoteFileModel(string deliveryNoteNumber, CustomerModel customer, IEnumerable<DeliveryNoteModel> deliveryNotes)
         {
             Customer = customer;

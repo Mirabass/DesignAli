@@ -93,7 +93,7 @@
                                </th>
                                <th id="productHeader">
                                    <a asp-action="Index" asp-route-sortOrder="@ViewData["RemainValueWithoutVATSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                       @Html.DisplayNameFor(model => model.FirstOrDefault().RemainValueWithoutVAT)</a> <span class="badge badge-primary badge-pill">@ViewData["ValueWithoutVATSum"]</span>
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().RemainValueWithoutVAT)</a> <span class="badge badge-primary badge-pill">@ViewData["RemainValueWithoutVATSum"]</span>
                                </th>
                            </tr>
                         </thead>
@@ -101,7 +101,7 @@
                            @foreach (var deliveryNote in Model)
                            {
                                <tr data-toggle="popover" data-trigger="hover" id="@deliveryNote.Product.Id">
-                                   <td>PV</td>
+                                   <td>DL</td>
                                    <td>@deliveryNote.Number</td>
                                    <td>@deliveryNote.Customer.Designation</td>
                                    <td>@deliveryNote.Customer.Name</td>

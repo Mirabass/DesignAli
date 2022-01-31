@@ -84,6 +84,7 @@ namespace DAERP.BL.Models.Movements
             this.Remains = this.StartingAmount;
             this.ValueWithoutVAT = this.StartingAmount * this.DeliveryNotePrice;
             this.ValueWithVAT = PriceCalculation.IncreaseOfVAT(this.ValueWithoutVAT);
+            this.RemainValueWithoutVAT = this.ValueWithoutVAT;
         }
     }
 }

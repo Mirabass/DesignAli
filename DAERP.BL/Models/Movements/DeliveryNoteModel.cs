@@ -60,5 +60,30 @@ namespace DAERP.BL.Models.Movements
         [DataType(DataType.Currency)]
         [Column(TypeName = "money")]
         public decimal RemainValueWithoutVAT { get; set; }
+        public DeliveryNoteModel()
+        {
+
+        }
+        public DeliveryNoteModel(ProductModel product, CustomerModel customer, int startingAmount, decimal issuedInvoicePrice, decimal deliveryNotePrice, int? lastOrderThisYear)
+        {
+            ProductId = product.Id;
+            CustomerId = customer.Id;
+            StartingAmount = startingAmount;
+            IssuedInvoicePrice = issuedInvoicePrice;
+            DeliveryNotePrice = deliveryNotePrice;
+            Fill(lastOrderThisYear);
+        }
+
+        private void Fill(int? lastOrderThisYear)
+        {
+            int newOrderThisYear = (lastOrderThisYear ?? 0) + 1;
+            string newNumber = DateTime.Now.ToString("yy") + "-" + CustomOperations.LeadingZeros(newOrderThisYear, 4);
+            this.DateCreated = DateTime.Now.Date;
+            this.OrderInCurrentYear = newOrderThisYear;
+            this.Number = newNumber;
+            this.Remains = this.StartingAmount;
+            this.ValueWithoutVAT = this.StartingAmount * this.DeliveryNotePrice;
+            this.ValueWithVAT = PriceCalculation.IncreaseOfVAT(this.ValueWithoutVAT);
+        }
     }
 }

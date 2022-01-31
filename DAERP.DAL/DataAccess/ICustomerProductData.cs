@@ -14,6 +14,6 @@ namespace DAERP.DAL.DataAccess
         IEnumerable<CustomerProductModel> GetCustomersWithStockOfProductWithChildModelsIncludedBy(int? id);
         IEnumerable<CustomerProductModel> GetProductsInStockOfCustomersWithChildModelsIncludedBy(int[] customersIds);
         CustomerProductModel GetCustomerProductBy(int customerId, int productId);
-        void IncreaseStock(List<DeliveryNoteModel> deliveryNotes);
+        void UpdateRange(List<CustomerProductModel> influencedCustomerProducts);
     }
 }

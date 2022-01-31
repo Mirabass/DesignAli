@@ -58,16 +58,9 @@ namespace DAERP.DAL.DataAccess
                 .FirstOrDefault();
         }
 
-        public void IncreaseStock(List<DeliveryNoteModel> deliveryNotes)
+        public void UpdateRange(List<CustomerProductModel> influencedCustomerProducts)
         {
-            deliveryNotes.ForEach(dn =>
-            {
-                var productCustomerStock = _db.CustomersProducts
-                .Where(cp => cp.ProductId == dn.ProductId && cp.CustomerId == dn.CustomerId)
-                .FirstOrDefault();
-                productCustomerStock.AmountInStock += dn.StartingAmount;
-                productCustomerStock.Value += dn.StartingAmount * productCustomerStock.IssuedInvoicePrice;
-            });
+            _db.CustomersProducts.UpdateRange(influencedCustomerProducts);
             _db.SaveChanges();
         }
     }

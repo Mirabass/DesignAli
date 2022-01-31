@@ -130,13 +130,10 @@ namespace DAERP.Web.Controllers
             List<ProductReceiptModel> productReceipts = new List<ProductReceiptModel>();
             foreach (SelectedProduct selectedProduct in selectedProducts)
             {
-                ProductReceiptModel productReceipt = new ProductReceiptModel()
-                {
-                    ProductId = selectedProduct.Product.Id,
-                    Product = selectedProduct.Product,
-                    Amount = selectedProduct.Amount
-                };
-                productReceipt.Fill(lastOrderThisYear);
+                ProductReceiptModel productReceipt = new ProductReceiptModel(
+                    selectedProduct.Product,
+                    selectedProduct.Amount,
+                    lastOrderThisYear);
                 productReceipts.Add(productReceipt);
                 var costPrice = _productData.GetProductWithChildModelsIncludedBy(selectedProduct.Product.Id).ProductPrices.OperatedCostPrice;
                 selectedProduct.Product.IncreaseMainStockOf(productReceipt.Amount, costPrice);

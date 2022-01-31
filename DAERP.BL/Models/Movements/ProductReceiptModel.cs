@@ -42,8 +42,17 @@ namespace DAERP.BL.Models.Movements
         [DataType(DataType.Currency)]
         [Column(TypeName = "money")]
         public decimal ValueWithVAT { get; set; }
-
-        public void Fill(int? lastOrderThisYear)
+        public ProductReceiptModel()
+        {
+              
+        }
+        public ProductReceiptModel(ProductModel product, int amount, int? lastOrderThisYear)
+        {
+            ProductId = product.Id;
+            Amount = amount;
+            Fill(lastOrderThisYear);
+        }
+        private void Fill(int? lastOrderThisYear)
         {
             int newOrderThisYear = (lastOrderThisYear ?? 0) + 1;
             string newNumber = DateTime.Now.ToString("yy") + "-" + CustomOperations.LeadingZeros(newOrderThisYear, 4);

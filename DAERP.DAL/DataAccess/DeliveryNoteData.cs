@@ -20,28 +20,6 @@ namespace DAERP.DAL.DataAccess
 
         public void AddRangeOfDeliveryNotes(List<DeliveryNoteModel> deliveryNotes)
         {
-            var deliveryThisYear = _db.DeliveryNotes.AsNoTracking()
-                .Where(pr => pr.DateCreated.Year == DateTime.Now.Year);
-            int? lastOrderThisYear = null;
-            if (deliveryThisYear.Any())
-            {
-                lastOrderThisYear = deliveryThisYear
-                 .Select(pr => pr.OrderInCurrentYear)
-                 .Max();
-            }
-            int newOrderThisYear = (lastOrderThisYear ?? 0) + 1;
-            string newNumber = DateTime.Now.ToString("yy") + "-" + CustomOperations.LeadingZeros(newOrderThisYear, 4);
-            deliveryNotes.ForEach(dn =>
-            {
-                dn.DateCreated = DateTime.Now.Date;
-                dn.OrderInCurrentYear = newOrderThisYear;
-                dn.Number = newNumber;
-                dn.Remains = dn.StartingAmount;
-                dn.ValueWithoutVAT = dn.StartingAmount * dn.DeliveryNotePrice;
-                dn.ValueWithVAT = PriceCalculation.IncreaseOfVAT(dn.ValueWithoutVAT);
-                dn.Product.MainStockAmount -= dn.StartingAmount;
-                dn.Product.MainStockValue -= dn.StartingAmount * dn.Product.ProductPrices.OperatedCostPrice;
-             });
             _db.DeliveryNotes.AddRange(deliveryNotes);
             _db.SaveChanges();
         }

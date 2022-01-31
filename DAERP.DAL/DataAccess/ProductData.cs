@@ -188,6 +188,7 @@ namespace DAERP.DAL.DataAccess
         public void UpdateRangeOfProducts(IEnumerable<ProductModel> editedProducts)
         {
             _db.Products.UpdateRange(editedProducts);
+            _db.SaveChanges();
         }
     }
 }

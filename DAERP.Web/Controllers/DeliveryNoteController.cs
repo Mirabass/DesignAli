@@ -140,12 +140,12 @@ namespace DAERP.Web.Controllers
                 customerId = TempData["CustomerId"] as int?;
             } 
             TempData["CustomerId"] = null;
-            IEnumerable<ProductModel> products = _productData.GetAllProductsWithChildModelsIncluded();
-            products = products.Where(p => p.MainStockAmount > 0);
+            List<ProductModel> products = _productData.GetAllProductsWithChildModelsIncluded().ToList();
             List<SelectedProduct> selectedProducts = _productSelectService.Get(addSelected, removeSelected,
                 removeAllSelected, TempData, true);
             selectedProducts.ForEach(sp => sp.Product = _productData.GetProductWithChildModelsIncludedBy(sp.Product.Id));
-            DecreaseStockBySelectedProducts(products, selectedProducts);
+            DecreaseStockViewBySelectedProducts(products, selectedProducts);
+            products = products.Where(p => p.MainStockAmount > 0).ToList();
             PaginatedList<ProductModel> paginatedList =
                 StaticHelper.SortAndFilterProductsForSelectPurpose(currentSort, sortOrder, currentFilter,
                 searchString, pageNumber, ViewData, products);
@@ -158,12 +158,12 @@ namespace DAERP.Web.Controllers
             return View(productSelectionViewModel);
         }
 
-        private void DecreaseStockBySelectedProducts(IEnumerable<ProductModel> products, List<SelectedProduct> selectedProducts)
+        private void DecreaseStockViewBySelectedProducts(List<ProductModel> products, List<SelectedProduct> selectedProducts)
         {
-            selectedProducts.ForEach(sp => {
-                var productInMainStock = products.Where(p => p.Id == sp.Product.Id).FirstOrDefault();
-                productInMainStock.MainStockAmount -= sp.Amount;
-                productInMainStock.MainStockValue -= sp.Amount * productInMainStock.ProductPrices.OperatedSellingPrice;
+            selectedProducts.ForEach(sp =>
+            {
+                products.FirstOrDefault(p => p.Id == sp.Product.Id)
+                        .DecreaseMainStockOf(sp.Amount);
             });
         }
 
@@ -175,28 +175,47 @@ namespace DAERP.Web.Controllers
             int? customerId = TempData["CustomerId"] as int?;
             TempData["CustomerId"] = null;
             List<SelectedProduct> selectedProducts = _productSelectService.Get(TempData);
+            int? lastOrderThisYear = GetDeliveryNoteLastOrderThisYear();
             List<DeliveryNoteModel> deliveryNotes = new List<DeliveryNoteModel>();
+            List<CustomerProductModel> influencedCustomerProducts = new List<CustomerProductModel>();
             foreach (SelectedProduct selectedProduct in selectedProducts)
             {
                 CustomerProductModel customerProduct = _customerProductData.GetCustomerProductBy((int)customerId, selectedProduct.Product.Id);
-                DeliveryNoteModel deliveryNote = new DeliveryNoteModel()
-                {
-                    ProductId = selectedProduct.Product.Id,
-                    Product = selectedProduct.Product,
-                    CustomerId = (int)customerId,
-                    //Customer = _customerData.GetCustomerBy(customerId),
-                    StartingAmount = selectedProduct.Amount,
-                    IssuedInvoicePrice = customerProduct.IssuedInvoicePrice,
-                    DeliveryNotePrice = customerProduct.DeliveryNotePrice
-                };
+                DeliveryNoteModel deliveryNote = new DeliveryNoteModel(
+                    selectedProduct.Product,
+                    _customerData.GetCustomerBy(customerId),
+                    selectedProduct.Amount,
+                    customerProduct.IssuedInvoicePrice,
+                    customerProduct.DeliveryNotePrice,
+                    lastOrderThisYear);
                 deliveryNotes.Add(deliveryNote);
+                var costPrice = _productData.GetProductWithChildModelsIncludedBy(selectedProduct.Product.Id).ProductPrices.OperatedCostPrice;
+                selectedProduct.Product.DecreaseMainStockOf(deliveryNote.StartingAmount, costPrice);
+                customerProduct.IncreaseStock(deliveryNote.StartingAmount);
+                influencedCustomerProducts.Add(customerProduct);
             }
             _deliveryNoteData.AddRangeOfDeliveryNotes(deliveryNotes);
-            _customerProductData.IncreaseStock(deliveryNotes);
+            var editedProducts = selectedProducts.Select(sp => sp.Product);
+            _productData.UpdateRangeOfProducts(editedProducts);
+            _customerProductData.UpdateRange(influencedCustomerProducts);
             TempData["SelectedProductsIds"] = null;
             TempData["SelectedProductAmounts"] = null;
             TempData.Clear();
             return RedirectToAction("Index");
+        }
+
+        private int? GetDeliveryNoteLastOrderThisYear()
+        {
+            var deliveriesThisYear = _deliveryNoteData.GetDeliveryNotes()
+                    .Where(pr => pr.DateCreated.Year == DateTime.Now.Year);
+            int? lastOrderThisYear = null;
+            if (deliveriesThisYear.Any())
+            {
+                lastOrderThisYear = deliveriesThisYear
+                 .Select(pr => pr.OrderInCurrentYear)
+                 .Max();
+            }
+            return lastOrderThisYear;
         }
     }
 }

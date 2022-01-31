@@ -57,5 +57,16 @@ namespace DAERP.BL.Models.Product
             this.MainStockAmount += amount;
             this.MainStockValue += amount * costPrice;
         }
+
+        public void DecreaseMainStockOf(int amount, decimal costPrice)
+        {
+            this.MainStockAmount -= amount;
+            this.MainStockValue -= amount * costPrice;
+        }
+
+        public void DecreaseMainStockOf(int amount)
+        {
+            DecreaseMainStockOf(amount, ProductPrices.OperatedCostPrice);
+        }
     }
 }

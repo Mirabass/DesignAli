@@ -1,4 +1,5 @@
 ﻿using DAERP.BL.Models;
+using DAERP.BL.Models.Files;
 using DAERP.BL.Models.Movements;
 using DAERP.BL.Models.Product;
 using Microsoft.EntityFrameworkCore;
@@ -31,5 +32,6 @@ namespace DAERP.DAL.Data
         public DbSet<CustomerProductModel> CustomersProducts { get; set; }
         public DbSet<ProductReceiptModel> ProductReceipts { get; set; }
         public DbSet<DeliveryNoteModel> DeliveryNotes { get; set; }
+        public DbSet<DeliveryNoteFileModel> DeliveryNoteFiles { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DAERP.BL.Models;
+using DAERP.BL.Models.Files;
 using DAERP.BL.Models.Movements;
 using DAERP.BL.Models.Product;
 using DAERP.DAL.DataAccess;
@@ -173,6 +174,7 @@ namespace DAERP.Web.Controllers
         public IActionResult CreatePost()
         {
             int? customerId = TempData["CustomerId"] as int?;
+            CustomerModel customer = _customerData.GetCustomerBy(customerId);
             TempData["CustomerId"] = null;
             List<SelectedProduct> selectedProducts = _productSelectService.Get(TempData);
             int? lastOrderThisYear = GetDeliveryNoteLastOrderThisYear();
@@ -183,7 +185,7 @@ namespace DAERP.Web.Controllers
                 CustomerProductModel customerProduct = _customerProductData.GetCustomerProductBy((int)customerId, selectedProduct.Product.Id);
                 DeliveryNoteModel deliveryNote = new DeliveryNoteModel(
                     selectedProduct.Product,
-                    _customerData.GetCustomerBy(customerId),
+                    customer,
                     selectedProduct.Amount,
                     customerProduct.IssuedInvoicePrice,
                     customerProduct.DeliveryNotePrice,
@@ -198,6 +200,9 @@ namespace DAERP.Web.Controllers
             var editedProducts = selectedProducts.Select(sp => sp.Product);
             _productData.UpdateRangeOfProducts(editedProducts);
             _customerProductData.UpdateRange(influencedCustomerProducts);
+            DeliveryNoteFileModel deliveryNoteFile = new DeliveryNoteFileModel(deliveryNotes.FirstOrDefault().Number, customer, deliveryNotes);
+            deliveryNoteFile.Create();
+            // TODO: insert file to db
             TempData["SelectedProductsIds"] = null;
             TempData["SelectedProductAmounts"] = null;
             TempData.Clear();

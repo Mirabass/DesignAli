@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
+using System;
 
 namespace DAERP.Web
 {
@@ -44,6 +44,7 @@ namespace DAERP.Web
             services.AddAutoMapper(typeof(ProductProfile));
 
             services.AddSingleton<IColorProvider, ColorProvider>();
+            services.AddSingleton<IPathProvider, PathProvider>();
             
             services.AddTransient<ICustomerData, CustomerData>();
             services.AddTransient<IProductData, ProductData>();

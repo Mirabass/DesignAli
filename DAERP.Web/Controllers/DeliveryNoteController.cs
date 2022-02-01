@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DAERP.Web.Controllers
 {
@@ -24,13 +25,16 @@ namespace DAERP.Web.Controllers
         private readonly ICustomerData _customerData;
         private readonly ICustomerProductData _customerProductData;
         private readonly IProductSelectService _productSelectService;
-        public DeliveryNoteController(IDeliveryNoteData deliveryNoteData, IProductData productData, ICustomerData customerData, ICustomerProductData customerProductData, IProductSelectService productSelectService)
+        private readonly IPathProvider _pathProvider;
+        private static string _deliveryNoteFilePath = "static_files/DL rr-xxxx - dd.mm.rr - Odběratel - vzor.xlsx";
+        public DeliveryNoteController(IDeliveryNoteData deliveryNoteData, IProductData productData, ICustomerData customerData, ICustomerProductData customerProductData, IProductSelectService productSelectService, IPathProvider pathProvider)
         {
             _deliveryNoteData = deliveryNoteData;
             _productData = productData;
             _customerData = customerData;
             _customerProductData = customerProductData;
             _productSelectService = productSelectService;
+            _pathProvider = pathProvider;
         }
         [Authorize(Roles = "Admin,Manager,Cashier")]
         public IActionResult Index(
@@ -171,7 +175,7 @@ namespace DAERP.Web.Controllers
         [HttpPost]
         [Authorize(Roles = "Admin,Manager,Cashier")]
         [ValidateAntiForgeryToken]
-        public IActionResult CreatePost()
+        public async Task<IActionResult> CreatePost()
         {
             int? customerId = TempData["CustomerId"] as int?;
             CustomerModel customer = _customerData.GetCustomerBy(customerId);
@@ -200,8 +204,9 @@ namespace DAERP.Web.Controllers
             var editedProducts = selectedProducts.Select(sp => sp.Product);
             _productData.UpdateRangeOfProducts(editedProducts);
             _customerProductData.UpdateRange(influencedCustomerProducts);
-            DeliveryNoteFileModel deliveryNoteFile = new DeliveryNoteFileModel(deliveryNotes.FirstOrDefault().Number, customer, deliveryNotes);
-            deliveryNoteFile.Create();
+            string dnPath = _pathProvider.MapPath(_deliveryNoteFilePath);
+            DeliveryNoteFileModel deliveryNoteFile = new DeliveryNoteFileModel(deliveryNotes.FirstOrDefault().Number, customer, deliveryNotes, dnPath);
+            await deliveryNoteFile.Create();
             // TODO: insert file to db
             TempData["SelectedProductsIds"] = null;
             TempData["SelectedProductAmounts"] = null;

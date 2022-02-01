@@ -35,6 +35,12 @@ namespace DAERP.BL.Models.Files
             _deliveryNoteTemplateFilePath = dnTemplateFilePath;
             FileName = CreateFileName();
         }
+
+        public MemoryStream GetDeliveryNoteMemoryStream()
+        {
+            return new MemoryStream(ExcelFile);
+        }
+
         public async Task Create()
         {
             MemoryStream memoryStream = new MemoryStream();
@@ -45,14 +51,14 @@ namespace DAERP.BL.Models.Files
             }
             //System.Diagnostics.Process.Start(_deliveryNoteTemplateFilePath);
         }
-        public void ClearNested()
+        public void ClearChildModels()
         {
             Customer = null;
             DeliveryNotes = null;
         }
         private string CreateFileName()
         {
-            return $"DL {DeliveryNoteNumber} - {DeliveryNotes.FirstOrDefault().DateCreated.ToString("dd.mm.yy")} - {Customer.Designation} {Customer.Name}";
+            return $"DL {DeliveryNoteNumber} - {DeliveryNotes.FirstOrDefault().DateCreated.ToString("dd.mm.yy")} - {Customer.Designation} {Customer.Name}.xlsx";
         }
 
 

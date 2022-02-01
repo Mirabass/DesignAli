@@ -31,6 +31,17 @@ namespace DAERP.DAL.DataAccess
             _db.SaveChanges();
         }
 
+        public DeliveryNoteFileModel GetDeliveryNoteFileBy(int fileId)
+        {
+            return _db.DeliveryNoteFiles.First(dnf => dnf.Id == fileId);
+        }
+
+        public IEnumerable<DeliveryNoteFileModel> GetDeliveryNoteFiles()
+        {
+            var dnFiles = _db.DeliveryNoteFiles.AsNoTracking();
+            return dnFiles;
+        }
+
         public IEnumerable<DeliveryNoteModel> GetDeliveryNotes()
         {
             return _db.DeliveryNotes

@@ -204,7 +204,7 @@ namespace DAERP.Web.Controllers
             string dnPath = _pathProvider.MapPath(_deliveryNoteFilePath);
             DeliveryNoteFileModel deliveryNoteFile = new DeliveryNoteFileModel(deliveryNotes.FirstOrDefault().Number, customer, deliveryNotes, dnPath);
             await deliveryNoteFile.Create();
-            deliveryNoteFile.ClearNested();
+            deliveryNoteFile.ClearChildModels();
 
             // Database:
             _deliveryNoteData.AddRangeOfDeliveryNotes(deliveryNotes);

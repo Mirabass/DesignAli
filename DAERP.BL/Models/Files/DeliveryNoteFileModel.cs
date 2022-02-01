@@ -2,6 +2,7 @@
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
@@ -14,8 +15,12 @@ namespace DAERP.BL.Models.Files
     {
         public int Id { get; set; }
         public string DeliveryNoteNumber { get; set; }
+        [Display(Name = "Název souboru")]
         public string FileName { get; set; }
+        [Display(Name = "MS Excel soubor")]
         public byte[] ExcelFile { get; set; }
+        [Display(Name = "Označit jako dokončený")]
+        public bool Finished { get; set; } = false;
         [ForeignKey("Customer")]
         public int CustomerId { get; set; }
         public CustomerModel Customer { get; set; }
@@ -43,12 +48,10 @@ namespace DAERP.BL.Models.Files
 
         public async Task Create()
         {
-            MemoryStream memoryStream = new MemoryStream();
-            using (FileStream fileStream = File.OpenRead(_deliveryNoteTemplateFilePath))
-            {
-                await FillExcelFile(fileStream, memoryStream);
-                SaveFileToByteProperty(memoryStream);
-            }
+            using MemoryStream memoryStream = new MemoryStream();
+            using FileStream fileStream = File.OpenRead(_deliveryNoteTemplateFilePath);
+            await FillExcelFile(fileStream, memoryStream);
+            SaveFileToByteProperty(memoryStream);
             //System.Diagnostics.Process.Start(_deliveryNoteTemplateFilePath);
         }
         public void ClearChildModels()

@@ -49,5 +49,11 @@ namespace DAERP.DAL.DataAccess
                     .ThenInclude(p => p.ProductDivision).AsNoTracking()
                 .Include(dn => dn.Customer).AsNoTracking();
         }
+
+        public async Task UpdateFileAsync(DeliveryNoteFileModel dnFile)
+        {
+            _db.DeliveryNoteFiles.Update(dnFile);
+            await _db.SaveChangesAsync();
+        }
     }
 }

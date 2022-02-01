@@ -1,10 +1,10 @@
 ﻿@model DAERP.Web.Helper.PaginatedList<DAERP.BL.Models.Files.DeliveryNoteFileModel>
 
 <div class="container-fluid p-3">
-    <div class="col-12 col-md-12">
+    <div class="col-sm-12 col-md-12">
         <div class="row">
-            <div class="col-12 col-md-4 col-sm-6"><h2 class="text-primary">04.01.01 - Dodací listy - stažení a úprava souborů MS Excel</h2></div>
-            <div class="col-12 col-md-4 col-sm-6">
+            <div class="col-sm-12 col-md-6"><h2 class="text-primary">04.01.01 - Dodací listy - stažení a úprava souborů MS Excel</h2></div>
+            <div class="col-sm-12 col-md-6">
                 <form asp-action="Index" method="get">
                     <div class="form-actions no-color">
                         <p>
@@ -40,7 +40,9 @@
                                </th>
                                <th>Stáhnout</th>
                                <th>Nahrát pozměněný</th>
-                               <th>Označit jako dokončený</th>
+                               <th><a asp-action="Index" asp-route-sortOrder="@ViewData["FinishedSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().Finished)</a>
+                                </th>
                            </tr>
                         </thead>
                         <tbody>
@@ -52,8 +54,25 @@
                                        <a asp-action="Download" asp-route-id="@file.Id" class="mx-1">
                                            <i class="fas fa-download"></i>
                                        </a>
-                                   <td><a class="mx-1"><i class="fas fa-upload"></i></a></td>
-                                   <td><a class="mx-1"><i class="far fa-square"></i></a></td>
+                                   <td><a asp-action="Upload" asp-route-id="@file.Id" class="mx-1"><i class="fas fa-upload"></i></a></td>
+                                   <td>
+                                       @if (@file.Finished)
+                                      {
+                                          <a asp-action="MakeNotFinished"
+                                             asp-route-id="@file.Id"
+                                             asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                             asp-route-pageNumber="@(Model.PageIndex - 1)"
+                                             asp-route-currentFilter="@ViewData["CurrentFilter"]" class="mx-1"><i class="fas fa-check"></i></a>
+                                      }
+                                      else
+                                      {
+                                          <a asp-action="MakeFinished"
+                                             asp-route-id="@file.Id"
+                                             asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                             asp-route-pageNumber="@(Model.PageIndex - 1)"
+                                             asp-route-currentFilter="@ViewData["CurrentFilter"]" class="mx-1"><i class="far fa-square"></i></a>       
+                                      }
+                                   </td>
                                </tr>
                            }
                         </tbody>

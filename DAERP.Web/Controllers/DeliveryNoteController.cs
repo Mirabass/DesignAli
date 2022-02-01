@@ -200,14 +200,18 @@ namespace DAERP.Web.Controllers
                 customerProduct.IncreaseStock(deliveryNote.StartingAmount);
                 influencedCustomerProducts.Add(customerProduct);
             }
-            _deliveryNoteData.AddRangeOfDeliveryNotes(deliveryNotes);
             var editedProducts = selectedProducts.Select(sp => sp.Product);
-            _productData.UpdateRangeOfProducts(editedProducts);
-            _customerProductData.UpdateRange(influencedCustomerProducts);
             string dnPath = _pathProvider.MapPath(_deliveryNoteFilePath);
             DeliveryNoteFileModel deliveryNoteFile = new DeliveryNoteFileModel(deliveryNotes.FirstOrDefault().Number, customer, deliveryNotes, dnPath);
             await deliveryNoteFile.Create();
-            // TODO: insert file to db
+            deliveryNoteFile.ClearNested();
+
+            // Database:
+            _deliveryNoteData.AddRangeOfDeliveryNotes(deliveryNotes);
+            _productData.UpdateRangeOfProducts(editedProducts);
+            _customerProductData.UpdateRange(influencedCustomerProducts);
+            await _deliveryNoteData.AddAsync(deliveryNoteFile);
+
             TempData["SelectedProductsIds"] = null;
             TempData["SelectedProductAmounts"] = null;
             TempData.Clear();

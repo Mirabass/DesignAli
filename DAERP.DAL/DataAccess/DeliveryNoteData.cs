@@ -1,4 +1,5 @@
 ﻿using DAERP.BL;
+using DAERP.BL.Models.Files;
 using DAERP.BL.Models.Movements;
 using DAERP.DAL.Data;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,12 @@ namespace DAERP.DAL.DataAccess
         public DeliveryNoteData(ApplicationDbContext db)
         {
             _db = db;
+        }
+
+        public async Task AddAsync(DeliveryNoteFileModel deliveryNoteFile)
+        {
+            await _db.DeliveryNoteFiles.AddAsync(deliveryNoteFile);
+            await _db.SaveChangesAsync();
         }
 
         public void AddRangeOfDeliveryNotes(List<DeliveryNoteModel> deliveryNotes)

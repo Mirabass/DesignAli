@@ -1,5 +1,7 @@
-﻿using DAERP.BL.Models.Movements;
+﻿using DAERP.BL.Models.Files;
+using DAERP.BL.Models.Movements;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DAERP.DAL.DataAccess
 {
@@ -7,5 +9,6 @@ namespace DAERP.DAL.DataAccess
     {
         IEnumerable<DeliveryNoteModel> GetDeliveryNotes();
         void AddRangeOfDeliveryNotes(List<DeliveryNoteModel> deliveryNotes);
+        Task AddAsync(DeliveryNoteFileModel deliveryNoteFile);
     }
 }

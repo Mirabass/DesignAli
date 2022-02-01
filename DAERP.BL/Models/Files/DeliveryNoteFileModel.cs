@@ -33,6 +33,7 @@ namespace DAERP.BL.Models.Files
             DeliveryNotes = deliveryNotes;
             CustomerId = Customer.Id;
             _deliveryNoteTemplateFilePath = dnTemplateFilePath;
+            FileName = CreateFileName();
         }
         public async Task Create()
         {
@@ -44,6 +45,17 @@ namespace DAERP.BL.Models.Files
             }
             //System.Diagnostics.Process.Start(_deliveryNoteTemplateFilePath);
         }
+        public void ClearNested()
+        {
+            Customer = null;
+            DeliveryNotes = null;
+        }
+        private string CreateFileName()
+        {
+            return $"DL {DeliveryNoteNumber} - {DeliveryNotes.FirstOrDefault().DateCreated.ToString("dd.mm.yy")} - {Customer.Designation} {Customer.Name}";
+        }
+
+
         private async Task FillExcelFile(FileStream fileStream, MemoryStream memoryStream)
         {
             // TODO: Create MS Excel file

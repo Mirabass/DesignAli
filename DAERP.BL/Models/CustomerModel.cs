@@ -45,9 +45,15 @@ namespace DAERP.BL.Models
         [Display(Name = "Stát - SF")]
         [Column(TypeName = "nvarchar(2)")]
         public string SFCountry { get; set; }
+        /// <summary>
+        /// IČO
+        /// </summary>
         [Display(Name = "IČO - SF")]
         [Column(TypeName = "nvarchar(8)")]
         public string SFIN { get; set; }
+        /// <summary>
+        /// DIČ
+        /// </summary>
         [Display(Name = "DIČ - SF")]
         [Column(TypeName = "nvarchar(12)")]
         public string SFTIN { get; set; }
@@ -104,9 +110,15 @@ namespace DAERP.BL.Models
         [Display(Name = "E-mail - DF")]
         [Column(TypeName = "nvarchar(256)")]
         public string DFEmail { get; set; }
+        /// <summary>
+        /// IČO
+        /// </summary>
         [Display(Name = "IČO - DF")]
         [Column(TypeName = "nvarchar(8)")]
         public string DFIN { get; set; }
+        /// <summary>
+        /// DIČs
+        /// </summary>
         [Display(Name = "DIČ - DF")]
         [Column(TypeName = "nvarchar(12)")]
         public string DFTIN { get; set; }

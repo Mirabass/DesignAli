@@ -55,7 +55,7 @@ namespace DAERP.Web.Controllers
             }
             if (dnFiles.Count() > 0)
             {
-                string defaultPropToSort = "FileName";
+                string defaultPropToSort = "FileName_desc";
                 Helper.StaticHelper.SetDataForSortingPurposes(ViewData, sortOrder, dnFiles.FirstOrDefault(), defaultPropToSort);
                 if (String.IsNullOrEmpty(sortOrder))
                 {

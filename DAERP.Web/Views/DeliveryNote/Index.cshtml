@@ -52,8 +52,8 @@
                                        @Html.DisplayNameFor(model => model.FirstOrDefault().Customer.Designation)</a>
                                </th>
                                <th id="productHeader">
-                                   <a asp-action="Index" asp-route-sortOrder="@ViewData["CustomerNameSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                       @Html.DisplayNameFor(model => model.FirstOrDefault().Customer.Name)</a>
+                                   <a asp-action="Index" asp-route-sortOrder="@ViewData["CustomerDFNameSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().Customer.DFName)</a>
                                </th>
                                <th id="productHeader">
                                    <a asp-action="Index" asp-route-sortOrder="@ViewData["DateCreatedSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">

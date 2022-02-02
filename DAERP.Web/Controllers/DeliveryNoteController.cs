@@ -202,9 +202,11 @@ namespace DAERP.Web.Controllers
             }
             var editedProducts = selectedProducts.Select(sp => sp.Product);
             string dnPath = _pathProvider.MapPath(_deliveryNoteFilePath);
+            deliveryNotes.ForEach(dn => dn.Product = _productData.GetProductWithChildModelsIncludedBy(dn.ProductId));
             DeliveryNoteFileModel deliveryNoteFile = new DeliveryNoteFileModel(deliveryNotes.FirstOrDefault().Number, customer, deliveryNotes, dnPath);
             await deliveryNoteFile.Create();
             deliveryNoteFile.ClearChildModels();
+            deliveryNotes.ForEach(dn => dn.ClearChildModels());
 
             // Database:
             _deliveryNoteData.AddRangeOfDeliveryNotes(deliveryNotes);

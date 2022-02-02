@@ -86,5 +86,11 @@ namespace DAERP.BL.Models.Movements
             this.ValueWithVAT = PriceCalculation.IncreaseOfVAT(this.ValueWithoutVAT);
             this.RemainValueWithoutVAT = this.ValueWithoutVAT;
         }
+
+        public void ClearChildModels()
+        {
+            Product = null;
+            Customer = null;
+        }
     }
 }

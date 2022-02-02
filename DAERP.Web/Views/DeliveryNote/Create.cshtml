@@ -4,11 +4,13 @@
     List<int> selectedProductAmounts = Model.SelectedProducts.Select(sp => sp.Amount).ToList();
     TempData["SelectedProductsIds"] = selectedProductIds;
     TempData["SelectedProductAmounts"] = selectedProductAmounts;
+
+    TempData["CustomerId"] = Model.Customer.Id;
 }
 <div class="container-fluid p-3">
     <div class="col-12 col-md-12">
         <div class="row">
-            <div class="col-12 col-md-6"><h2 class="text-primary">04.01.01 - Tvorba příjemky výrobků</h2></div>
+            <div class="col-12 col-md-6"><h2 class="text-primary">04.01.01 - Tvorba dodacího listu</h2></div>
             <div class="col-12 col-md-6">
                 <form asp-action="Create" method="get">
                     <div class="form-actions no-color">
@@ -26,6 +28,8 @@
         </div>
     </div>
     <br />
+
+
     <div class="col-12">
         <div class="row">
             <div class="col-xl-8 col-12">
@@ -42,11 +46,14 @@
                                 <th id="productHeader" colspan="4">
                                     Výrobek
                                 </th>
-                                <th id="strap" colspan="1">
+                                <th id="strap" colspan="2">
                                     Ceny výrobku
                                 </th>
-                                <th colspan="2">
+                                <th id="accessories" colspan="2">
                                     Stav na skladě Design Ali
+                                </th>
+                                <th colspan="4">
+                                    Stav na skladě @ViewData["CustomerColumnName"]
                                 </th>
                             </tr>
                             <tr>
@@ -71,15 +78,40 @@
                                     <a asp-action="Create" asp-route-sortOrder="@ViewData["ProductPricesOperatedCostPriceSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                         @Html.DisplayNameFor(model => model.Products.FirstOrDefault().ProductPrices.OperatedCostPrice)</a>
                                 </th>
+                                <th id="strap">
+                                    <a asp-action="Create" asp-route-sortOrder="@ViewData["ProductPricesOperatedSellingPriceSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        @Html.DisplayNameFor(model => model.Products.FirstOrDefault().ProductPrices.OperatedSellingPrice)</a>
+                                </th>
 
-                                <th>
+                                <th id="accessories">
                                     <a asp-action="Create" asp-route-sortOrder="@ViewData["MainStockAmountSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                         @Html.DisplayNameFor(model => model.Products.FirstOrDefault().MainStockAmount) <span class="badge badge-primary badge-pill">@ViewData["StockSum"]</span>
                                     </a>
                                 </th>
-                                <th>
+                                <th id="accessories">
                                     <a asp-action="Create" asp-route-sortOrder="@ViewData["MainStockValueSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                         @Html.DisplayNameFor(model => model.Products.FirstOrDefault().MainStockValue)
+                                    </a>
+                                </th>
+
+                                <th>
+                                    <a asp-action="Create" asp-route-sortOrder="@ViewData["CustomerAmountInStockSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        @Html.DisplayNameFor(model => model.Customer.CustomerProducts.FirstOrDefault().AmountInStock)
+                                    </a>
+                                </th>
+                                <th>
+                                    <a asp-action="Create" asp-route-sortOrder="@ViewData["CustomerDeliveryNotePriceSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        @Html.DisplayNameFor(model => model.Customer.CustomerProducts.FirstOrDefault().DeliveryNotePrice)
+                                    </a>
+                                </th>
+                                <th>
+                                    <a asp-action="Create" asp-route-sortOrder="@ViewData["CustomerIssuedInvoicePriceSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        @Html.DisplayNameFor(model => model.Customer.CustomerProducts.FirstOrDefault().IssuedInvoicePrice)
+                                    </a>
+                                </th>
+                                <th>
+                                    <a asp-action="Create" asp-route-sortOrder="@ViewData["CustomerValueSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        @Html.DisplayNameFor(model => model.Customer.CustomerProducts.FirstOrDefault().Value)
                                     </a>
                                 </th>
                             </tr>
@@ -88,7 +120,8 @@
                             @foreach (var product in Model.Products)
                             {
                                 <tr data-toggle="popover" data-trigger="hover" id="@product.Id">
-                                    <td><a class="btn btn-primary"
+                                    <td>
+                                        <a class="btn btn-primary"
                                         asp-action="Create"
                                         asp-route-addSelected="@product.Id"
                                         asp-route-sortOrder="@ViewData["CurrentSort"]"
@@ -100,9 +133,17 @@
                                     <td>@product.ProductDivision.ProductType</td>
 
                                     <td>@product.ProductPrices.OperatedCostPrice</td>
+                                    <td>@product.ProductPrices.OperatedSellingPrice</td>
 
                                     <td>@product.MainStockAmount</td>
                                     <td>@product.MainStockValue</td>
+                                    @{
+                                        var productCustomer = @product.ProductCustomers.Where(pc => pc.CustomerId == Model.Customer.Id).FirstOrDefault();
+                                    }
+                                    <td>@productCustomer.AmountInStock</td>
+                                    <td>@productCustomer.DeliveryNotePrice</td>
+                                    <td>@productCustomer.IssuedInvoicePrice</td>
+                                    <td>@productCustomer.Value</td>
                                 </tr>
                             }
                         </tbody>
@@ -147,17 +188,21 @@
                                         @selectedProduct.Product.Designation | 
                                         @selectedProduct.Product.ProductDivision.Name | 
                                         @selectedProduct.Product.ProductDivision.ProductType | 
-                                        @selectedProduct.Product.ProductPrices.OperatedCostPrice
+                                        @selectedProduct.Product.ProductCustomers.Where(pc => pc.CustomerId == Model.Customer.Id).FirstOrDefault().DeliveryNotePrice
                                         <span class="badge badge-primary badge-pill">@selectedProduct.Amount</span>
                                     </div>
                                     <div class="float-right">
                                         <span>
+                                            @if (selectedProduct.IsPossibleAdd)
+                                        {
                                             <a class="btn btn-primary"
                                                 asp-action="Create"
                                                 asp-route-addSelected="@selectedProduct.Product.Id"
                                                 asp-route-sortOrder="@ViewData["CurrentSort"]"
                                                 asp-route-currentFilter="@ViewData["CurrentFilter"]">
-                                                <i class="fas fa-plus"></i></a></span>                               
+                                                <i class="fas fa-plus"></i></a>
+                                        }
+                                        </span>                               
                                         <span>
                                             <a class="btn btn-secondary"
                                                 asp-action="Create"
@@ -180,11 +225,11 @@
                     <div class="row justify-content-between">
                         <div class="col p-2 text-center align-content-center">
                             <button type="submit" class="btn btn-lg btn-primary">
-                            <i class="fas fa-paper-plane"></i> Potvrdit příjemku výrobků</button>
+                            <i class="fas fa-paper-plane"></i> Vydat dodací list</button>
                         </div>
                         <div class="col p-2 text-center">
                             <a class="btn btn-lg btn-secondary" asp-action="Index">
-                                <i class="fa fa-arrow-left"></i> Vrátit se na přehled příjemek</a>
+                                <i class="fa fa-arrow-left"></i> Vrátit se na přehled DL</a>
                         </div>
                     </div>
 

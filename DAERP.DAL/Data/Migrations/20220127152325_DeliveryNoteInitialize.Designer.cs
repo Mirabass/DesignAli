@@ -4,14 +4,16 @@ using DAERP.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DAERP.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220127152325_DeliveryNoteInitialize")]
+    partial class DeliveryNoteInitialize
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -211,35 +213,6 @@ namespace DAERP.DAL.Migrations
                     b.ToTable("CustomersProducts");
                 });
 
-            modelBuilder.Entity("DAERP.BL.Models.Files.DeliveryNoteFileModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("DeliveryNoteNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("ExcelFile")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("FileName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Finished")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("DeliveryNoteFiles");
-                });
-
             modelBuilder.Entity("DAERP.BL.Models.Movements.DeliveryNoteModel", b =>
                 {
                     b.Property<int>("Id")
@@ -252,9 +225,6 @@ namespace DAERP.DAL.Migrations
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("DeliveryNoteFileModelId")
-                        .HasColumnType("int");
 
                     b.Property<decimal>("DeliveryNotePrice")
                         .HasColumnType("money");
@@ -289,8 +259,6 @@ namespace DAERP.DAL.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("DeliveryNoteFileModelId");
 
                     b.HasIndex("ProductId");
 
@@ -599,17 +567,6 @@ namespace DAERP.DAL.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("DAERP.BL.Models.Files.DeliveryNoteFileModel", b =>
-                {
-                    b.HasOne("DAERP.BL.Models.CustomerModel", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-                });
-
             modelBuilder.Entity("DAERP.BL.Models.Movements.DeliveryNoteModel", b =>
                 {
                     b.HasOne("DAERP.BL.Models.CustomerModel", "Customer")
@@ -617,10 +574,6 @@ namespace DAERP.DAL.Migrations
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("DAERP.BL.Models.Files.DeliveryNoteFileModel", null)
-                        .WithMany("DeliveryNotes")
-                        .HasForeignKey("DeliveryNoteFileModelId");
 
                     b.HasOne("DAERP.BL.Models.Product.ProductModel", "Product")
                         .WithMany()
@@ -695,11 +648,6 @@ namespace DAERP.DAL.Migrations
             modelBuilder.Entity("DAERP.BL.Models.CustomerModel", b =>
                 {
                     b.Navigation("CustomerProducts");
-                });
-
-            modelBuilder.Entity("DAERP.BL.Models.Files.DeliveryNoteFileModel", b =>
-                {
-                    b.Navigation("DeliveryNotes");
                 });
 
             modelBuilder.Entity("DAERP.BL.Models.Product.ProductModel", b =>

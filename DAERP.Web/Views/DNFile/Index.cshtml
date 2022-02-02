@@ -1,0 +1,110 @@
+﻿@model DAERP.Web.Helper.PaginatedList<DAERP.BL.Models.Files.DeliveryNoteFileModel>
+
+<div class="container-fluid p-3">
+    <div class="col-sm-12 col-md-12">
+        <div class="row">
+            <div class="col-sm-12 col-md-6"><h2 class="text-primary">04.01.01 - Dodací listy - stažení a úprava souborů MS Excel</h2></div>
+            <div class="col-sm-12 col-md-6">
+                <form asp-action="Index" method="get">
+                    <div class="form-actions no-color">
+                        <p>
+                            Prohledat dodací listy: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                            <input type="hidden" name="CurrentSort" value="@ViewData["CurrentSort"]" />
+                            <input type="submit" value="Filtrovat" class="btn btn-secondary"/> |
+                            <a class="btn btn-outline-warning"
+                            asp-action="Index"
+                            asp-route-currentSort="@ViewData["CurrentSort"]">Zpět na celý seznam</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br />
+
+     @if (Model.Count() > 0)
+    {
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12">
+                    <table
+                    class="table table-bordered table-striped table-responsive"
+                    data-filter-control="true"
+                    data-show-search-clear-button="true"
+                    style="width:unset;text-align:center;word-wrap:normal">
+                       <thead>
+                           <tr>
+                               <th id="productHeader">
+                                   <a asp-action="Index" asp-route-sortOrder="@ViewData["NumberSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().FileName)</a>
+                               </th>
+                               <th>Stáhnout</th>
+                               <th>Nahrát pozměněný</th>
+                               <th><a asp-action="Index" asp-route-sortOrder="@ViewData["FinishedSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().Finished)</a>
+                                </th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           @foreach (var file in Model)
+                           {
+                               <tr>
+                                   <td>@file.FileName</td>
+                                   <td>
+                                       <a asp-action="Download" asp-route-id="@file.Id" class="mx-1">
+                                           <i class="fas fa-download"></i>
+                                       </a>
+                                   <td><a asp-action="Upload" asp-route-id="@file.Id" class="mx-1"><i class="fas fa-upload"></i></a></td>
+                                   <td>
+                                       @if (@file.Finished)
+                                      {
+                                          <a asp-action="MakeNotFinished"
+                                             asp-route-id="@file.Id"
+                                             asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                             asp-route-pageNumber="@(Model.PageIndex - 1)"
+                                             asp-route-currentFilter="@ViewData["CurrentFilter"]" class="mx-1"><i class="fas fa-check"></i></a>
+                                      }
+                                      else
+                                      {
+                                          <a asp-action="MakeFinished"
+                                             asp-route-id="@file.Id"
+                                             asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                             asp-route-pageNumber="@(Model.PageIndex - 1)"
+                                             asp-route-currentFilter="@ViewData["CurrentFilter"]" class="mx-1"><i class="far fa-square"></i></a>       
+                                      }
+                                   </td>
+                               </tr>
+                           }
+                        </tbody>
+                    </table>
+                    <div>
+                        <div class="row">
+                            @{
+                                var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+                                var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+                            }
+                            <div class="col p-2">
+                                <a asp-action="Index"
+                                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                   asp-route-pageNumber="@(Model.PageIndex - 1)"
+                                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                   class="btn btn-secondary @prevDisabled">
+                                   <i class="fas fa-arrow-left"></i>
+                                </a>
+                                <a asp-action="Index"
+                                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                   asp-route-pageNumber="@(Model.PageIndex + 1)"
+                                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                   class="btn btn-secondary @nextDisabled">
+                                   <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                   </div>
+                </div>
+            </div>
+        </div>
+
+    }
+</div>
+

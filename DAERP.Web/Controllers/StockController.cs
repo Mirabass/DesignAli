@@ -24,18 +24,7 @@ namespace DAERP.Web.Controllers
         [Authorize(Roles = "Admin,Manager,Cashier")]
         public IActionResult Index()
         {
-            var activeCustomers = _customerData.GetAllCustomers().Where(c => c.State == "A");
-            var data = new List<MultiDropDownListViewModel>();
-            foreach (var customer in activeCustomers)
-            {
-                data.Add(new MultiDropDownListViewModel
-                {
-                    Id = customer.Id,
-                    Name = customer.Designation + ": " + customer.Name
-                });
-            }
-            MultiDropDownListViewModel model = new();
-            model.ItemList = data.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
+            MultiDropDownListViewModel model = Helper.StaticHelper.GetModelForCustomerSelect(_customerData);
             return View(model);
         }
         [Authorize(Roles = "Admin,Manager,Cashier")]
@@ -88,7 +77,7 @@ namespace DAERP.Web.Controllers
             if (customerProducts.Count() > 0)
             {
                 string defaultPropToSort = "Product.Designation";
-                Helper.Helper.SetDataForSortingPurposes(ViewData, sortOrder, customerProducts.FirstOrDefault(), defaultPropToSort);
+                Helper.StaticHelper.SetDataForSortingPurposes(ViewData, sortOrder, customerProducts.FirstOrDefault(), defaultPropToSort);
                 if (String.IsNullOrEmpty(sortOrder))
                 {
                     sortOrder = defaultPropToSort;

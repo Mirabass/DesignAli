@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System;
 using DAERP.Web.Helper;
 using System.IO;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace DAERP.Web.Controllers
 {
@@ -69,7 +70,7 @@ namespace DAERP.Web.Controllers
             if (products.Count() > 0)
             {
                 string defaultPropToSort = "Designation";
-                Helper.Helper.SetDataForSortingPurposes(ViewData, sortOrder, products.FirstOrDefault(), defaultPropToSort);
+                Helper.StaticHelper.SetDataForSortingPurposes(ViewData, sortOrder, products.FirstOrDefault(), defaultPropToSort);
                 foreach (ProductModel product in products)
                 {
                     
@@ -112,7 +113,7 @@ namespace DAERP.Web.Controllers
             {
                 return Json(notFoundResult);
             }
-            string productImageDataURL = Helper.Helper.ConvertImageToURL(productImage.Image, productImage.Type);
+            string productImageDataURL = Helper.StaticHelper.ConvertImageToURL(productImage.Image, productImage.Type);
             return Json(productImageDataURL);
         }
         // GET-Create
@@ -149,22 +150,14 @@ namespace DAERP.Web.Controllers
                 CustomOperations.CreateAndAsignDesignationFor(product);
                 product.DateCreated = System.DateTime.Today;
                 product.DateLastModified = System.DateTime.Today;
-                ProductImageModel img = new ProductImageModel();
-                var file = Request.Form.Files.FirstOrDefault();
-                MemoryStream ms = new MemoryStream();
-                file.CopyTo(ms);
-                img.Image = ms.ToArray();
-                string fileType = Path.GetExtension(file.FileName).Replace(".", String.Empty).ToUpper();
-                if ((fileType == "PNG" || fileType == "JPG") == false)
+                try
                 {
-                    ModelState.AddModelError("Invalid image file name","Invalid file name of image. Must be PNG or JPG.");
-                    CreateViewBagOfProductNames();
+                    product.ProductImage = ImageFromFile(Request.Form.Files.FirstOrDefault(), ModelState);
+                }
+                catch (FormatException)
+                {
                     return View(productViewModel);
                 }
-                img.Type = fileType;
-                ms.Close();
-                ms.Dispose();
-                product.ProductImage = img;
                 product.ProductPrices.GainPercentValue = BL.PriceCalculation.GainPercentValue(product.ProductPrices.OperatedCostPrice, product.ProductPrices.OperatedSellingPrice);
                 await _productData.AddProductAsync(product);
                 await _productData.UpdateProductCustomersPricesAsync(product);
@@ -173,6 +166,25 @@ namespace DAERP.Web.Controllers
             CreateViewBagOfProductNames();
             return View(productViewModel);
         }
+
+        private ProductImageModel ImageFromFile(Microsoft.AspNetCore.Http.IFormFile file, ModelStateDictionary modelState)
+        {
+            ProductImageModel img = new ProductImageModel();
+            using MemoryStream ms = new MemoryStream();
+            file.CopyTo(ms);
+            img.Image = ms.ToArray();
+            string fileType = Path.GetExtension(file.FileName).Replace(".", String.Empty).ToUpper();
+            if ((fileType == "PNG" || fileType == "JPG") == false)
+            {
+                ModelState.AddModelError("Invalid image file name", "Invalid file name of image. Must be PNG or JPG.");
+                CreateViewBagOfProductNames();
+                throw new FormatException();
+            }
+            img.Type = fileType;
+            return img;
+        }
+
+
         // Get-Delete
         [Authorize(Roles = "Admin,Manager")]
         public IActionResult Delete(int? Id)
@@ -250,7 +262,18 @@ namespace DAERP.Web.Controllers
                 updatedProduct.DateCreated = oldProduct.DateCreated;
                 CustomOperations.CreateAndAsignDesignationFor(updatedProduct);
                 updatedProduct.DateLastModified = System.DateTime.Today;
-                updatedProduct.ProductPrices.GainPercentValue = BL.PriceCalculation.GainPercentValue(updatedProduct.ProductPrices.OperatedCostPrice, updatedProduct.ProductPrices.OperatedSellingPrice);
+                try
+                {
+                    updatedProduct.ProductImage = ImageFromFile(Request.Form.Files.FirstOrDefault(), ModelState);
+                }
+                catch (FormatException)
+                {
+                    return View(productViewModel);
+                }
+                updatedProduct.ProductPrices.GainPercentValue =
+                    BL.PriceCalculation.GainPercentValue(updatedProduct.ProductPrices.OperatedCostPrice,
+                    updatedProduct.ProductPrices.OperatedSellingPrice);
+                updatedProduct.MainStockValue = updatedProduct.MainStockAmount * updatedProduct.ProductPrices.OperatedCostPrice;
                 _productData.UpdateProduct(updatedProduct);
                 await _productData.UpdateProductCustomersPricesAsync(updatedProduct);
                 return RedirectToAction("Index");

@@ -11,7 +11,6 @@ namespace DAERP.DAL.DataAccess
         IEnumerable<ProductDivisionModel> GetAllProductDivisions();
         ProductDivisionModel GetProductDivisionBy(int productDivisionId);
         Task AddProductAsync(ProductModel product);
-        ProductModel GetProductBy(int? id);
         ProductModel GetProductWithChildModelsIncludedBy(int? id);
         void RemoveProduct(ProductModel product);
         ProductDivisionModel GetProductDivisionWithChildModelsIncludedBy(int? id);
@@ -24,5 +23,7 @@ namespace DAERP.DAL.DataAccess
         IEnumerable<ProductModel> GetProductsBy(ProductDivisionModel productDivision);
         ProductImageModel GetProductImageBy(int? productId);
         Task UpdateProductCustomersPricesAsync(ProductModel product);
+        ProductModel GetProductBy(int id);
+        void UpdateRangeOfProducts(IEnumerable<ProductModel> editedProducts);
     }
 }

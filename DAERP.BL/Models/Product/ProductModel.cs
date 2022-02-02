@@ -51,5 +51,22 @@ namespace DAERP.BL.Models.Product
         [DataType(DataType.Currency)]
         [Column(TypeName = "money")]
         public decimal MainStockValue { get; set; } = 0;
+
+        public void IncreaseMainStockOf(int amount, decimal costPrice)
+        {
+            this.MainStockAmount += amount;
+            this.MainStockValue += amount * costPrice;
+        }
+
+        public void DecreaseMainStockOf(int amount, decimal costPrice)
+        {
+            this.MainStockAmount -= amount;
+            this.MainStockValue -= amount * costPrice;
+        }
+
+        public void DecreaseMainStockOf(int amount)
+        {
+            DecreaseMainStockOf(amount, ProductPrices.OperatedCostPrice);
+        }
     }
 }

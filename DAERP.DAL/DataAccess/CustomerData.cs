@@ -35,7 +35,7 @@ namespace DAERP.DAL.DataAccess
 
         public IEnumerable<CustomerModel> GetAllCustomers()
         {
-            return _db.Customers;
+            return _db.Customers.AsNoTracking();
         }
 
         public CustomerModel GetCustomerBy(int? id)
@@ -48,12 +48,11 @@ namespace DAERP.DAL.DataAccess
             var output = _db.Customers
                 .Include(c => c.CustomerProducts)
                     .ThenInclude(cp => cp.Product)
-                        .ThenInclude(p => p.ProductDivision)
+                        .ThenInclude(p => p.ProductDivision).AsNoTracking()
                 .Include(c => c.CustomerProducts)
                     .ThenInclude(cp => cp.Product)
-                        .ThenInclude(p => p.ProductPrices)
-                .AsNoTracking()
-                .Where(c => c.Id == customerId)
+                        .ThenInclude(p => p.ProductPrices).AsNoTracking()
+                .Where(c => c.Id == customerId) // this is not probably neccessary
                 .FirstOrDefault()
                 .CustomerProducts
                 .GroupBy(cp => cp.CustomerId).FirstOrDefault();

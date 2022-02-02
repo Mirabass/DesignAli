@@ -37,5 +37,11 @@ namespace DAERP.BL.Models
         [DataType(DataType.Currency)]
         [Column(TypeName = "money")]
         public decimal Value { get; set; } = 0;
+
+        public void IncreaseStock(int amount)
+        {
+            this.AmountInStock += amount;
+            this.Value += amount * this.IssuedInvoicePrice;
+        }
     }
 }

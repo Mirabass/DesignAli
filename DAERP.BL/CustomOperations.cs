@@ -1,4 +1,6 @@
 ﻿using DAERP.BL.Models.Product;
+using System;
+using System.IO;
 
 namespace DAERP.BL
 {

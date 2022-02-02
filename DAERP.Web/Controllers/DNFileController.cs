@@ -128,14 +128,22 @@ namespace DAERP.Web.Controllers
                 using MemoryStream memoryStream = new MemoryStream();
                 var file = Request.Form.Files.FirstOrDefault();
                 await file.CopyToAsync(memoryStream);
-                oldDNFile.ExcelFile = memoryStream.ToArray();
-                await _deliveryNoteData.UpdateFileAsync(oldDNFile);
-                return RedirectToAction("Index");
+                if (memoryStream.Length < 2097152) // 2 MB
+                {
+                    oldDNFile.ExcelFile = memoryStream.ToArray();
+                    await _deliveryNoteData.UpdateFileAsync(oldDNFile);
+                    return RedirectToAction("Index");                    
+                }
+                else
+                {
+                    ModelState.AddModelError("File", "The file is too large");
+                }
             }
             return View(updatedDeliveryNoteFile);
         }
 
         [Authorize(Roles = "Admin,Manager,Cashier")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> MakeFinished(int? id,
             string currentSort,
             string sortOrder,
@@ -163,6 +171,7 @@ namespace DAERP.Web.Controllers
                     pageNumber = pageNumber}));
         }
         [Authorize(Roles = "Admin,Manager,Cashier")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> MakeNotFinished(int? id,
             string currentSort,
             string sortOrder,

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DAERP.BL.Models.Movements
 {
-    public class DeliveryNoteModel : NoteModel
+    public sealed class DeliveryNoteModel : NoteModel
     {
         [Display(Name = "Číslo DL")]
         public override string Number { get; set; }
@@ -42,6 +42,11 @@ namespace DAERP.BL.Models.Movements
             this.ValueWithoutVAT = this.StartingAmount * this.DeliveryNotePrice;
             this.ValueWithVAT = PriceCalculation.IncreaseOfVAT(this.ValueWithoutVAT);
             this.RemainValueWithoutVAT = this.ValueWithoutVAT;
+        }
+
+        public void DecreaseRemainsOf(int amount)
+        {
+            Remains -= amount;
         }
     }
 }

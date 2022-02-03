@@ -8,7 +8,8 @@
         <div class="row">
             <div class="col-12 col-md-4 col-sm-6"><h2 class="text-primary">04.01.02 - Dodací listy</h2></div>
             <div class="col-12 col-md-4 col-sm-6">
-                <a class="btn btn-primary" asp-action="CustomerSelect"><i class="fas fa-plus"></i> Vydat dodací list</a>
+                <a class="btn btn-primary" asp-controller="Menu" asp-action="CustomerSelect" asp-route-controllerToRedirect="DeliveryNote">
+                    <i class="fas fa-plus"></i> Vydat dodací list</a>
             </div>
             <div class="col-12 col-md-4 col-sm-6">
                 <form asp-action="Index" method="get">

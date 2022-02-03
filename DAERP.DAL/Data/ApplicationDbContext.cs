@@ -19,10 +19,11 @@ namespace DAERP.DAL.Data
                 .Entity<CustomerProductModel>()
                 .HasKey(cp => new { cp.CustomerId, cp.ProductId });
             modelBuilder
-                .Entity<NoteModel>().ToTable("Notes")
-                .HasDiscriminator<int>("NoteType")
+                .Entity<MovementModel>().ToTable("Movements")
+                .HasDiscriminator<int>("MovementType")
                 .HasValue<DeliveryNoteModel>(1)
-                .HasValue<ReturnNoteModel>(2);
+                .HasValue<ReturnNoteModel>(2)
+                .HasValue<ProductReceiptModel>(3);
             modelBuilder
                 .Entity<NoteFileModel>().ToTable("NoteFiles")
                 .HasDiscriminator<int>("NoteFileType")

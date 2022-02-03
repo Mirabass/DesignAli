@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DAERP.BL.Models.Movements
 {
-    public class ReturnNoteModel : NoteModel
+    public sealed class ReturnNoteModel : NoteModel
     {
         [Display(Name = "Číslo VZ")]
         public override string Number { get; set; }
@@ -22,12 +22,9 @@ namespace DAERP.BL.Models.Movements
 
         }
         public ReturnNoteModel(ProductModel product, CustomerModel customer, int amount, decimal issuedInvoicePrice, decimal deliveryNotePrice, int? lastOrderThisYear)
+        :base(product,customer,issuedInvoicePrice, deliveryNotePrice, lastOrderThisYear)
         {
-            ProductId = product.Id;
-            CustomerId = customer.Id;
             Amount = amount;
-            IssuedInvoicePrice = issuedInvoicePrice;
-            DeliveryNotePrice = deliveryNotePrice;
             Fill();
         }
 

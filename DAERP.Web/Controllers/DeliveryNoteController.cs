@@ -113,12 +113,6 @@ namespace DAERP.Web.Controllers
 
         }
         [Authorize(Roles = "Admin,Manager,Cashier")]
-        public IActionResult CustomerSelect()
-        {
-            MultiDropDownListViewModel model = Helper.StaticHelper.GetModelForCustomerSelect(_customerData);
-            return View(model);
-        }
-        [Authorize(Roles = "Admin,Manager,Cashier")]
         [HttpPost]
         public IActionResult PostSelectedCustomer(PostSelectedViewModel model)
         {
@@ -181,7 +175,7 @@ namespace DAERP.Web.Controllers
             CustomerModel customer = _customerData.GetCustomerBy(customerId);
             TempData["CustomerId"] = null;
             List<SelectedProduct> selectedProducts = _productSelectService.Get(TempData);
-            int? lastOrderThisYear = GetDeliveryNoteLastOrderThisYear();
+            int? lastOrderThisYear = NoteModel.GetMovementLastOrderThisYear(_deliveryNoteData.GetDeliveryNotes());
             List<DeliveryNoteModel> deliveryNotes = new List<DeliveryNoteModel>();
             List<CustomerProductModel> influencedCustomerProducts = new List<CustomerProductModel>();
             foreach (SelectedProduct selectedProduct in selectedProducts)
@@ -218,20 +212,6 @@ namespace DAERP.Web.Controllers
             TempData["SelectedProductAmounts"] = null;
             TempData.Clear();
             return RedirectToAction("Index");
-        }
-
-        private int? GetDeliveryNoteLastOrderThisYear()
-        {
-            var deliveriesThisYear = _deliveryNoteData.GetDeliveryNotes()
-                    .Where(pr => pr.DateCreated.Year == DateTime.Now.Year);
-            int? lastOrderThisYear = null;
-            if (deliveriesThisYear.Any())
-            {
-                lastOrderThisYear = deliveriesThisYear
-                 .Select(pr => pr.OrderInCurrentYear)
-                 .Max();
-            }
-            return lastOrderThisYear;
         }
     }
 }

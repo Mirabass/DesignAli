@@ -1,7 +1,7 @@
 ﻿@model DAERP.Web.ViewModels.MultiDropDownListViewModel
 <link href="~/lib/bootstrap/bootstrap-multiselect/css/bootstrap-multiselect.css" rel="stylesheet" />
 
-<h2 class="text-primary">04.02.0.. Tvorba dodacího listu</h2>
+<h2 class="text-primary">Výběr odběratele</h2>
 <br />
 <div>
     <div class="form-group row border p-2 shadow rounded justify-content-center">
@@ -12,7 +12,7 @@
         </div>
         <div class="row p-3">
             <div class="col">
-                <form asp-controller="DeliveryNote" asp-action="PostSelectedCustomer">
+                <form asp-controller=@ViewData["ControllerToRedirect"] asp-action="PostSelectedCustomer">
                     <div class="row">
                         <div class="col">
                             <select name="SelectedIds"

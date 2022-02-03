@@ -1,4 +1,5 @@
-﻿using DAERP.BL.Models.Product;
+﻿using DAERP.BL.Models.Movements;
+using DAERP.BL.Models.Product;
 using DAERP.DAL.DataAccess;
 using DAERP.DAL.Services;
 using DAERP.Web.ViewModels;
@@ -118,6 +119,62 @@ namespace DAERP.Web.Helper
                 }
             }
             return PaginatedList<ProductModel>.Create(products, pageNumber ?? 1, pageSize);
+        }
+
+        internal static PaginatedList<DeliveryNoteModel> SortAndFilterDeliveryNotesForSelectPurpose(string currentSort,
+            string sortOrder, string currentFilter, string searchString, int? pageNumber,
+            ViewDataDictionary viewData, IEnumerable<DeliveryNoteModel> deliveryNotes)
+        {
+            int pageSize = 12;
+            if (sortOrder is null)
+            {
+                sortOrder = currentSort;
+            }
+            viewData["CurrentSort"] = sortOrder;
+            viewData["CurrentFilter"] = searchString ?? currentFilter;
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                string normalizedSearchString = searchString.Normalize(System.Text.NormalizationForm.FormD).ToUpper();
+                deliveryNotes = deliveryNotes.Where(dn =>
+                    dn.Product.Designation.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString) ||
+                    dn.Product.EAN.ToString().Contains(normalizedSearchString) ||
+                    dn.Product.ProductDivision.Name.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString) ||
+                    dn.Product.ProductDivision.ProductType.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString)
+                    
+                );
+            }
+            if (deliveryNotes.Count() > 0)
+            {
+                string defaultPropToSort = "Number_desc";
+                Helper.StaticHelper.SetDataForSortingPurposes(viewData, sortOrder, deliveryNotes.FirstOrDefault(), defaultPropToSort);
+                if (String.IsNullOrEmpty(sortOrder))
+                {
+                    sortOrder = defaultPropToSort;
+                }
+                bool descending = false;
+                if (sortOrder.EndsWith("_desc"))
+                {
+                    sortOrder = sortOrder.Substring(0, sortOrder.Length - 5);
+                    descending = true;
+                }
+                if (descending)
+                {
+                    deliveryNotes = deliveryNotes.OrderByDescending(e => DataOperations.GetPropertyValue(e, sortOrder));
+                }
+                else
+                {
+                    deliveryNotes = deliveryNotes.OrderBy(e => DataOperations.GetPropertyValue(e, sortOrder));
+                }
+            }
+            return PaginatedList<DeliveryNoteModel>.Create(deliveryNotes, pageNumber ?? 1, pageSize);
         }
     }
 }

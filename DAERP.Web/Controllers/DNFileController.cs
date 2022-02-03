@@ -143,7 +143,6 @@ namespace DAERP.Web.Controllers
         }
 
         [Authorize(Roles = "Admin,Manager,Cashier")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> MakeFinished(int? id,
             string currentSort,
             string sortOrder,
@@ -171,7 +170,6 @@ namespace DAERP.Web.Controllers
                     pageNumber = pageNumber}));
         }
         [Authorize(Roles = "Admin,Manager,Cashier")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> MakeNotFinished(int? id,
             string currentSort,
             string sortOrder,

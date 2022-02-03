@@ -26,7 +26,7 @@ namespace DAERP.Web.Controllers
         private readonly ICustomerProductData _customerProductData;
         private readonly IProductSelectService _productSelectService;
         private readonly IPathProvider _pathProvider;
-        private static string _deliveryNoteFilePath = "static_files/DL rr-xxxx - dd.mm.rr - Odběratel - vzor.xlsx";
+        private static string _deliveryNoteFilePath = "static_files/DL rr-xxxx - dd.MM.rr - Odběratel - vzor.xlsx";
         public DeliveryNoteController(IDeliveryNoteData deliveryNoteData, IProductData productData, ICustomerData customerData, ICustomerProductData customerProductData, IProductSelectService productSelectService, IPathProvider pathProvider)
         {
             _deliveryNoteData = deliveryNoteData;

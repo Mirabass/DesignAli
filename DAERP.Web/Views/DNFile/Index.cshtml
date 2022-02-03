@@ -61,7 +61,7 @@
                                           <a asp-action="MakeNotFinished"
                                              asp-route-id="@file.Id"
                                              asp-route-sortOrder="@ViewData["CurrentSort"]"
-                                             asp-route-pageNumber="@(Model.PageIndex - 1)"
+                                             asp-route-pageNumber="@(Model.PageIndex)"
                                              asp-route-currentFilter="@ViewData["CurrentFilter"]" class="mx-1"><i class="fas fa-check"></i></a>
                                       }
                                       else
@@ -69,7 +69,7 @@
                                           <a asp-action="MakeFinished"
                                              asp-route-id="@file.Id"
                                              asp-route-sortOrder="@ViewData["CurrentSort"]"
-                                             asp-route-pageNumber="@(Model.PageIndex - 1)"
+                                             asp-route-pageNumber="@(Model.PageIndex)"
                                              asp-route-currentFilter="@ViewData["CurrentFilter"]" class="mx-1"><i class="far fa-square"></i></a>       
                                       }
                                    </td>

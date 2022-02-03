@@ -18,6 +18,16 @@ namespace DAERP.DAL.Data
             modelBuilder
                 .Entity<CustomerProductModel>()
                 .HasKey(cp => new { cp.CustomerId, cp.ProductId });
+            modelBuilder
+                .Entity<NoteModel>().ToTable("Notes")
+                .HasDiscriminator<int>("NoteType")
+                .HasValue<DeliveryNoteModel>(1)
+                .HasValue<ReturnNoteModel>(2);
+            modelBuilder
+                .Entity<NoteFileModel>().ToTable("NoteFiles")
+                .HasDiscriminator<int>("NoteFileType")
+                .HasValue<DeliveryNoteFileModel>(1)
+                .HasValue<ReturnNoteFileModel>(2);
         }
 
         public DbSet<ProductModel> Products { get; set; }
@@ -33,5 +43,7 @@ namespace DAERP.DAL.Data
         public DbSet<ProductReceiptModel> ProductReceipts { get; set; }
         public DbSet<DeliveryNoteModel> DeliveryNotes { get; set; }
         public DbSet<DeliveryNoteFileModel> DeliveryNoteFiles { get; set; }
+        public DbSet<ReturnNoteModel> ReturnNotes { get; set; }
+        public DbSet<ReturnNoteFileModel> ReturnNoteFiles { get; set; }
     }
 }

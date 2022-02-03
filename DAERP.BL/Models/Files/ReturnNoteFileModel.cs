@@ -11,19 +11,21 @@ using System.Threading.Tasks;
 
 namespace DAERP.BL.Models.Files
 {
-    public class DeliveryNoteFileModel : NoteFileModel
+    public class ReturnNoteFileModel : NoteFileModel
     {
-        public DeliveryNoteFileModel()
+        public ReturnNoteFileModel()
         {
         }
-        public DeliveryNoteFileModel(string deliveryNoteNumber, CustomerModel customer, IEnumerable<DeliveryNoteModel> deliveryNotes, string dnTemplateFilePath)
-            : base(deliveryNoteNumber, customer, deliveryNotes, dnTemplateFilePath)
+        public ReturnNoteFileModel(string returnNoteNumber, CustomerModel customer, IEnumerable<ReturnNoteModel> returnNotes, string rnTemplateFilePath)
+            :base(returnNoteNumber, customer, returnNotes, rnTemplateFilePath)
         {
         }
+
         protected override string CreateFileName()
         {
             return $"DL {NoteNumber} - {Notes.FirstOrDefault().DateCreated.ToString("dd.MM.yy")} - {Customer.Designation} {Customer.DFName}.xlsx";
         }
+
         protected override void FillProductsData(ExcelWorksheet ws)
         {
             const int productDesignationColumnNumber = 3;

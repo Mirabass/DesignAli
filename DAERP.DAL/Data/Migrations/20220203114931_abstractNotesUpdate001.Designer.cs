@@ -4,14 +4,16 @@ using DAERP.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DAERP.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220203114931_abstractNotesUpdate001")]
+    partial class abstractNotesUpdate001
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -221,6 +223,10 @@ namespace DAERP.DAL.Migrations
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<byte[]>("ExcelFile")
                         .HasColumnType("varbinary(max)");
 
@@ -230,9 +236,6 @@ namespace DAERP.DAL.Migrations
                     b.Property<bool>("Finished")
                         .HasColumnType("bit");
 
-                    b.Property<int>("NoteFileType")
-                        .HasColumnType("int");
-
                     b.Property<string>("NoteNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -240,7 +243,7 @@ namespace DAERP.DAL.Migrations
 
                     b.ToTable("NoteFiles");
 
-                    b.HasDiscriminator<int>("NoteFileType");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("NoteFileModel");
                 });
 
             modelBuilder.Entity("DAERP.BL.Models.Movements.NoteModel", b =>
@@ -259,13 +262,14 @@ namespace DAERP.DAL.Migrations
                     b.Property<decimal>("DeliveryNotePrice")
                         .HasColumnType("money");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("IssuedInvoicePrice")
                         .HasColumnType("money");
 
                     b.Property<int?>("NoteFileModelId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NoteType")
                         .HasColumnType("int");
 
                     b.Property<string>("Number")
@@ -293,7 +297,7 @@ namespace DAERP.DAL.Migrations
 
                     b.ToTable("Notes");
 
-                    b.HasDiscriminator<int>("NoteType");
+                    b.HasDiscriminator<string>("Discriminator").HasValue("NoteModel");
                 });
 
             modelBuilder.Entity("DAERP.BL.Models.Movements.ProductReceiptModel", b =>
@@ -585,7 +589,7 @@ namespace DAERP.DAL.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.HasDiscriminator().HasValue(1);
+                    b.HasDiscriminator().HasValue("DeliveryNoteFileModel");
                 });
 
             modelBuilder.Entity("DAERP.BL.Models.Files.ReturnNoteFileModel", b =>
@@ -594,7 +598,7 @@ namespace DAERP.DAL.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.HasDiscriminator().HasValue(2);
+                    b.HasDiscriminator().HasValue("ReturnNoteFileModel");
                 });
 
             modelBuilder.Entity("DAERP.BL.Models.Movements.DeliveryNoteModel", b =>
@@ -610,7 +614,7 @@ namespace DAERP.DAL.Migrations
                     b.Property<int>("StartingAmount")
                         .HasColumnType("int");
 
-                    b.HasDiscriminator().HasValue(1);
+                    b.HasDiscriminator().HasValue("DeliveryNoteModel");
                 });
 
             modelBuilder.Entity("DAERP.BL.Models.Movements.ReturnNoteModel", b =>
@@ -620,7 +624,7 @@ namespace DAERP.DAL.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
-                    b.HasDiscriminator().HasValue(2);
+                    b.HasDiscriminator().HasValue("ReturnNoteModel");
                 });
 
             modelBuilder.Entity("DAERP.BL.Models.CustomerProductModel", b =>

@@ -13,5 +13,7 @@ namespace DAERP.DAL.DataAccess
         IEnumerable<DeliveryNoteFileModel> GetDeliveryNoteFiles();
         DeliveryNoteFileModel GetDeliveryNoteFileBy(int fileId);
         Task UpdateFileAsync(DeliveryNoteFileModel dnFile);
+        DeliveryNoteModel GetDeliveryNoteBy(int id);
+        void UpdateRangeOfDeliveryNotes(IEnumerable<DeliveryNoteModel> editedDeliveryNotes);
     }
 }

@@ -43,5 +43,11 @@ namespace DAERP.BL.Models
             this.AmountInStock += amount;
             this.Value += amount * this.IssuedInvoicePrice;
         }
+
+        public void DecreaseStock(int amount)
+        {
+            this.AmountInStock -= amount;
+            this.Value -= amount * this.IssuedInvoicePrice;
+        }
     }
 }

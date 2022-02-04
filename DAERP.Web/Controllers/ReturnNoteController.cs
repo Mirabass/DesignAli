@@ -171,46 +171,54 @@ namespace DAERP.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreatePost()
         {
-            //int? customerId = TempData["CustomerId"] as int?;
-            //CustomerModel customer = _customerData.GetCustomerBy(customerId);
-            //TempData["CustomerId"] = null;
-            //List<SelectedProduct> selectedProducts = _productSelectService.Get(TempData);
-            //int? lastOrderThisYear = NoteModel.GetMovementLastOrderThisYear(_returnNoteData.GetReturnNotes());
-            //List<ReturnNoteModel> returnNotes = new List<ReturnNoteModel>();
-            //List<CustomerProductModel> influencedCustomerProducts = new List<CustomerProductModel>();
-            //foreach (SelectedProduct selectedProduct in selectedProducts)
-            //{
-            //    CustomerProductModel customerProduct = _customerProductData.GetCustomerProductBy((int)customerId, selectedProduct.Product.Id);
-            //    ReturnNoteModel returnNote = new ReturnNoteModel(
-            //        selectedProduct.Product,
-            //        customer,
-            //        selectedProduct.Amount,
-            //        customerProduct.IssuedInvoicePrice,
-            //        customerProduct.DeliveryNotePrice,
-            //        lastOrderThisYear);
-            //    returnNotes.Add(returnNote);
-            //    var costPrice = _productData.GetProductWithChildModelsIncludedBy(selectedProduct.Product.Id).ProductPrices.OperatedCostPrice;
-            //    selectedProduct.Product.DecreaseMainStockOf(returnNote.Amount, costPrice);
-            //    customerProduct.IncreaseStock(returnNote.Amount);
-            //    influencedCustomerProducts.Add(customerProduct);
-            //}
-            //var editedProducts = selectedProducts.Select(sp => sp.Product);
-            //string dnPath = _pathProvider.MapPath(_returnNoteFilePath);
-            //returnNotes.ForEach(dn => dn.Product = _productData.GetProductWithChildModelsIncludedBy(dn.ProductId));
-            //ReturnNoteFileModel returnNoteFile = new ReturnNoteFileModel(returnNotes.FirstOrDefault().Number, customer, returnNotes, dnPath);
-            //await returnNoteFile.Create();
-            //returnNoteFile.ClearChildModels();
-            //returnNotes.ForEach(dn => dn.ClearChildModels());
+            int? customerId = TempData["CustomerId"] as int?;
+            CustomerModel customer = _customerData.GetCustomerBy(customerId);
+            TempData["CustomerId"] = null;
+            List<SelectedDeliveryNote> selectedDeliveryNotes = _deliveryNoteSelectService.Get(TempData);
+            selectedDeliveryNotes.ForEach(sdn => {
+                sdn.DeliveryNote.Product = _productData.GetProductWithChildModelsIncludedBy(sdn.DeliveryNote.ProductId);
+            });
+            int? lastOrderThisYear = NoteModel.GetMovementLastOrderThisYear(_returnNoteData.GetReturnNotes());
+            List<ReturnNoteModel> returnNotes = new List<ReturnNoteModel>();
+            List<ProductModel> influencedProducts = new List<ProductModel>();
+            List<CustomerProductModel> influencedCustomerProducts = new List<CustomerProductModel>();
+            foreach (SelectedDeliveryNote selectedDeliveryNote in selectedDeliveryNotes)
+            {
+                CustomerProductModel customerProduct = _customerProductData
+                    .GetCustomerProductBy((int)customerId, selectedDeliveryNote.DeliveryNote.ProductId); // customer stock
+                ReturnNoteModel returnNote = new ReturnNoteModel(
+                    selectedDeliveryNote.DeliveryNote.Product,
+                    customer,
+                    selectedDeliveryNote.Amount,
+                    selectedDeliveryNote.DeliveryNote.IssuedInvoicePrice,
+                    selectedDeliveryNote.DeliveryNote.DeliveryNotePrice,
+                    lastOrderThisYear);
+                returnNotes.Add(returnNote);
+                var costPrice = _productData.GetProductWithChildModelsIncludedBy(selectedDeliveryNote.DeliveryNote.ProductId).ProductPrices.OperatedCostPrice;
+                ProductModel product = _productData.GetProductBy(selectedDeliveryNote.DeliveryNote.ProductId);
+                product.IncreaseMainStockOf(returnNote.Amount, costPrice);
+                influencedProducts.Add(product); // main stock
+                customerProduct.DecreaseStock(returnNote.Amount);
+                influencedCustomerProducts.Add(customerProduct); // customer stock
+            }
+            var editedDeliveryNotes = selectedDeliveryNotes.Select(sdn => sdn.DeliveryNote);
+            string rnPath = _pathProvider.MapPath(_returnNoteFilePath);
+            returnNotes.ForEach(dn => dn.Product = _productData.GetProductWithChildModelsIncludedBy(dn.ProductId));
+            ReturnNoteFileModel returnNoteFile = new ReturnNoteFileModel(returnNotes.FirstOrDefault().Number, customer, returnNotes, rnPath);
+            await returnNoteFile.Create();
+            returnNoteFile.ClearChildModels();
+            returnNotes.ForEach(rn => rn.ClearChildModels());
 
-            //// Database:
-            //_returnNoteData.AddRangeOfReturnNotes(returnNotes);
-            //_productData.UpdateRangeOfProducts(editedProducts);
-            //_customerProductData.UpdateRange(influencedCustomerProducts);
-            //await _returnNoteData.AddAsync(returnNoteFile);
+            // Database:
+            _returnNoteData.AddRangeOfReturnNotes(returnNotes);
+            _deliveryNoteData.UpdateRangeOfDeliveryNotes(editedDeliveryNotes);
+            _productData.UpdateRangeOfProducts(influencedProducts);
+            _customerProductData.UpdateRange(influencedCustomerProducts);
+            await _returnNoteData.AddAsync(returnNoteFile);
 
-            //TempData["SelectedProductsIds"] = null;
-            //TempData["SelectedProductAmounts"] = null;
-            //TempData.Clear();
+            TempData["SelectedProductsIds"] = null;
+            TempData["SelectedProductAmounts"] = null;
+            TempData.Clear();
             return RedirectToAction("Index");
         }
     }

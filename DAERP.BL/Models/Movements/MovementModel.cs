@@ -13,7 +13,8 @@ namespace DAERP.BL.Models.Movements
     {
         [Required]
         public int Id { get; set; }
-        public virtual string Number { get; set; }
+        [Display(Name = "Číslo")]
+        public string Number { get; set; }
         public int OrderInCurrentYear { get; set; }
         [Required]
         [Display(Name = "Datum")]
@@ -55,7 +56,7 @@ namespace DAERP.BL.Models.Movements
         {
             Product = null;
         }
-        public static int? GetMovementLastOrderThisYear(IEnumerable<NoteModel> allOtherNoteModels)
+        public static int? GetMovementLastOrderThisYear(IEnumerable<MovementModel> allOtherNoteModels)
         {
             var notesThisYear = allOtherNoteModels.Where(pr => pr.DateCreated.Year == DateTime.Now.Year);
             int? lastOrderThisYear = null;

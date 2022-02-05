@@ -11,8 +11,6 @@ namespace DAERP.BL.Models.Movements
 {
     public sealed class DeliveryNoteModel : NoteModel
     {
-        [Display(Name = "Číslo DL")]
-        public override string Number { get; set; }
         [Required]
         [Display(Name = "Množství")]
         public int StartingAmount { get; set; }

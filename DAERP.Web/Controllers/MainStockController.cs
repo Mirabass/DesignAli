@@ -126,16 +126,19 @@ namespace DAERP.Web.Controllers
         public IActionResult CreatePost()
         {
             List<SelectedProduct> selectedProducts = _productSelectService.Get(TempData);
-            int? lastOrderThisYear = GetProductReceiptLastOrderThisYear();
+            int? lastOrderThisYear = NoteModel.GetMovementLastOrderThisYear(_productReceiptData.GetProductReceipts());
             List<ProductReceiptModel> productReceipts = new List<ProductReceiptModel>();
             foreach (SelectedProduct selectedProduct in selectedProducts)
             {
+                var costPrice = _productData
+                    .GetProductWithChildModelsIncludedBy(selectedProduct.Product.Id)
+                    .ProductPrices.OperatedCostPrice;
                 ProductReceiptModel productReceipt = new ProductReceiptModel(
                     selectedProduct.Product,
                     selectedProduct.Amount,
+                    costPrice,
                     lastOrderThisYear);
                 productReceipts.Add(productReceipt);
-                var costPrice = _productData.GetProductWithChildModelsIncludedBy(selectedProduct.Product.Id).ProductPrices.OperatedCostPrice;
                 selectedProduct.Product.IncreaseMainStockOf(productReceipt.Amount, costPrice);
             }
             _productReceiptData.AddRangeOfProductReceipts(productReceipts);
@@ -147,18 +150,5 @@ namespace DAERP.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        private int? GetProductReceiptLastOrderThisYear()
-        {
-            var receiptsThisYear = _productReceiptData.GetProductReceipts()
-                    .Where(pr => pr.DateCreated.Year == DateTime.Now.Year);
-            int? lastOrderThisYear = null;
-            if (receiptsThisYear.Any())
-            {
-                lastOrderThisYear = receiptsThisYear
-                 .Select(pr => pr.OrderInCurrentYear)
-                 .Max();
-            }
-            return lastOrderThisYear;
-        }
     }
 }

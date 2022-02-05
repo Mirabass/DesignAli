@@ -3,7 +3,7 @@
 <div class="container-fluid p-3">
     <div class="col-12 col-md-12">
         <div class="row">
-            <div class="col-12 col-md-4 col-sm-6"><h2 class="text-primary">04.01.02 - Dodací listy</h2></div>
+            <div class="col-12 col-md-4 col-sm-6"><h2 class="text-primary">04.01.02 - Vratky</h2></div>
             <div class="col-12 col-md-4 col-sm-6">
                 <a class="btn btn-primary" asp-controller="Menu" asp-action="CustomerSelect" asp-route-controllerToRedirect="ReturnNote">
                     <i class="fas fa-plus"></i> Vydat vratku</a>
@@ -90,7 +90,7 @@
                         <tbody>
                            @foreach (var deliveryNote in Model)
                            {
-                               <tr data-toggle="popover" data-trigger="hover" id="@deliveryNote.Product.Id">
+                               <tr data-toggle="popover" data-trigger="hover" id="@deliveryNote.Id">
                                    <td>DL</td>
                                    <td>@deliveryNote.Number</td>
                                    <td>@deliveryNote.Customer.Designation</td>

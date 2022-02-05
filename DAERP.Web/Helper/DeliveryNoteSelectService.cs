@@ -56,8 +56,8 @@ namespace DAERP.Web.Helper
         private void RetrieveSelectedDeliveryNotes()
         {
             _selectedDeliveryNotes = new List<SelectedDeliveryNote>();
-            var selectedDeliveryNotesIds = _tempData["SelectedDeliveryNotesIds"] as int[];
-            var selectedDeliveryNoteAmounts = _tempData["SelectedProductAmounts"] as int[];
+            var selectedDeliveryNotesIds = _tempData["SelectedDeliveryNoteIds"] as int[];
+            var selectedDeliveryNoteAmounts = _tempData["SelectedDeliveryNoteAmounts"] as int[];
             if (selectedDeliveryNotesIds is not null)
             {
                 for (int i = 0; i < selectedDeliveryNotesIds.Length; i++)

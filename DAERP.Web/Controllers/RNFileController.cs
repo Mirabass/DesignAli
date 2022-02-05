@@ -15,12 +15,12 @@ using Microsoft.AspNetCore.Authorization;
 namespace DAERP.Web.Controllers
 {
     [Authorize]
-    public class DNFileController : Controller
+    public class RNFileController : Controller
     {
-        private readonly IDeliveryNoteData _deliveryNoteData;
-        public DNFileController(IDeliveryNoteData deliveryNoteData)
+        private readonly IReturnNoteData _returnNoteData;
+        public RNFileController(IReturnNoteData returnNoteData)
         {
-            _deliveryNoteData = deliveryNoteData;
+            _returnNoteData = returnNoteData;
         }
         [Authorize(Roles = "Admin,Manager,Cashier")]
         public IActionResult Index(
@@ -44,19 +44,19 @@ namespace DAERP.Web.Controllers
             {
                 searchString = currentFilter;
             }
-            IEnumerable<DeliveryNoteFileModel> dnFiles = _deliveryNoteData.GetDeliveryNoteFiles();
+            IEnumerable<ReturnNoteFileModel> rnFiles = _returnNoteData.GetReturnNoteFiles();
             if (!String.IsNullOrEmpty(searchString))
             {
                 string normalizedSearchString = searchString.Normalize(System.Text.NormalizationForm.FormD).ToUpper();
-                dnFiles = dnFiles.Where(f =>
+                rnFiles = rnFiles.Where(f =>
                     f.FileName.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString) ||
                     f.Finished.ToString().Contains(normalizedSearchString)
                 );
             }
-            if (dnFiles.Count() > 0)
+            if (rnFiles.Count() > 0)
             {
                 string defaultPropToSort = "FileName_desc";
-                Helper.StaticHelper.SetDataForSortingPurposes(ViewData, sortOrder, dnFiles.FirstOrDefault(), defaultPropToSort);
+                Helper.StaticHelper.SetDataForSortingPurposes(ViewData, sortOrder, rnFiles.FirstOrDefault(), defaultPropToSort);
                 if (String.IsNullOrEmpty(sortOrder))
                 {
                     sortOrder = defaultPropToSort;
@@ -69,15 +69,15 @@ namespace DAERP.Web.Controllers
                 }
                 if (descending)
                 {
-                    dnFiles = dnFiles.OrderByDescending(e => DataOperations.GetPropertyValue(e, sortOrder));
+                    rnFiles = rnFiles.OrderByDescending(e => DataOperations.GetPropertyValue(e, sortOrder));
                 }
                 else
                 {
-                    dnFiles = dnFiles.OrderBy(e => DataOperations.GetPropertyValue(e, sortOrder));
+                    rnFiles = rnFiles.OrderBy(e => DataOperations.GetPropertyValue(e, sortOrder));
                 }
             }
             int pageSize = 12;
-            return View(PaginatedList<DeliveryNoteFileModel>.Create(dnFiles, pageNumber ?? 1, pageSize));
+            return View(PaginatedList<ReturnNoteFileModel>.Create(rnFiles, pageNumber ?? 1, pageSize));
         }
         [Authorize(Roles = "Admin,Manager,Cashier")]
         public IActionResult Download(int? id)
@@ -86,15 +86,15 @@ namespace DAERP.Web.Controllers
             {
                 return NotFound();
             }
-            DeliveryNoteFileModel dnFile = _deliveryNoteData.GetDeliveryNoteFileBy((int)id);
-            if (dnFile is null)
+            ReturnNoteFileModel rnFile = _returnNoteData.GetReturnNoteFileBy((int)id);
+            if (rnFile is null)
             {
                 return NotFound();
             }
-            MemoryStream dnFileStreamResult = dnFile.GetNoteMemoryStream();
-            string fileName = dnFile.FileName;
+            MemoryStream rnFileStreamResult = rnFile.GetNoteMemoryStream();
+            string fileName = rnFile.FileName;
             fileName = string.Join("_", fileName.Split(Path.GetInvalidFileNameChars()));
-            return new FileStreamResult(dnFileStreamResult, new MediaTypeHeaderValue("application/vnd.ms-excel"))
+            return new FileStreamResult(rnFileStreamResult, new MediaTypeHeaderValue("application/vnd.ms-excel"))
             {
                 FileDownloadName = fileName
             };
@@ -108,7 +108,7 @@ namespace DAERP.Web.Controllers
             {
                 return NotFound();
             }
-            DeliveryNoteFileModel dnFile = _deliveryNoteData.GetDeliveryNoteFileBy((int)id);
+            ReturnNoteFileModel dnFile = _returnNoteData.GetReturnNoteFileBy((int)id);
             if (dnFile == null)
             {
                 return NotFound();
@@ -120,18 +120,18 @@ namespace DAERP.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Manager,Cashier")]
-        public async Task<IActionResult> Upload(DeliveryNoteFileModel updatedDeliveryNoteFile)
+        public async Task<IActionResult> Upload(ReturnNoteFileModel updatedReturnNoteFile)
         {
             if (ModelState.IsValid)
             {
-                DeliveryNoteFileModel oldDNFile = _deliveryNoteData.GetDeliveryNoteFileBy(updatedDeliveryNoteFile.Id);
+                ReturnNoteFileModel oldRNFile = _returnNoteData.GetReturnNoteFileBy(updatedReturnNoteFile.Id);
                 using MemoryStream memoryStream = new MemoryStream();
                 var file = Request.Form.Files.FirstOrDefault();
                 await file.CopyToAsync(memoryStream);
                 if (memoryStream.Length < 2097152) // 2 MB
                 {
-                    oldDNFile.ExcelFile = memoryStream.ToArray();
-                    await _deliveryNoteData.UpdateFileAsync(oldDNFile);
+                    oldRNFile.ExcelFile = memoryStream.ToArray();
+                    await _returnNoteData.UpdateFileAsync(oldRNFile);
                     return RedirectToAction("Index");                    
                 }
                 else
@@ -139,7 +139,7 @@ namespace DAERP.Web.Controllers
                     ModelState.AddModelError("File", "The file is too large");
                 }
             }
-            return View(updatedDeliveryNoteFile);
+            return View(updatedReturnNoteFile);
         }
 
         [Authorize(Roles = "Admin,Manager,Cashier")]
@@ -154,13 +154,13 @@ namespace DAERP.Web.Controllers
             {
                 return NotFound();
             }
-            DeliveryNoteFileModel dnFile = _deliveryNoteData.GetDeliveryNoteFileBy((int)id);
+            ReturnNoteFileModel dnFile = _returnNoteData.GetReturnNoteFileBy((int)id);
             if (dnFile is null)
             {
                 return NotFound();
             }
             dnFile.Finished = true;
-            await _deliveryNoteData.UpdateFileAsync(dnFile);
+            await _returnNoteData.UpdateFileAsync(dnFile);
             return RedirectToAction("Index", new RouteValueDictionary(
                 new { controller = "DNFile", action = "Index",
                     currentSort = currentSort,
@@ -181,13 +181,13 @@ namespace DAERP.Web.Controllers
             {
                 return NotFound();
             }
-            DeliveryNoteFileModel dnFile = _deliveryNoteData.GetDeliveryNoteFileBy((int)id);
-            if (dnFile is null)
+            ReturnNoteFileModel rnFile = _returnNoteData.GetReturnNoteFileBy((int)id);
+            if (rnFile is null)
             {
                 return NotFound();
             }
-            dnFile.Finished = false;
-            await _deliveryNoteData.UpdateFileAsync(dnFile);
+            rnFile.Finished = false;
+            await _returnNoteData.UpdateFileAsync(rnFile);
             return RedirectToAction("Index", new RouteValueDictionary(
                 new
                 {

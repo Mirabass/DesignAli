@@ -11,8 +11,6 @@ namespace DAERP.BL.Models.Movements
 {
     public sealed class ProductReceiptModel : MovementModel
     {
-        [Display(Name = "Číslo PV")]
-        public override string Number { get; set; }
         [Required]
         [Display(Name = "Množství")]
         public int Amount { get; set; }
@@ -25,10 +23,13 @@ namespace DAERP.BL.Models.Movements
         {
               
         }
-        public ProductReceiptModel(ProductModel product, int amount, int? lastOrderThisYear)
+        public ProductReceiptModel(ProductModel product, int amount, decimal costPrice, int? lastOrderThisYear)
             :base(product, lastOrderThisYear)
         {
             Amount = amount;
+            CostPrice = costPrice;
+            ValueWithoutVAT += amount * costPrice;
+            ValueWithVAT += PriceCalculation.IncreaseOfVAT(ValueWithoutVAT);
         }
     }
 }

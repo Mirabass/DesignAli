@@ -45,7 +45,7 @@ namespace DAERP.BL.Models.Files
             FileName = CreateFileName();
         }
 
-        public MemoryStream GetDeliveryNoteMemoryStream()
+        public MemoryStream GetNoteMemoryStream()
         {
             return new MemoryStream(ExcelFile);
         }

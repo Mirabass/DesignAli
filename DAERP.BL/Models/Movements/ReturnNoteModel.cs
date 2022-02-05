@@ -11,8 +11,6 @@ namespace DAERP.BL.Models.Movements
 {
     public sealed class ReturnNoteModel : NoteModel
     {
-        [Display(Name = "Číslo VZ")]
-        public override string Number { get; set; }
         [Required]
         [Display(Name = "Množství")]
         public int Amount { get; set; }

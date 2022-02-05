@@ -135,7 +135,6 @@ namespace DAERP.Web.Controllers
                 customerId = TempData["CustomerId"] as int?;
             }
             TempData["CustomerId"] = null;
-            // TODO: Zde nenabízet produkty, ale DeliveryNotes!
             List<DeliveryNoteModel> deliveryNotes = _deliveryNoteData.GetDeliveryNotes().ToList();
             deliveryNotes = deliveryNotes.Where(dn => dn.Remains > 0).ToList();
             List<SelectedDeliveryNote> selectedDeliveryNotes = _deliveryNoteSelectService.Get(addSelected,
@@ -143,6 +142,7 @@ namespace DAERP.Web.Controllers
                 removeAllSelected,
                 TempData,
                 true);
+            deliveryNotes.ForEach(dn => dn.Product = _productData.GetProductWithChildModelsIncludedBy(dn.ProductId));
             selectedDeliveryNotes.ForEach(sdn => sdn.DeliveryNote.Product = _productData.GetProductWithChildModelsIncludedBy(sdn.DeliveryNote.ProductId));
             DecreaseDeliveryRemainsViewBySelected(deliveryNotes, selectedDeliveryNotes);
             PaginatedList<DeliveryNoteModel> paginatedList =

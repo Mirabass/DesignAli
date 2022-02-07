@@ -161,7 +161,7 @@
             <div class="col-xl-4 col-12">
                 <form asp-action="CreatePost" method="post">
                     <div class="col">
-                        <ul class="list-group">
+                        <ul id="selectList" class="list-group">
                             @foreach (var selectedDeliveryNote in Model.SelectedDeliveryNotes)
                             {
                                 <li class="list-group-item d-flex justify-content-between align-items-center"
@@ -208,7 +208,7 @@
                     </div>
                     <div class="row justify-content-between">
                         <div class="col p-2 text-center align-content-center">
-                            <button type="submit" class="btn btn-lg btn-primary">
+                            <button id="sendSelectedList" type="submit" class="btn btn-lg btn-primary">
                             <i class="fas fa-paper-plane"></i> Vydat vratku</button>
                         </div>
                         <div class="col p-2 text-center">
@@ -222,3 +222,11 @@
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function(){    
+            submit_button_disabler()
+        });
+    </script>
+}

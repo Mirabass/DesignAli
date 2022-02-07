@@ -26,3 +26,10 @@ function load_image(product_id){
     });
     return '<div id="toedit'+ product_id +'">Loading...</div>';
 }
+
+function submit_button_disabler() {
+    var isEmpty = $('ul#selectList li').length == 0;
+    if (isEmpty) {
+        $("#sendSelectedList").prop('disabled', true);
+    }
+}

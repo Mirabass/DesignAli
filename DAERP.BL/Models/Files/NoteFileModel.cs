@@ -38,7 +38,7 @@ namespace DAERP.BL.Models.Files
             :this()
         {
             Customer = customer;
-            NoteNumber = NoteNumber;
+            NoteNumber = noteNumber;
             Notes = notes;
             CustomerId = Customer.Id;
             _noteTemplateFilePath = templateFilePath;
@@ -77,6 +77,7 @@ namespace DAERP.BL.Models.Files
             FillMainData(ws);
             FillCustomerData(ws);
             FillProductsData(ws);
+            FillExtraData(ws);
             FinalAdjustments(ws);
             await package.SaveAsAsync(memoryStream);
         }
@@ -114,7 +115,9 @@ namespace DAERP.BL.Models.Files
         {
             throw new NotImplementedException();
         }
-
+        protected virtual void FillExtraData(ExcelWorksheet ws)
+        {
+        }
         private void FinalAdjustments(ExcelWorksheet ws)
         {
             for (int row = _productsStartingRow + Notes.Count(); row <= _productsEndingRow; row++)

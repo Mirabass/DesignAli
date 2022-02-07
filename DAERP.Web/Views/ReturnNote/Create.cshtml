@@ -121,13 +121,13 @@
                                     <td>@deliveryNote.Product.ProductDivision.ProductType</td>
 
                                     <td>@deliveryNote.Product.MainStockAmount</td>
-                                    <td>@deliveryNote.StartingAmount</td>
-                                    <td>@deliveryNote.Remains</td>
                                     @{
                                         var productCustomer = @deliveryNote.Product.ProductCustomers
                                         .Where(pc => pc.CustomerId == Model.Customer.Id).FirstOrDefault();
                                     }
                                     <td>@productCustomer.AmountInStock</td>
+                                    <td>@deliveryNote.StartingAmount</td>
+                                    <td>@deliveryNote.Remains</td>
                                 </tr>
                             }
                         </tbody>
@@ -177,7 +177,7 @@
                                     </div>
                                     <div class="float-right">
                                         <span>
-                                            @if (selectedDeliveryNote.IsPossibleAdd)
+                                        @if (selectedDeliveryNote.IsPossibleAdd)
                                         {
                                             <a class="btn btn-primary"
                                                 asp-action="Create"

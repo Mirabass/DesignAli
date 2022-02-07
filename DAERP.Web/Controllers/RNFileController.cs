@@ -154,15 +154,15 @@ namespace DAERP.Web.Controllers
             {
                 return NotFound();
             }
-            ReturnNoteFileModel dnFile = _returnNoteData.GetReturnNoteFileBy((int)id);
-            if (dnFile is null)
+            ReturnNoteFileModel rnFile = _returnNoteData.GetReturnNoteFileBy((int)id);
+            if (rnFile is null)
             {
                 return NotFound();
             }
-            dnFile.Finished = true;
-            await _returnNoteData.UpdateFileAsync(dnFile);
+            rnFile.Finished = true;
+            await _returnNoteData.UpdateFileAsync(rnFile);
             return RedirectToAction("Index", new RouteValueDictionary(
-                new { controller = "DNFile", action = "Index",
+                new { controller = "RNFile", action = "Index",
                     currentSort = currentSort,
                     sortOrder = sortOrder,
                     currentFilter = currentFilter,
@@ -191,7 +191,7 @@ namespace DAERP.Web.Controllers
             return RedirectToAction("Index", new RouteValueDictionary(
                 new
                 {
-                    controller = "DNFile",
+                    controller = "RNFile",
                     action = "Index",
                     currentSort = currentSort,
                     sortOrder = sortOrder,

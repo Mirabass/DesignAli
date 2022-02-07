@@ -23,7 +23,7 @@ namespace DAERP.BL.Models.Files
 
         protected override string CreateFileName()
         {
-            return $"DL {NoteNumber} - {Notes.FirstOrDefault().DateCreated.ToString("dd.MM.yy")} - {Customer.Designation} {Customer.DFName}.xlsx";
+            return $"VZ {NoteNumber} - {Notes.FirstOrDefault().DateCreated.ToString("dd.MM.yy")} - {Customer.Designation} {Customer.DFName}.xlsx";
         }
 
         protected override void FillProductsData(ExcelWorksheet ws)
@@ -38,16 +38,16 @@ namespace DAERP.BL.Models.Files
             const int productPriceWithVATColumnNumber = 11;
             int row = _productsStartingRow;
             decimal currencyConvertValue = PriceCalculation.CurrencyConvertValue(Customer.CurrencyCode);
-            foreach (DeliveryNoteModel deliveryNote in Notes)
+            foreach (ReturnNoteModel returnNote in Notes)
             {
-                ws.Cells[row, productDesignationColumnNumber].Value = deliveryNote.Product.Designation;
-                ws.Cells[row, productNameColumnNumber].Value = deliveryNote.Product.ProductDivision.Name;
-                ws.Cells[row, productTypeColumnNumber].Value = deliveryNote.Product.ProductDivision.ProductType;
-                ws.Cells[row, productAmountColumnNumber].Value = deliveryNote.StartingAmount;
+                ws.Cells[row, productDesignationColumnNumber].Value = returnNote.Product.Designation;
+                ws.Cells[row, productNameColumnNumber].Value = returnNote.Product.ProductDivision.Name;
+                ws.Cells[row, productTypeColumnNumber].Value = returnNote.Product.ProductDivision.ProductType;
+                ws.Cells[row, productAmountColumnNumber].Value = returnNote.Amount;
                 ws.Cells[row, vatColumnNumber].Value = PriceCalculation.VATbasedOn(Customer.CurrencyCode);
                 ws.Cells[row, productPriceWithoutVATColumnNumber].Formula =
                     PriceCalculation.FormulaForDNproductPriceWithoutVAT(
-                        deliveryNote.DeliveryNotePrice,
+                        returnNote.DeliveryNotePrice,
                         currencyConvertValue,
                         Customer.CurrencyCode,
                         Customer.RoundPriceWithVAT);
@@ -58,6 +58,17 @@ namespace DAERP.BL.Models.Files
                         Customer.RoundPriceWithVAT);
                 row++;
             }
+        }
+        protected override void FillExtraData(ExcelWorksheet ws)
+        {
+            List<string> dnNumbers = new();
+            foreach (ReturnNoteModel returnNote in Notes)
+            {
+                dnNumbers.Add(returnNote.DeliveryNoteNumber);
+            }
+            dnNumbers = dnNumbers.Distinct().ToList();
+            string dnNumebersResult = string.Join(" | ", dnNumbers);
+            ws.Cells["D22"].Value = dnNumebersResult;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using DAERP.BL.Models.Files;
 using DAERP.BL.Models.Movements;
+using DAERP.BL.Models.Product;
 using DAERP.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using System;

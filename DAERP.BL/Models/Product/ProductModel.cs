@@ -68,5 +68,11 @@ namespace DAERP.BL.Models.Product
         {
             DecreaseMainStockOf(amount, ProductPrices.OperatedCostPrice);
         }
+
+        public void ClearChildModels()
+        {
+            ProductCustomers = null;
+            ProductDivision = null;
+        }
     }
 }

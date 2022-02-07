@@ -33,12 +33,12 @@ namespace DAERP.DAL.DataAccess
 
         public DeliveryNoteModel GetDeliveryNoteBy(int id)
         {
-            return _db.DeliveryNotes.First(dn => dn.Id == id);
+            return _db.DeliveryNotes.AsNoTracking().First(dn => dn.Id == id);
         }
 
         public DeliveryNoteFileModel GetDeliveryNoteFileBy(int fileId)
         {
-            return _db.DeliveryNoteFiles.First(dnf => dnf.Id == fileId);
+            return _db.DeliveryNoteFiles.AsNoTracking().First(dnf => dnf.Id == fileId);
         }
 
         public IEnumerable<DeliveryNoteFileModel> GetDeliveryNoteFiles()

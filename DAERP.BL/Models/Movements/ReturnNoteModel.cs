@@ -14,14 +14,14 @@ namespace DAERP.BL.Models.Movements
         [Required]
         [Display(Name = "Množství")]
         public int Amount { get; set; }
-        
-        public ReturnNoteModel()
+        public int DeliveryNoteId { get; set; }
+        public string DeliveryNoteNumber { get; set; }
+        public ReturnNoteModel(){}
+        public ReturnNoteModel(DeliveryNoteModel deliveryNote, int amount, int? lastOrderThisYear)
+        :base(deliveryNote.Product, deliveryNote.Customer, deliveryNote.IssuedInvoicePrice, deliveryNote.DeliveryNotePrice, lastOrderThisYear)
         {
-
-        }
-        public ReturnNoteModel(ProductModel product, CustomerModel customer, int amount, decimal issuedInvoicePrice, decimal deliveryNotePrice, int? lastOrderThisYear)
-        :base(product,customer,issuedInvoicePrice, deliveryNotePrice, lastOrderThisYear)
-        {
+            DeliveryNoteId = deliveryNote.Id;
+            DeliveryNoteNumber = deliveryNote.Number;
             Amount = amount;
             Fill();
         }
@@ -30,6 +30,10 @@ namespace DAERP.BL.Models.Movements
         {
             this.ValueWithoutVAT = this.Amount * this.DeliveryNotePrice;
             this.ValueWithVAT = PriceCalculation.IncreaseOfVAT(this.ValueWithoutVAT);
+        }
+        public override void ClearChildModels()
+        {
+            base.ClearChildModels();
         }
     }
 }

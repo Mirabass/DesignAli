@@ -136,7 +136,6 @@ namespace DAERP.Web.Controllers
             }
             TempData["CustomerId"] = null;
             List<DeliveryNoteModel> deliveryNotes = _deliveryNoteData.GetDeliveryNotes().ToList();
-            deliveryNotes = deliveryNotes.Where(dn => dn.Remains > 0).ToList();
             List<SelectedDeliveryNote> selectedDeliveryNotes = _deliveryNoteSelectService.Get(addSelected,
                 removeSelected,
                 removeAllSelected,
@@ -144,7 +143,9 @@ namespace DAERP.Web.Controllers
                 true);
             deliveryNotes.ForEach(dn => dn.Product = _productData.GetProductWithChildModelsIncludedBy(dn.ProductId));
             selectedDeliveryNotes.ForEach(sdn => sdn.DeliveryNote.Product = _productData.GetProductWithChildModelsIncludedBy(sdn.DeliveryNote.ProductId));
-            DecreaseDeliveryRemainsViewBySelected(deliveryNotes, selectedDeliveryNotes);
+            AdjustStocksViewBySelected(deliveryNotes, selectedDeliveryNotes);
+            deliveryNotes = deliveryNotes
+                .Where(dn => dn.CustomerId == customerId && dn.Remains > 0).ToList();
             PaginatedList<DeliveryNoteModel> paginatedList =
                 StaticHelper.SortAndFilterDeliveryNotesForSelectPurpose(currentSort, sortOrder, currentFilter,
                 searchString, pageNumber, ViewData, deliveryNotes);
@@ -157,12 +158,17 @@ namespace DAERP.Web.Controllers
             return View(deliveryNoteSelectionViewModel);
         }
 
-        private void DecreaseDeliveryRemainsViewBySelected(List<DeliveryNoteModel> deliveryNotes, List<SelectedDeliveryNote> selectedDeliveryNotes)
+        private void AdjustStocksViewBySelected(List<DeliveryNoteModel> deliveryNotes, List<SelectedDeliveryNote> selectedDeliveryNotes)
         {
             selectedDeliveryNotes.ForEach(sdn =>
             {
-                deliveryNotes.FirstOrDefault(dn => dn.Id == sdn.DeliveryNote.Id)
-                        .DecreaseRemainsOf(sdn.Amount);
+                var dn = deliveryNotes.FirstOrDefault(dn => dn.Id == sdn.DeliveryNote.Id);
+                if (dn != null)
+                {
+                    dn.DecreaseRemainsOf(sdn.Amount);
+                    dn.Product.ProductCustomers.First(pd => pd.CustomerId == dn.CustomerId).DecreaseStock(sdn.Amount);
+                    dn.Product.IncreaseMainStockOf(sdn.Amount, dn.Product.ProductPrices.OperatedCostPrice);
+                }
             });
         }
 
@@ -184,18 +190,18 @@ namespace DAERP.Web.Controllers
             List<CustomerProductModel> influencedCustomerProducts = new List<CustomerProductModel>();
             foreach (SelectedDeliveryNote selectedDeliveryNote in selectedDeliveryNotes)
             {
+                selectedDeliveryNote.DeliveryNote.Customer = customer;
+                selectedDeliveryNote.DeliveryNote.DecreaseRemainsOf(selectedDeliveryNote.Amount);
                 CustomerProductModel customerProduct = _customerProductData
                     .GetCustomerProductBy((int)customerId, selectedDeliveryNote.DeliveryNote.ProductId); // customer stock
                 ReturnNoteModel returnNote = new ReturnNoteModel(
-                    selectedDeliveryNote.DeliveryNote.Product,
-                    customer,
+                    selectedDeliveryNote.DeliveryNote,
                     selectedDeliveryNote.Amount,
-                    selectedDeliveryNote.DeliveryNote.IssuedInvoicePrice,
-                    selectedDeliveryNote.DeliveryNote.DeliveryNotePrice,
                     lastOrderThisYear);
+                returnNote.Product = selectedDeliveryNote.DeliveryNote.Product;
                 returnNotes.Add(returnNote);
-                var costPrice = _productData.GetProductWithChildModelsIncludedBy(selectedDeliveryNote.DeliveryNote.ProductId).ProductPrices.OperatedCostPrice;
-                ProductModel product = _productData.GetProductBy(selectedDeliveryNote.DeliveryNote.ProductId);
+                var costPrice = selectedDeliveryNote.DeliveryNote.Product.ProductPrices.OperatedCostPrice;
+                ProductModel product = selectedDeliveryNote.DeliveryNote.Product;
                 product.IncreaseMainStockOf(returnNote.Amount, costPrice);
                 influencedProducts.Add(product); // main stock
                 customerProduct.DecreaseStock(returnNote.Amount);
@@ -203,11 +209,12 @@ namespace DAERP.Web.Controllers
             }
             var editedDeliveryNotes = selectedDeliveryNotes.Select(sdn => sdn.DeliveryNote);
             string rnPath = _pathProvider.MapPath(_returnNoteFilePath);
-            returnNotes.ForEach(dn => dn.Product = _productData.GetProductWithChildModelsIncludedBy(dn.ProductId));
             ReturnNoteFileModel returnNoteFile = new ReturnNoteFileModel(returnNotes.FirstOrDefault().Number, customer, returnNotes, rnPath);
             await returnNoteFile.Create();
             returnNoteFile.ClearChildModels();
+            editedDeliveryNotes.ToList().ForEach(edn => edn.ClearChildModels());
             returnNotes.ForEach(rn => rn.ClearChildModels());
+            influencedProducts.ForEach(ip => ip.ClearChildModels());
 
             // Database:
             _returnNoteData.AddRangeOfReturnNotes(returnNotes);

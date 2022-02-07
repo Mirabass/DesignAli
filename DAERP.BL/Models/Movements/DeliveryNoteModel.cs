@@ -12,7 +12,7 @@ namespace DAERP.BL.Models.Movements
     public sealed class DeliveryNoteModel : NoteModel
     {
         [Required]
-        [Display(Name = "Množství")]
+        [Display(Name = "Množství v záznamu DL")]
         public int StartingAmount { get; set; }
         [Display(Name = "Zbývá")]
         [Required]
@@ -45,6 +45,7 @@ namespace DAERP.BL.Models.Movements
         public void DecreaseRemainsOf(int amount)
         {
             Remains -= amount;
+            RemainValueWithoutVAT -= amount * this.DeliveryNotePrice;
         }
     }
 }

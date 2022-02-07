@@ -50,7 +50,7 @@ namespace DAERP.Web.Helper
 
         private void CheckRemains()
         {
-            _selectedDeliveryNotes.ForEach(sdn => sdn.IsPossibleAdd = sdn.DeliveryNote.Remains > 0);
+            _selectedDeliveryNotes.ForEach(sdn => sdn.IsPossibleAdd = sdn.DeliveryNote.Remains > sdn.Amount);
         }
 
         private void RetrieveSelectedDeliveryNotes()

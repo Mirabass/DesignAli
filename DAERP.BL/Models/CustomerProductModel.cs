@@ -19,7 +19,7 @@ namespace DAERP.BL.Models
         public int ProductId { get; set; }
         [Required]
         public ProductModel Product { get; set; }
-        [Display(Name = "Množství ve skladu")]
+        [Display(Name = "Množství ve skladu odběratele")]
         [Required]
         public int AmountInStock { get; set; } = 0;
         [Required]

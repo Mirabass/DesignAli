@@ -23,12 +23,14 @@ namespace DAERP.DAL.Data
                 .HasDiscriminator<int>("MovementType")
                 .HasValue<DeliveryNoteModel>(1)
                 .HasValue<ReturnNoteModel>(2)
-                .HasValue<ProductReceiptModel>(3);
+                .HasValue<ProductReceiptModel>(3)
+                .HasValue<IssuedInvoiceModel>(4);
             modelBuilder
                 .Entity<NoteFileModel>().ToTable("NoteFiles")
                 .HasDiscriminator<int>("NoteFileType")
                 .HasValue<DeliveryNoteFileModel>(1)
-                .HasValue<ReturnNoteFileModel>(2);
+                .HasValue<ReturnNoteFileModel>(2)
+                .HasValue<IssuedInvoiceFileModel>(3);
         }
 
         public DbSet<ProductModel> Products { get; set; }
@@ -46,5 +48,7 @@ namespace DAERP.DAL.Data
         public DbSet<DeliveryNoteFileModel> DeliveryNoteFiles { get; set; }
         public DbSet<ReturnNoteModel> ReturnNotes { get; set; }
         public DbSet<ReturnNoteFileModel> ReturnNoteFiles { get; set; }
+        public DbSet<IssuedInvoiceModel> IssuedInvoices { get; set; }
+        public DbSet<IssuedInvoiceFileModel> IssuedInvoiceFiles { get; set; }
     }
 }

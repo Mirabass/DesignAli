@@ -25,7 +25,28 @@ namespace DAERP.BL.Models.Files
         {
             return $"FV {NoteNumber} - {Notes.FirstOrDefault().DateCreated.ToString("dd.MM.yy")} - {Customer.Designation} {Customer.DFName}.xlsx";
         }
-
+        protected override void FillMainData(ExcelWorksheet ws)
+        {
+            ws.Cells["P2"].Value = NoteNumber;
+            ws.Cells["P3"].Value = Notes.FirstOrDefault()
+                .DateCreated.ToString("dd.MM.yy");
+        }
+        protected override void FillCustomerData(ExcelWorksheet ws)
+        {
+            ws.Cells["N7"].Value = Customer.Name;
+            ws.Cells["N9"].Value = Customer.DFStreetAndNo;
+            ws.Cells["N10"].Value = $"{Customer.DFZIP} - {Customer.DFCity}";
+            ws.Cells["N12"].Value = Customer.DFPhone;
+            ws.Cells["N13"].Value = Customer.DFMobile;
+            ws.Cells["N14"].Value = Customer.DFEmail;
+            ws.Cells["N16"].Value = Customer.DFIN;
+            ws.Cells["N17"].Value = Customer.DFTIN;
+            ws.Cells["P19"].Value = Customer.FVDiscountPercentValue;
+            ws.Cells["P22"].Value = DateTime.Now.AddDays(Customer.Maturity).ToString("dd.MM.yy");
+            ws.Cells["O84"].Value = Customer.CurrencyCode;
+            ws.Cells["L30"].Value = Customer.CurrencyCode;
+            ws.Cells["O30"].Value = Customer.CurrencyCode;
+        }
         protected override void FillProductsData(ExcelWorksheet ws)
         {
             const int productDesignationColumnNumber = 3;
@@ -34,8 +55,6 @@ namespace DAERP.BL.Models.Files
             const int productAmountColumnNumber = 6;
             const int vatColumnNumber = 8;
             const int productPriceWithoutVATColumnNumber = 9;
-            const int vatValueColumnNumber = 10;
-            const int productPriceWithVATColumnNumber = 11;
             int row = _productsStartingRow;
             decimal currencyConvertValue = PriceCalculation.CurrencyConvertValue(Customer.CurrencyCode);
             foreach (IssuedInvoiceModel IssuedInvoice in Notes)
@@ -46,16 +65,9 @@ namespace DAERP.BL.Models.Files
                 ws.Cells[row, productAmountColumnNumber].Value = IssuedInvoice.Amount;
                 ws.Cells[row, vatColumnNumber].Value = PriceCalculation.VATbasedOn(Customer.CurrencyCode);
                 ws.Cells[row, productPriceWithoutVATColumnNumber].Formula =
-                    PriceCalculation.FormulaForDNproductPriceWithoutVAT(
-                        IssuedInvoice.DeliveryNotePrice,
-                        currencyConvertValue,
-                        Customer.CurrencyCode,
-                        Customer.RoundPriceWithVAT);
-                ws.Cells[row, productPriceWithVATColumnNumber].Formula =
-                    PriceCalculation.FormulaForDNproductPriceWithVAT(
-                        ws.Cells[row, productPriceWithoutVATColumnNumber].Address,
-                        ws.Cells[row, vatValueColumnNumber].Address,
-                        Customer.RoundPriceWithVAT);
+                    PriceCalculation.FormulaForIIProductPriceWithoutVAT(
+                        IssuedInvoice.IssuedInvoicePrice,
+                        currencyConvertValue);
                 row++;
             }
         }

@@ -86,15 +86,16 @@ namespace DAERP.BL.Models.Files
         {
             this.ExcelFile = memoryStream.ToArray();
         }
-        private void FillMainData(ExcelWorksheet ws)
+        protected virtual void FillMainData(ExcelWorksheet ws)
         {
             ws.Cells["N2"].Value = NoteNumber;
             ws.Cells["N3"].Value = Notes.FirstOrDefault()
                 .DateCreated.ToString("dd.MM.yy");
         }
 
-        private void FillCustomerData(ExcelWorksheet ws)
+        protected virtual void FillCustomerData(ExcelWorksheet ws)
         {
+            // performs when delivery note or return note is created
             ws.Cells["K7"].Value = Customer.DFName;
             ws.Cells["K9"].Value = Customer.DFStreetAndNo;
             ws.Cells["K10"].Value = $"{Customer.DFZIP} - {Customer.DFCity}";

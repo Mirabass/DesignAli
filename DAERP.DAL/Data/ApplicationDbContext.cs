@@ -42,6 +42,7 @@ namespace DAERP.DAL.Data
         public DbSet<ProductStrapModel> ProductStraps { get; set; }
         public DbSet<ProductImageModel> ProductImages { get; set; }
         public DbSet<CustomerModel> Customers { get; set; }
+        public DbSet<EshopModel> Eshops { get; set; }
         public DbSet<CustomerProductModel> CustomersProducts { get; set; }
         public DbSet<ProductReceiptModel> ProductReceipts { get; set; }
         public DbSet<DeliveryNoteModel> DeliveryNotes { get; set; }

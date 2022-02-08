@@ -106,11 +106,12 @@ namespace DAERP.Web.Controllers
             int? removeSelected,
             int? removeAllSelected)
         {
-            IEnumerable<ProductModel> products = _productData.GetAllProductsWithChildModelsIncluded();
-            PaginatedList<ProductModel> paginatedList = StaticHelper.SortAndFilterProductsForSelectPurpose(currentSort, sortOrder, currentFilter,
-                searchString, pageNumber, ViewData, products);
+            List<ProductModel> products = _productData.GetAllProductsWithChildModelsIncluded().ToList();
             List<SelectedProduct> selectedProducts = _productSelectService.Get(addSelected, removeSelected,
                 removeAllSelected, TempData, false);
+            IncreaseStockViewBySelectedProducts(products, selectedProducts);
+            PaginatedList<ProductModel> paginatedList = StaticHelper.SortAndFilterProductsForSelectPurpose(currentSort, sortOrder, currentFilter,
+                searchString, pageNumber, ViewData, products);
             selectedProducts.ForEach(sp => sp.Product = _productData.GetProductWithChildModelsIncludedBy(sp.Product.Id));
             ProductsSelectionViewModel productSelectionViewModel = new ProductsSelectionViewModel()
             {
@@ -118,6 +119,15 @@ namespace DAERP.Web.Controllers
                 SelectedProducts = selectedProducts
             };
             return View(productSelectionViewModel);
+        }
+
+        private void IncreaseStockViewBySelectedProducts(List<ProductModel> products, List<SelectedProduct> selectedProducts)
+        {
+            selectedProducts.ForEach(sp =>
+            {
+                products.FirstOrDefault(p => p.Id == sp.Product.Id)
+                        .IncreaseMainStockOf(sp.Amount);
+            });
         }
 
         [HttpPost]

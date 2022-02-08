@@ -1,7 +1,226 @@
-﻿
+﻿@model DAERP.Web.ViewModels.DeliveryNotesSelectionViewModel
 @{
-    ViewData["Title"] = "Create";
+    List<int> selectedDeliveryNoteIds = Model.SelectedDeliveryNotes.Select(sp => sp.DeliveryNote.Id).ToList();
+    List<int> selectedDeliveryNoteAmounts = Model.SelectedDeliveryNotes.Select(sp => sp.Amount).ToList();
+    TempData["SelectedDeliveryNoteIds"] = selectedDeliveryNoteIds;
+    TempData["SelectedDeliveryNoteAmounts"] = selectedDeliveryNoteAmounts;
+
+    TempData["CustomerId"] = Model.Customer.Id;
 }
+<div class="container-fluid p-3">
+    <div class="col-12 col-md-12">
+        <div class="row">
+            <div class="col-12 col-md-6"><h2 class="text-primary">04.05.02 - Tvorba faktury</h2></div>
+            <div class="col-12 col-md-6">
+                <form asp-action="Create" method="get">
+                    <div class="form-actions no-color">
+                        <p>
+                            Prohledat záznamy do dodacích listů: 
+                            <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                            <input type="submit" value="Filtrovat" class="btn btn-secondary"/> |
+                            <a class="btn btn-outline-warning"
+                                asp-action="Create"
+                                asp-route-currentSort="@ViewData["CurrentSort"]">
+                                Zpět na celý seznam</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br />
 
-<h1>Create</h1>
 
+    <div class="col-12">
+        <div class="row">
+            <div class="col-xl-8 col-12">
+                @if (Model.DeliveryNotes.Count() > 0)
+                {
+                    <table
+                    class="table table-bordered table-striped table-responsive"
+                    data-filter-control="true"
+                    data-show-search-clear-button="true"
+                    style="width:unset;text-align:center;word-wrap:normal">
+                        <thead>
+                            <tr>
+                                <th rowspan="2"></th>
+                                <th id="strap" colspan="2">
+                                    Dodací list
+                                </th>
+                                <th id="productHeader" colspan="4">
+                                    Výrobek
+                                </th>
+                                <th id="accessories" colspan="3">
+                                    Sklady
+                                </th>
+                            </tr>
+                            <tr>
+                                <th id="strap">
+                                    <a asp-action="Create" asp-route-sortOrder="@ViewData["NumberSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        @Html.DisplayNameFor(model => model.DeliveryNotes.FirstOrDefault().Number)</a>
+                                </th>
+                                <th id="strap">
+                                    <a asp-action="Create" asp-route-sortOrder="@ViewData["DateCreatedSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        @Html.DisplayNameFor(model => model.DeliveryNotes.FirstOrDefault().DateCreated)</a>
+                                </th>
+                                <th id="productHeader">
+                                    <a asp-action="Create" asp-route-sortOrder="@ViewData["ProductDesignationSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        @Html.DisplayNameFor(model => model.DeliveryNotes.FirstOrDefault().Product.Designation)</a>
+                                </th>
+                                <th id="productHeader">
+                                    <a asp-action="Create" asp-route-sortOrder="@ViewData["ProductEANSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        @Html.DisplayNameFor(model => model.DeliveryNotes.FirstOrDefault().Product.EAN)</a>
+                                </th>
+                                <th id="productHeader">
+                                    <a asp-action="Create" asp-route-sortOrder="@ViewData["ProductDivisionNameSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        @Html.DisplayNameFor(model => model.DeliveryNotes.FirstOrDefault().Product.ProductDivision.Name)</a>
+                                </th>
+                                <th id="productHeader">
+                                    <a asp-action="Create" asp-route-sortOrder="@ViewData["ProductProductDivisionProductTypeSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        @Html.DisplayNameFor(model => model.DeliveryNotes.FirstOrDefault().Product.ProductDivision.ProductType)</a>
+                                </th>
+
+                                <th id="accessories">
+                                    <a asp-action="Create" asp-route-sortOrder="@ViewData["CustomerAmountInStockSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        @Html.DisplayNameFor(model => model.Customer.CustomerProducts.FirstOrDefault().AmountInStock)
+                                    </a>
+                                </th>
+                                <th id="accessories">
+                                    <a asp-action="Create" asp-route-sortOrder="@ViewData["StartingAmountSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        @Html.DisplayNameFor(model => model.DeliveryNotes.FirstOrDefault().StartingAmount)
+                                    </a>
+                                </th>
+                                <th id="accessories">
+                                    <a asp-action="Create" asp-route-sortOrder="@ViewData["RemainsSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                        @Html.DisplayNameFor(model => model.DeliveryNotes.FirstOrDefault().Remains)
+                                    </a>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var deliveryNote in Model.DeliveryNotes)
+                            {
+                                <tr data-toggle="popover" data-trigger="hover" id="@deliveryNote.ProductId">
+                                    <td>
+                                        <a class="btn btn-primary"
+                                        asp-action="Create"
+                                        asp-route-addSelected="@deliveryNote.Id"
+                                        asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                        asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                            <i class="fas fa-plus"></i></a></td>
+                                    <td>@deliveryNote.Number</td>
+                                    <td>@deliveryNote.DateCreated.ToString("dd.MM.yy")</td>
+                                    <td>@deliveryNote.Product.Designation</td>
+                                    <td>@deliveryNote.Product.EAN</td>
+                                    <td>@deliveryNote.Product.ProductDivision.Name</td>
+                                    <td>@deliveryNote.Product.ProductDivision.ProductType</td>
+
+                                    @{
+                                        var productCustomer = @deliveryNote.Product.ProductCustomers
+                                        .Where(pc => pc.CustomerId == Model.Customer.Id).FirstOrDefault();
+                                    }
+                                    <td>@productCustomer.AmountInStock</td>
+                                    <td>@deliveryNote.StartingAmount</td>
+                                    <td>@deliveryNote.Remains</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <div>
+                        <div class="row">
+                            @{
+                                var prevDisabled = !Model.DeliveryNotes.HasPreviousPage ? "disabled" : "";
+                                var nextDisabled = !Model.DeliveryNotes.HasNextPage ? "disabled" : "";
+                            }
+                            <div class="col p-2">
+                                <a asp-action="Create"
+                                    asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                    asp-route-pageNumber="@(Model.DeliveryNotes.PageIndex - 1)"
+                                    asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                    class="btn btn-secondary @prevDisabled">
+                                    <i class="fas fa-arrow-left"></i>
+                                </a>
+                                <a asp-action="Create"
+                                    asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                    asp-route-pageNumber="@(Model.DeliveryNotes.PageIndex + 1)"
+                                    asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                    class="btn btn-secondary @nextDisabled">
+                                    <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="col-xl-4 col-12">
+                <form asp-action="CreatePost" method="post">
+                    <div class="col">
+                        <ul id="selectList" class="list-group">
+                            @foreach (var selectedDeliveryNote in Model.SelectedDeliveryNotes)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center"
+                                data-toggle="popover"
+                                data-trigger="hover"
+                                id="@selectedDeliveryNote.DeliveryNote.ProductId">
+                                    <div >
+                                        @selectedDeliveryNote.DeliveryNote.Product.Designation | 
+                                        @selectedDeliveryNote.DeliveryNote.Product.ProductDivision.Name | 
+                                        @selectedDeliveryNote.DeliveryNote.Product.ProductDivision.ProductType | 
+                                        @selectedDeliveryNote.DeliveryNote.Number
+                                        <span class="badge badge-primary badge-pill">@selectedDeliveryNote.Amount</span>
+                                    </div>
+                                    <div class="float-right">
+                                        <span>
+                                        @if (selectedDeliveryNote.IsPossibleAdd)
+                                        {
+                                            <a class="btn btn-primary"
+                                                asp-action="Create"
+                                                asp-route-addSelected="@selectedDeliveryNote.DeliveryNote.Id"
+                                                asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                                asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                                <i class="fas fa-plus"></i></a>
+                                        }
+                                        </span>                               
+                                        <span>
+                                            <a class="btn btn-secondary"
+                                                asp-action="Create"
+                                                asp-route-removeSelected="@selectedDeliveryNote.DeliveryNote.Id"
+                                                asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                                asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                                <i class="fas fa-minus"></i></a></span>
+                                        <span>
+                                            <a class="btn btn-danger"
+                                                asp-action="Create"
+                                                asp-route-removeAllSelected="@selectedDeliveryNote.DeliveryNote.Id"
+                                                asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                                asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                                <i class="fas fa-trash"></i></a></span>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="row justify-content-between">
+                        <div class="col p-2 text-center align-content-center">
+                            <button id="sendSelectedList" type="submit" class="btn btn-lg btn-primary">
+                            <i class="fas fa-paper-plane"></i> Vydat fakturu</button>
+                        </div>
+                        <div class="col p-2 text-center">
+                            <a class="btn btn-lg btn-secondary" asp-action="Index">
+                                <i class="fa fa-arrow-left"></i> Vrátit se na přehled faktur vydaných</a>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function(){    
+            submit_button_disabler()
+        });
+    </script>
+}

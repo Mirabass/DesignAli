@@ -1,7 +1,140 @@
-﻿
-@{
-    ViewData["Title"] = "Index";
-}
+﻿@model DAERP.Web.Helper.PaginatedList<DAERP.BL.Models.Movements.IssuedInvoiceModel>
 
-<h1>Index</h1>
+<div class="container-fluid p-3">
+    <div class="col-12 col-md-12">
+        <div class="row">
+            <div class="col-12 col-md-4 col-sm-6"><h2 class="text-primary">04.05.01 - Faktury vydané</h2></div>
+            <div class="col-12 col-md-4 col-sm-6">
+                <a class="btn btn-primary" asp-controller="Menu" asp-action="CustomerSelect" asp-route-controllerToRedirect="IssuedInvoice">
+                    <i class="fas fa-plus"></i> Vydat fakturu</a>
+            </div>
+            <div class="col-12 col-md-4 col-sm-6">
+                <form asp-action="Index" method="get">
+                    <div class="form-actions no-color">
+                        <p>
+                            Prohledat faktury vydané: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                            <input type="hidden" name="CurrentSort" value="@ViewData["CurrentSort"]" />
+                            <input type="submit" value="Filtrovat" class="btn btn-secondary"/> |
+                            <a class="btn btn-outline-warning"
+                            asp-action="Index"
+                            asp-route-currentSort="@ViewData["CurrentSort"]">Zpět na celý seznam</a>
+                        </p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br />
+
+     @if (Model.Count() > 0)
+    {
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12">
+                    <table
+                    class="table table-bordered table-striped table-responsive"
+                    data-filter-control="true"
+                    data-show-search-clear-button="true"
+                    style="width:unset;text-align:center;word-wrap:normal">
+                       <thead>
+                           <tr>
+                               <th id="productHeader">
+                                   Pohyb
+                               </th>
+                               <th id="productHeader">
+                                   <a asp-action="Index" asp-route-sortOrder="@ViewData["NumberSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().Number)</a>
+                               </th>
+                               <th id="accessories">
+                                   <a asp-action="Index" asp-route-sortOrder="@ViewData["DeliveryNoteNumberSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().DeliveryNoteNumber)</a>
+                               </th>
+                               <th id="productHeader">
+                                   <a asp-action="Index" asp-route-sortOrder="@ViewData["CustomerDesignationSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().Customer.Designation)</a>
+                               </th>
+                               <th id="productHeader">
+                                   <a asp-action="Index" asp-route-sortOrder="@ViewData["CustomerDFNameSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().Customer.DFName)</a>
+                               </th>
+                               <th id="productHeader">
+                                   <a asp-action="Index" asp-route-sortOrder="@ViewData["DateCreatedSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().DateCreated)</a>
+                               </th>
+                               <th id="productHeader">
+                                   <a asp-action="Index" asp-route-sortOrder="@ViewData["ProductDesignationSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().Product.Designation)</a>
+                               </th>
+                               <th id="productHeader">
+                                   <a asp-action="Index" asp-route-sortOrder="@ViewData["ProductProductDivisionNameSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().Product.ProductDivision.Name)</a>
+                               </th>
+                               <th id="productHeader">
+                                   <a asp-action="Index" asp-route-sortOrder="@ViewData["StartingAmountSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().Amount)</a> <span class="badge badge-primary badge-pill">@ViewData["AmountSum"]</span>
+                               </th>
+                               <th id="productHeader">
+                                   <a asp-action="Index" asp-route-sortOrder="@ViewData["IssuedInvoicePriceSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().IssuedInvoicePrice)</a>
+                               </th>
+                               <th id="productHeader">
+                                   <a asp-action="Index" asp-route-sortOrder="@ViewData["ValueWithoutVATSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().ValueWithoutVAT)</a> <span class="badge badge-primary badge-pill">@ViewData["ValueWithoutVATSum"]</span>
+                               </th>
+                               <th id="productHeader">
+                                   <a asp-action="Index" asp-route-sortOrder="@ViewData["ValueWithVATSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().ValueWithVAT)</a> <span class="badge badge-primary badge-pill">@ViewData["ValueWithVATSum"]</span>
+                               </th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           @foreach (var issuedInvoice in Model)
+                           {
+                               <tr data-toggle="popover" data-trigger="hover" id="@issuedInvoice.Product.Id">
+                                   <td>FV</td>
+                                   <td>@issuedInvoice.Number</td>
+                                   <td>@issuedInvoice.DeliveryNoteNumber</td>
+                                   <td>@issuedInvoice.Customer.Designation</td>
+                                   <td>@issuedInvoice.Customer.Name</td>
+                                   <td>@issuedInvoice.DateCreated.ToString("dd.mm.yy")</td>
+                                   <td>@issuedInvoice.Product.Designation</td>
+                                   <td>@issuedInvoice.Product.ProductDivision.Name</td>
+                                   <td>@issuedInvoice.Amount</td>
+                                   <td>@issuedInvoice.IssuedInvoicePrice</td>
+                                   <td>@issuedInvoice.ValueWithoutVAT</td>
+                                   <td>@issuedInvoice.ValueWithVAT</td>
+                               </tr>
+                           }
+                        </tbody>
+                    </table>
+                    <div>
+                        <div class="row">
+                            @{
+                                var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+                                var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+                            }
+                            <div class="col p-2">
+                                <a asp-action="Index"
+                                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                   asp-route-pageNumber="@(Model.PageIndex - 1)"
+                                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                   class="btn btn-secondary @prevDisabled">
+                                   <i class="fas fa-arrow-left"></i>
+                                </a>
+                                <a asp-action="Index"
+                                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                                   asp-route-pageNumber="@(Model.PageIndex + 1)"
+                                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                                   class="btn btn-secondary @nextDisabled">
+                                   <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                   </div>
+                </div>
+            </div>
+        </div>
+
+    }
+</div>
 

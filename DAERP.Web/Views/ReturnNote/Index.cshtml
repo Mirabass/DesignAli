@@ -45,6 +45,10 @@
                                    <a asp-action="Index" asp-route-sortOrder="@ViewData["NumberSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                        @Html.DisplayNameFor(model => model.FirstOrDefault().Number)</a>
                                </th>
+                               <th id="accessories">
+                                   <a asp-action="Index" asp-route-sortOrder="@ViewData["DeliveryNoteNumberSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
+                                       @Html.DisplayNameFor(model => model.FirstOrDefault().DeliveryNoteNumber)</a>
+                               </th>
                                <th id="productHeader">
                                    <a asp-action="Index" asp-route-sortOrder="@ViewData["CustomerDesignationSortParam"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">
                                        @Html.DisplayNameFor(model => model.FirstOrDefault().Customer.Designation)</a>
@@ -88,21 +92,22 @@
                            </tr>
                         </thead>
                         <tbody>
-                           @foreach (var deliveryNote in Model)
+                           @foreach (var returnNote in Model)
                            {
-                               <tr data-toggle="popover" data-trigger="hover" id="@deliveryNote.Product.Id">
+                               <tr data-toggle="popover" data-trigger="hover" id="@returnNote.Product.Id">
                                    <td>DL</td>
-                                   <td>@deliveryNote.Number</td>
-                                   <td>@deliveryNote.Customer.Designation</td>
-                                   <td>@deliveryNote.Customer.Name</td>
-                                   <td>@deliveryNote.DateCreated.ToString("dd.mm.yy")</td>
-                                   <td>@deliveryNote.Product.Designation</td>
-                                   <td>@deliveryNote.Product.ProductDivision.Name</td>
-                                   <td>-@deliveryNote.Amount</td>
-                                   <td>@deliveryNote.IssuedInvoicePrice</td>
-                                   <td>@deliveryNote.DeliveryNotePrice</td>
-                                   <td>@deliveryNote.ValueWithoutVAT</td>
-                                   <td>@deliveryNote.ValueWithVAT</td>
+                                   <td>@returnNote.Number</td>
+                                   <td>@returnNote.DeliveryNoteNumber</td>
+                                   <td>@returnNote.Customer.Designation</td>
+                                   <td>@returnNote.Customer.Name</td>
+                                   <td>@returnNote.DateCreated.ToString("dd.mm.yy")</td>
+                                   <td>@returnNote.Product.Designation</td>
+                                   <td>@returnNote.Product.ProductDivision.Name</td>
+                                   <td>-@returnNote.Amount</td>
+                                   <td>@returnNote.IssuedInvoicePrice</td>
+                                   <td>@returnNote.DeliveryNotePrice</td>
+                                   <td>@returnNote.ValueWithoutVAT</td>
+                                   <td>@returnNote.ValueWithVAT</td>
                                </tr>
                            }
                         </tbody>

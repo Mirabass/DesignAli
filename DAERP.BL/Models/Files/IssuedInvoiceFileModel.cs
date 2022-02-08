@@ -68,7 +68,7 @@ namespace DAERP.BL.Models.Files
             }
             dnNumbers = dnNumbers.Distinct().ToList();
             string dnNumebersResult = string.Join(" | ", dnNumbers);
-            ws.Cells["D22"].Value = dnNumebersResult;
+            ws.Cells["D23"].Value = dnNumebersResult;
         }
     }
 }

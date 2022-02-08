@@ -15,6 +15,7 @@ namespace DAERP.BL.Models.Movements
         [Display(Name = "Množství")]
         public int Amount { get; set; }
         public int DeliveryNoteId { get; set; }
+        [Display(Name = "Číslo DL")]
         public string DeliveryNoteNumber { get; set; }
         public IssuedInvoiceModel(){}
         public IssuedInvoiceModel(DeliveryNoteModel deliveryNote, int amount, int? lastOrderThisYear)

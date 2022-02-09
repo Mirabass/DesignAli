@@ -10,16 +10,16 @@ namespace DAERP.Web.Controllers
     [Authorize]
     public class EshopController : Controller
     {
-        private IEshopData _EshopData;
-        public EshopController(IEshopData EshopData)
+        private IEshopData _eshopData;
+        public EshopController(IEshopData eshopData)
         {
-            _EshopData = EshopData;
+            _eshopData = eshopData;
         }
         [Authorize(Roles = "Admin,Manager,Cashier")]
         public IActionResult Index()
         {
-            IEnumerable<EshopModel> Eshops = _EshopData.GetAllEshops();
-            return View(Eshops);
+            IEnumerable<EshopModel> eshops = _eshopData.GetAllEshops();
+            return View(eshops);
         }
         // GET-Create
         [Authorize(Roles = "Admin,Manager")]
@@ -31,16 +31,16 @@ namespace DAERP.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Manager")]
-        public async Task<IActionResult> Create(EshopModel Eshop)
+        public async Task<IActionResult> Create(EshopModel eshop)
         {
             if (ModelState.IsValid)
             {
-                Eshop.DateCreated = System.DateTime.Today;
-                Eshop.DateLastModified = System.DateTime.Today;
-                await _EshopData.AddEshopAsync(Eshop);
+                eshop.DateCreated = System.DateTime.Today;
+                eshop.DateLastModified = System.DateTime.Today;
+                await _eshopData.AddEshopAsync(eshop);
                 return RedirectToAction("Index");
             }
-            return View(Eshop);
+            return View(eshop);
         }
         // Get-Delete
         [Authorize(Roles = "Admin,Manager")]
@@ -50,12 +50,12 @@ namespace DAERP.Web.Controllers
             {
                 return NotFound();
             }
-            EshopModel Eshop = _EshopData.GetEshopBy(Id);
-            if (Eshop == null)
+            EshopModel eshop = _eshopData.GetEshopBy(Id);
+            if (eshop == null)
             {
                 return NotFound();
             }
-            return View(Eshop);
+            return View(eshop);
         }
         // POST-Delete
         [HttpPost]
@@ -63,14 +63,14 @@ namespace DAERP.Web.Controllers
         [Authorize(Roles = "Admin,Manager")]
         public IActionResult DeletePost(int? Id)
         {
-            EshopModel Eshop = _EshopData.GetEshopBy(Id);
-            if (Eshop == null)
+            EshopModel eshop = _eshopData.GetEshopBy(Id);
+            if (eshop == null)
             {
                 return NotFound();
             }
             else
             {
-                _EshopData.RemoveEshop(Eshop);
+                _eshopData.RemoveEshop(eshop);
                 return RedirectToAction("Index");
             }
         }
@@ -82,28 +82,28 @@ namespace DAERP.Web.Controllers
             {
                 return NotFound();
             }
-            EshopModel Eshop = _EshopData.GetEshopBy(Id);
-            if (Eshop == null)
+            EshopModel eshop = _eshopData.GetEshopBy(Id);
+            if (eshop == null)
             {
                 return NotFound();
             }
-            return View(Eshop);
+            return View(eshop);
         }
         // POST-Update
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,Manager")]
-        public async Task<IActionResult> Update(EshopModel Eshop)
+        public IActionResult Update(EshopModel eshop)
         {
             if (ModelState.IsValid)
             {
-                EshopModel oldEshop = _EshopData.GetEshopBy(Eshop.Id);
-                Eshop.DateCreated = oldEshop.DateCreated;
-                Eshop.DateLastModified = System.DateTime.Today;
-                _EshopData.UpdateEshop(Eshop);
+                EshopModel oldEshop = _eshopData.GetEshopBy(eshop.Id);
+                eshop.DateCreated = oldEshop.DateCreated;
+                eshop.DateLastModified = System.DateTime.Today;
+                _eshopData.UpdateEshop(eshop);
                 return RedirectToAction("Index");
             }
-            return View(Eshop);
+            return View(eshop);
         }
     }
 }

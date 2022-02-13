@@ -8,8 +8,6 @@
 <div class="container-fluid p-3">
     <h2 class="text-primary">01.00.01 - Číselník odběratelů</h2>
     <br />
- @if (Model.Count() > 0)
-   {
    <div>
        <table class="table table-bordered table-striped table-responsive" style="width:unset;text-align:center;word-wrap:normal">
            <thead>
@@ -48,12 +46,12 @@
                    <th id="productHeader">@Html.LabelFor(m => m.FirstOrDefault().Franchise)</th>
 
                    <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().SFName)</th>
-                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().SFStreetAndNo)</th>
+                   <th id="colorDesign" style="min-width: 160px;">@Html.LabelFor(m => m.FirstOrDefault().SFStreetAndNo)</th>
                    <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().SFZIP)</th>
                    <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().SFCity)</th>
                    <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().SFCountry)</th>
-                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().SFIN)</th>
-                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().SFTIN)</th>
+                   <th id="colorDesign" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().SFIN)</th>
+                   <th id="colorDesign" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().SFTIN)</th>
 
                    <th id="strap">@Html.LabelFor(m => m.FirstOrDefault().ProvisionFor60PercentValue)</th>
                    <th id="strap">@Html.LabelFor(m => m.FirstOrDefault().FVDiscountPercentValue)</th>
@@ -63,23 +61,23 @@
 
                    <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFName)</th>
                    <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFContactPerson)</th>
-                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFStreetAndNo)</th>
-                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFZIP)</th>
+                   <th id="motive" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().DFStreetAndNo)</th>
+                   <th id="motive" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().DFZIP)</th>
                    <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFCity)</th>
-                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFCountry)</th>
+                   <th id="motive" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().DFCountry)</th>
                    <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFPhone)</th>
                    <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFMobile)</th>
-                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFEmail)</th>
-                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFIN)</th>
-                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFTIN)</th>
+                   <th id="motive" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().DFEmail)</th>
+                   <th id="motive" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().DFIN)</th>
+                   <th id="motive" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().DFTIN)</th>
                    <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFBank)</th>
-                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFAccountNumber)</th>
-                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFBIC)</th>
+                   <th id="motive" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().DFAccountNumber)</th>
+                   <th id="motive" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().DFBIC)</th>
 
                    <th id="accessories">@Html.LabelFor(m => m.FirstOrDefault().MDName)</th>
                    <th id="accessories">@Html.LabelFor(m => m.FirstOrDefault().MDContactPerson)</th>
-                   <th id="accessories">@Html.LabelFor(m => m.FirstOrDefault().MDStreetAndNo)</th>
-                   <th id="accessories">@Html.LabelFor(m => m.FirstOrDefault().MDZIP)</th>
+                   <th id="accessories" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().MDStreetAndNo)</th>
+                   <th id="accessories" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().MDZIP)</th>
                    <th id="accessories">@Html.LabelFor(m => m.FirstOrDefault().MDCity)</th>
 
                    <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().ContractDANumber)</th>
@@ -95,11 +93,13 @@
                    <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().ContractProvisionPercentValue)</th>
                </tr>
             </thead>
-            <tbody>
-               @foreach (var customer in Model)
-                {
-                    <tr>
-                        <td>
+            @if (Model.Count() > 0)
+            {
+                <tbody>
+                    @foreach (var customer in Model)
+                    {
+                        <tr>
+                            <td>
                             <div class="row">
                                 <div class="col text-nowrap">
                                     <a asp-controller="Customer" asp-action="Update" asp-route-Id="@customer.Id" class="btn btn-primary mx-1">
@@ -167,7 +167,7 @@
                     </tr>
                 }
             </tbody>
+            }
         </table>
    </div>
-   }
 </div>

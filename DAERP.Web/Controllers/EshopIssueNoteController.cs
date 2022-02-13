@@ -105,6 +105,13 @@ namespace DAERP.Web.Controllers
         public IActionResult EshopSelect()
         {
             MultiDropDownListViewModel model = Helper.StaticHelper.GetModelForEshopSelect(_eshopData);
+            if (model.ItemList.Count == 0)
+            {
+                return View("Error", new ErrorViewModel()
+                {
+
+                });
+            }
             return View(model);
         }
         [Authorize(Roles = "Admin,Manager,Cashier")]

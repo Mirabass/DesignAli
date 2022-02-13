@@ -91,7 +91,7 @@ namespace DAERP.Web.Controllers
             {
                 return NotFound();
             }
-            MemoryStream dnFileStreamResult = dnFile.GetDeliveryNoteMemoryStream();
+            MemoryStream dnFileStreamResult = dnFile.GetNoteMemoryStream();
             string fileName = dnFile.FileName;
             fileName = string.Join("_", fileName.Split(Path.GetInvalidFileNameChars()));
             return new FileStreamResult(dnFileStreamResult, new MediaTypeHeaderValue("application/vnd.ms-excel"))
@@ -128,9 +128,16 @@ namespace DAERP.Web.Controllers
                 using MemoryStream memoryStream = new MemoryStream();
                 var file = Request.Form.Files.FirstOrDefault();
                 await file.CopyToAsync(memoryStream);
-                oldDNFile.ExcelFile = memoryStream.ToArray();
-                await _deliveryNoteData.UpdateFileAsync(oldDNFile);
-                return RedirectToAction("Index");
+                if (memoryStream.Length < 2097152) // 2 MB
+                {
+                    oldDNFile.ExcelFile = memoryStream.ToArray();
+                    await _deliveryNoteData.UpdateFileAsync(oldDNFile);
+                    return RedirectToAction("Index");                    
+                }
+                else
+                {
+                    ModelState.AddModelError("File", "The file is too large");
+                }
             }
             return View(updatedDeliveryNoteFile);
         }

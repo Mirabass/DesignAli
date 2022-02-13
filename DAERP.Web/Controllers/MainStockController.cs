@@ -106,11 +106,12 @@ namespace DAERP.Web.Controllers
             int? removeSelected,
             int? removeAllSelected)
         {
-            IEnumerable<ProductModel> products = _productData.GetAllProductsWithChildModelsIncluded();
-            PaginatedList<ProductModel> paginatedList = StaticHelper.SortAndFilterProductsForSelectPurpose(currentSort, sortOrder, currentFilter,
-                searchString, pageNumber, ViewData, products);
+            List<ProductModel> products = _productData.GetAllProductsWithChildModelsIncluded().ToList();
             List<SelectedProduct> selectedProducts = _productSelectService.Get(addSelected, removeSelected,
                 removeAllSelected, TempData, false);
+            IncreaseStockViewBySelectedProducts(products, selectedProducts);
+            PaginatedList<ProductModel> paginatedList = StaticHelper.SortAndFilterProductsForSelectPurpose(currentSort, sortOrder, currentFilter,
+                searchString, pageNumber, ViewData, products);
             selectedProducts.ForEach(sp => sp.Product = _productData.GetProductWithChildModelsIncludedBy(sp.Product.Id));
             ProductsSelectionViewModel productSelectionViewModel = new ProductsSelectionViewModel()
             {
@@ -120,24 +121,37 @@ namespace DAERP.Web.Controllers
             return View(productSelectionViewModel);
         }
 
+        private void IncreaseStockViewBySelectedProducts(List<ProductModel> products, List<SelectedProduct> selectedProducts)
+        {
+            selectedProducts.ForEach(sp =>
+            {
+                products.FirstOrDefault(p => p.Id == sp.Product.Id)
+                        .IncreaseMainStockOf(sp.Amount);
+            });
+        }
+
         [HttpPost]
         [Authorize(Roles = "Admin,Manager,Cashier")]
         [ValidateAntiForgeryToken]
         public IActionResult CreatePost()
         {
             List<SelectedProduct> selectedProducts = _productSelectService.Get(TempData);
-            int? lastOrderThisYear = GetProductReceiptLastOrderThisYear();
+            int? lastOrderThisYear = NoteModel.GetMovementLastOrderThisYear(_productReceiptData.GetProductReceipts());
             List<ProductReceiptModel> productReceipts = new List<ProductReceiptModel>();
             foreach (SelectedProduct selectedProduct in selectedProducts)
             {
+                var costPrice = _productData
+                    .GetProductWithChildModelsIncludedBy(selectedProduct.Product.Id)
+                    .ProductPrices.OperatedCostPrice;
                 ProductReceiptModel productReceipt = new ProductReceiptModel(
                     selectedProduct.Product,
                     selectedProduct.Amount,
+                    costPrice,
                     lastOrderThisYear);
                 productReceipts.Add(productReceipt);
-                var costPrice = _productData.GetProductWithChildModelsIncludedBy(selectedProduct.Product.Id).ProductPrices.OperatedCostPrice;
                 selectedProduct.Product.IncreaseMainStockOf(productReceipt.Amount, costPrice);
             }
+
             _productReceiptData.AddRangeOfProductReceipts(productReceipts);
             var editedProducts = selectedProducts.Select(sp => sp.Product);
             _productData.UpdateRangeOfProducts(editedProducts);
@@ -147,18 +161,5 @@ namespace DAERP.Web.Controllers
             return RedirectToAction("Index");
         }
 
-        private int? GetProductReceiptLastOrderThisYear()
-        {
-            var receiptsThisYear = _productReceiptData.GetProductReceipts()
-                    .Where(pr => pr.DateCreated.Year == DateTime.Now.Year);
-            int? lastOrderThisYear = null;
-            if (receiptsThisYear.Any())
-            {
-                lastOrderThisYear = receiptsThisYear
-                 .Select(pr => pr.OrderInCurrentYear)
-                 .Max();
-            }
-            return lastOrderThisYear;
-        }
     }
 }

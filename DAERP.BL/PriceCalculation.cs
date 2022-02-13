@@ -109,6 +109,11 @@ namespace DAERP.BL
             }
         }
 
+        internal static string FormulaForIIProductPriceWithoutVAT(decimal issuedInvoicePrice, decimal currencyConvertValue)
+        {
+            return String.Format("{0:G}*{1:G}", issuedInvoicePrice, currencyConvertValue);
+        }
+
         internal static string FormulaForDNproductPriceWithVAT(string priceWithoutVATAdress, string vatValueAdress, bool roundPriceWithVAT)
         {
             if (roundPriceWithVAT)

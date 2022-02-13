@@ -182,7 +182,7 @@ namespace DAERP.DAL.DataAccess
 
         public ProductModel GetProductBy(int id)
         {
-            return _db.Products.Where(p => p.Id == id).FirstOrDefault();
+            return _db.Products.AsNoTracking().Where(p => p.Id == id).FirstOrDefault();
         }
 
         public void UpdateRangeOfProducts(IEnumerable<ProductModel> editedProducts)

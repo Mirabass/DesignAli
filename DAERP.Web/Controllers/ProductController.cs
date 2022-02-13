@@ -154,8 +154,9 @@ namespace DAERP.Web.Controllers
                 {
                     product.ProductImage = ImageFromFile(Request.Form.Files.FirstOrDefault(), ModelState);
                 }
-                catch (FormatException)
+                catch (Exception)
                 {
+                    CreateViewBagOfProductNames();
                     return View(productViewModel);
                 }
                 product.ProductPrices.GainPercentValue = BL.PriceCalculation.GainPercentValue(product.ProductPrices.OperatedCostPrice, product.ProductPrices.OperatedSellingPrice);
@@ -172,12 +173,16 @@ namespace DAERP.Web.Controllers
             ProductImageModel img = new ProductImageModel();
             using MemoryStream ms = new MemoryStream();
             file.CopyTo(ms);
+            if (ms.Length > 2097152) // 2 MB
+            {
+                ModelState.AddModelError("Image", "The Image is too large");
+                throw new FileLoadException();
+            }
             img.Image = ms.ToArray();
             string fileType = Path.GetExtension(file.FileName).Replace(".", String.Empty).ToUpper();
             if ((fileType == "PNG" || fileType == "JPG") == false)
             {
                 ModelState.AddModelError("Invalid image file name", "Invalid file name of image. Must be PNG or JPG.");
-                CreateViewBagOfProductNames();
                 throw new FormatException();
             }
             img.Type = fileType;
@@ -266,8 +271,9 @@ namespace DAERP.Web.Controllers
                 {
                     updatedProduct.ProductImage = ImageFromFile(Request.Form.Files.FirstOrDefault(), ModelState);
                 }
-                catch (FormatException)
+                catch (Exception)
                 {
+                    CreateViewBagOfProductNames();
                     return View(productViewModel);
                 }
                 updatedProduct.ProductPrices.GainPercentValue =

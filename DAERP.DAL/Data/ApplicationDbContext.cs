@@ -18,6 +18,20 @@ namespace DAERP.DAL.Data
             modelBuilder
                 .Entity<CustomerProductModel>()
                 .HasKey(cp => new { cp.CustomerId, cp.ProductId });
+            modelBuilder
+                .Entity<MovementModel>().ToTable("Movements")
+                .HasDiscriminator<int>("MovementType")
+                .HasValue<DeliveryNoteModel>(1)
+                .HasValue<ReturnNoteModel>(2)
+                .HasValue<ProductReceiptModel>(3)
+                .HasValue<IssuedInvoiceModel>(4)
+                .HasValue<EshopIssueNoteModel>(5);
+            modelBuilder
+                .Entity<NoteFileModel>().ToTable("NoteFiles")
+                .HasDiscriminator<int>("NoteFileType")
+                .HasValue<DeliveryNoteFileModel>(1)
+                .HasValue<ReturnNoteFileModel>(2)
+                .HasValue<IssuedInvoiceFileModel>(3);
         }
 
         public DbSet<ProductModel> Products { get; set; }
@@ -29,9 +43,15 @@ namespace DAERP.DAL.Data
         public DbSet<ProductStrapModel> ProductStraps { get; set; }
         public DbSet<ProductImageModel> ProductImages { get; set; }
         public DbSet<CustomerModel> Customers { get; set; }
+        public DbSet<EshopModel> Eshops { get; set; }
         public DbSet<CustomerProductModel> CustomersProducts { get; set; }
         public DbSet<ProductReceiptModel> ProductReceipts { get; set; }
         public DbSet<DeliveryNoteModel> DeliveryNotes { get; set; }
         public DbSet<DeliveryNoteFileModel> DeliveryNoteFiles { get; set; }
+        public DbSet<ReturnNoteModel> ReturnNotes { get; set; }
+        public DbSet<ReturnNoteFileModel> ReturnNoteFiles { get; set; }
+        public DbSet<IssuedInvoiceModel> IssuedInvoices { get; set; }
+        public DbSet<IssuedInvoiceFileModel> IssuedInvoiceFiles { get; set; }
+        public DbSet<EshopIssueNoteModel> EshopIssueNotes { get; set; }
     }
 }

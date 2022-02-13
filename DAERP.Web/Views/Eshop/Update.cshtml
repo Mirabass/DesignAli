@@ -1,0 +1,367 @@
+﻿@model DAERP.BL.Models.EshopModel
+<form method="post" asp-action="Update">
+    <input asp-for="Id" hidden />
+    <div class="p-3">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group row">
+            <h2 class="text-black-50 pl-3">Upravit eshop</h2>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <!-- Eshop -->
+                <div class="form-group row border p-2 shadow rounded">
+                    <div class="col-12">
+                        <div class="row p-3">
+                            <div class="col text-info">
+                                Eshop
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="Designation"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="Designation" class="form-control"/>
+                                    <span asp-validation-for="Designation" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="Code"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="Code" class="form-control"/>
+                                    <span asp-validation-for="Code" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="State"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="State" class="form-control"/>
+                                    <span asp-validation-for="State" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="Name"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="Name" class="form-control"/>
+                                    <span asp-validation-for="Name" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="Web"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="Web" class="form-control"/>
+                                    <span asp-validation-for="Web" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ContactPerson"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ContactPerson" class="form-control"/>
+                                    <span asp-validation-for="ContactPerson" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="Phone"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="Phone" class="form-control"/>
+                                    <span asp-validation-for="Phone" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="Mobile"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="Mobile" class="form-control"/>
+                                    <span asp-validation-for="Mobile" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="Email"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="Email" class="form-control"/>
+                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Sídlo firmy -->
+                <div class="form-group row border p-2 shadow rounded">
+                    <div class="col-12">
+                        <div class="row p-3">
+                            <div class="col text-info">
+                                Sídlo firmy
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="SFName"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="SFName" class="form-control"/>
+                                    <span asp-validation-for="SFName" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="SFStreetAndNo"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="SFStreetAndNo" class="form-control"/>
+                                    <span asp-validation-for="SFStreetAndNo" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="SFZIP"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="SFZIP" class="form-control"/>
+                                    <span asp-validation-for="SFZIP" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="SFCity"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="SFCity" class="form-control"/>
+                                    <span asp-validation-for="SFCity" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="SFCountry"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="SFCountry" class="form-control"/>
+                                    <span asp-validation-for="SFCountry" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="SFIN"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="SFIN" class="form-control"/>
+                                    <span asp-validation-for="SFIN" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="SFTIN"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="SFTIN" class="form-control"/>
+                                    <span asp-validation-for="SFTIN" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Hlavní nastavení -->
+                <div class="form-group row border p-2 shadow rounded">
+                    <div class="col-12">
+                        <div class="row p-3">
+                            <div class="col text-info">
+                                Hlavní nastavení
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="FVDiscountPercentValue"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="FVDiscountPercentValue" class="form-control"/>
+                                    <span asp-validation-for="FVDiscountPercentValue" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="Maturity"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="Maturity" class="form-control"/>
+                                    <span asp-validation-for="Maturity" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="CurrencyCode"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="CurrencyCode" class="form-control"/>
+                                    <span asp-validation-for="CurrencyCode" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="RoundPriceWithVAT"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="RoundPriceWithVAT" class="form-control"/>
+                                    <span asp-validation-for="RoundPriceWithVAT" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row border p-2 shadow rounded">
+                    <div class="col-12">
+                        <div class="row p-3">
+                            <div class="col text-info">
+                                Smlouva
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ContractDANumber"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ContractDANumber" class="form-control"/>
+                                    <span asp-validation-for="ContractDANumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ContractONumber"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ContractONumber" class="form-control"/>
+                                    <span asp-validation-for="ContractONumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ContractContent"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ContractContent" class="form-control"/>
+                                    <span asp-validation-for="ContractContent" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ContractPoPro"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ContractPoPro" class="form-control"/>
+                                    <span asp-validation-for="ContractPoPro" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ContractPoUm"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ContractPoUm" class="form-control"/>
+                                    <span asp-validation-for="ContractPoUm" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ContractDateSigned"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ContractDateSigned" class="form-control"/>
+                                    <span asp-validation-for="ContractDateSigned" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ContractDateFrom"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ContractDateFrom" class="form-control"/>
+                                    <span asp-validation-for="ContractDateFrom" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ContractDateTo"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ContractDateTo" class="form-control"/>
+                                    <span asp-validation-for="ContractDateTo" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ContractRent"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ContractRent" class="form-control"/>
+                                    <span asp-validation-for="ContractRent" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ContractPeriod"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ContractPeriod" class="form-control"/>
+                                    <span asp-validation-for="ContractPeriod" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-xl-2 col-lg-3 col-6 p-1">
+                                <div class="col">
+                                    <label asp-for="ContractProvisionPercentValue"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="ContractProvisionPercentValue" class="form-control"/>
+                                    <span asp-validation-for="ContractProvisionPercentValue" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row border p-2 shadow rounded">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="col">
+                                    <label asp-for="Comment"></label>
+                                </div>
+                                <div class="col">
+                                    <input asp-for="Comment" class="form-control"/>
+                                    <span asp-validation-for="Comment" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group row justify-content-around p-2">
+                    <div class="col-6">
+                        <input type="submit" class="btn btn-info w-75" value="Potvrdit změny" />
+                    </div>
+                    <div class="col-6">
+                        <a class="btn btn-danger w-75" asp-action="Index">Vrátit se</a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+</form>

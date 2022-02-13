@@ -82,7 +82,7 @@ namespace DAERP.DAL.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("DFCountry")
-                        .HasColumnType("nvarchar(2)");
+                        .HasColumnType("nvarchar(3)");
 
                     b.Property<string>("DFEmail")
                         .HasColumnType("nvarchar(256)");
@@ -158,7 +158,7 @@ namespace DAERP.DAL.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("SFCountry")
-                        .HasColumnType("nvarchar(2)");
+                        .HasColumnType("nvarchar(3)");
 
                     b.Property<string>("SFIN")
                         .HasColumnType("nvarchar(8)");
@@ -211,7 +211,124 @@ namespace DAERP.DAL.Migrations
                     b.ToTable("CustomersProducts");
                 });
 
-            modelBuilder.Entity("DAERP.BL.Models.Files.DeliveryNoteFileModel", b =>
+            modelBuilder.Entity("DAERP.BL.Models.EshopModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Code")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(MAX)");
+
+                    b.Property<string>("ContactPerson")
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("ContractContent")
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("ContractDANumber")
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime?>("ContractDateFrom")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ContractDateSigned")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("ContractDateTo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ContractONumber")
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("ContractPeriod")
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("ContractPoPro")
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("ContractPoUm")
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<decimal?>("ContractProvisionPercentValue")
+                        .HasColumnType("decimal(8,2)");
+
+                    b.Property<decimal?>("ContractRent")
+                        .HasColumnType("money");
+
+                    b.Property<string>("CurrencyCode")
+                        .HasColumnType("nvarchar(3)");
+
+                    b.Property<DateTime?>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateLastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Designation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(5)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<decimal>("FVDiscountPercentValue")
+                        .HasColumnType("decimal(3,1)");
+
+                    b.Property<decimal?>("Maturity")
+                        .HasColumnType("numeric(2,0)");
+
+                    b.Property<string>("Mobile")
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<bool?>("RoundPriceWithVAT")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SFCity")
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("SFCountry")
+                        .HasColumnType("nvarchar(3)");
+
+                    b.Property<string>("SFIN")
+                        .HasColumnType("nvarchar(8)");
+
+                    b.Property<string>("SFName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("SFStreetAndNo")
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("SFTIN")
+                        .HasColumnType("nvarchar(12)");
+
+                    b.Property<string>("SFZIP")
+                        .HasColumnType("nvarchar(6)");
+
+                    b.Property<string>("State")
+                        .HasColumnType("nvarchar(3)");
+
+                    b.Property<string>("Web")
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Eshops");
+                });
+
+            modelBuilder.Entity("DAERP.BL.Models.Files.NoteFileModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -220,9 +337,6 @@ namespace DAERP.DAL.Migrations
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
-
-                    b.Property<string>("DeliveryNoteNumber")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("ExcelFile")
                         .HasColumnType("varbinary(max)");
@@ -233,85 +347,31 @@ namespace DAERP.DAL.Migrations
                     b.Property<bool>("Finished")
                         .HasColumnType("bit");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.ToTable("DeliveryNoteFiles");
-                });
-
-            modelBuilder.Entity("DAERP.BL.Models.Movements.DeliveryNoteModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CustomerId")
+                    b.Property<int>("NoteFileType")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DeliveryNoteFileModelId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("DeliveryNotePrice")
-                        .HasColumnType("money");
-
-                    b.Property<decimal>("IssuedInvoicePrice")
-                        .HasColumnType("money");
-
-                    b.Property<string>("Number")
+                    b.Property<string>("NoteNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OrderInCurrentYear")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("RemainValueWithoutVAT")
-                        .HasColumnType("money");
-
-                    b.Property<int>("Remains")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StartingAmount")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("ValueWithVAT")
-                        .HasColumnType("money");
-
-                    b.Property<decimal>("ValueWithoutVAT")
-                        .HasColumnType("money");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
+                    b.ToTable("NoteFiles");
 
-                    b.HasIndex("DeliveryNoteFileModelId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("DeliveryNotes");
+                    b.HasDiscriminator<int>("NoteFileType");
                 });
 
-            modelBuilder.Entity("DAERP.BL.Models.Movements.ProductReceiptModel", b =>
+            modelBuilder.Entity("DAERP.BL.Models.Movements.MovementModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("CostPrice")
-                        .HasColumnType("money");
-
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("MovementType")
+                        .HasColumnType("int");
 
                     b.Property<string>("Number")
                         .HasColumnType("nvarchar(max)");
@@ -330,9 +390,9 @@ namespace DAERP.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.ToTable("Movements");
 
-                    b.ToTable("ProductReceipts");
+                    b.HasDiscriminator<int>("MovementType");
                 });
 
             modelBuilder.Entity("DAERP.BL.Models.Product.ProductColorDesignModel", b =>
@@ -580,6 +640,132 @@ namespace DAERP.DAL.Migrations
                     b.ToTable("ProductStraps");
                 });
 
+            modelBuilder.Entity("DAERP.BL.Models.Files.DeliveryNoteFileModel", b =>
+                {
+                    b.HasBaseType("DAERP.BL.Models.Files.NoteFileModel");
+
+                    b.HasIndex("CustomerId");
+                });
+
+            modelBuilder.Entity("DAERP.BL.Models.Files.IssuedInvoiceFileModel", b =>
+                {
+                    b.HasBaseType("DAERP.BL.Models.Files.NoteFileModel");
+
+                    b.HasIndex("CustomerId");
+                });
+
+            modelBuilder.Entity("DAERP.BL.Models.Files.ReturnNoteFileModel", b =>
+                {
+                    b.HasBaseType("DAERP.BL.Models.Files.NoteFileModel");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasDiscriminator().HasValue(2);
+                });
+
+            modelBuilder.Entity("DAERP.BL.Models.Movements.EshopIssueNoteModel", b =>
+                {
+                    b.HasBaseType("DAERP.BL.Models.Movements.MovementModel");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int")
+                        .HasColumnName("EshopIssueNoteModel_Amount");
+
+                    b.Property<int>("EshopId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("OperatedSellingPrice")
+                        .HasColumnType("money");
+
+                    b.HasIndex("EshopId");
+
+                    b.HasIndex("ProductId");
+                });
+
+            modelBuilder.Entity("DAERP.BL.Models.Movements.NoteModel", b =>
+                {
+                    b.HasBaseType("DAERP.BL.Models.Movements.MovementModel");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("DeliveryNotePrice")
+                        .HasColumnType("money");
+
+                    b.Property<decimal>("IssuedInvoicePrice")
+                        .HasColumnType("money");
+
+                    b.Property<int?>("NoteFileModelId")
+                        .HasColumnType("int");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("NoteFileModelId");
+
+                    b.HasIndex("ProductId");
+                });
+
+            modelBuilder.Entity("DAERP.BL.Models.Movements.ProductReceiptModel", b =>
+                {
+                    b.HasBaseType("DAERP.BL.Models.Movements.MovementModel");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int")
+                        .HasColumnName("ProductReceiptModel_Amount");
+
+                    b.Property<decimal>("CostPrice")
+                        .HasColumnType("money");
+
+                    b.HasIndex("ProductId");
+                });
+
+            modelBuilder.Entity("DAERP.BL.Models.Movements.DeliveryNoteModel", b =>
+                {
+                    b.HasBaseType("DAERP.BL.Models.Movements.NoteModel");
+
+                    b.Property<decimal>("RemainValueWithoutVAT")
+                        .HasColumnType("money");
+
+                    b.Property<int>("Remains")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StartingAmount")
+                        .HasColumnType("int");
+                });
+
+            modelBuilder.Entity("DAERP.BL.Models.Movements.IssuedInvoiceModel", b =>
+                {
+                    b.HasBaseType("DAERP.BL.Models.Movements.NoteModel");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DeliveryNoteId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DeliveryNoteNumber")
+                        .HasColumnType("nvarchar(max)");
+                });
+
+            modelBuilder.Entity("DAERP.BL.Models.Movements.ReturnNoteModel", b =>
+                {
+                    b.HasBaseType("DAERP.BL.Models.Movements.NoteModel");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int")
+                        .HasColumnName("ReturnNoteModel_Amount");
+
+                    b.Property<int>("DeliveryNoteId")
+                        .HasColumnType("int")
+                        .HasColumnName("ReturnNoteModel_DeliveryNoteId");
+
+                    b.Property<string>("DeliveryNoteNumber")
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ReturnNoteModel_DeliveryNoteNumber");
+
+                    b.HasDiscriminator().HasValue(2);
+                });
+
             modelBuilder.Entity("DAERP.BL.Models.CustomerProductModel", b =>
                 {
                     b.HasOne("DAERP.BL.Models.CustomerModel", "Customer")
@@ -595,51 +781,6 @@ namespace DAERP.DAL.Migrations
                         .IsRequired();
 
                     b.Navigation("Customer");
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("DAERP.BL.Models.Files.DeliveryNoteFileModel", b =>
-                {
-                    b.HasOne("DAERP.BL.Models.CustomerModel", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("DAERP.BL.Models.Movements.DeliveryNoteModel", b =>
-                {
-                    b.HasOne("DAERP.BL.Models.CustomerModel", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DAERP.BL.Models.Files.DeliveryNoteFileModel", null)
-                        .WithMany("DeliveryNotes")
-                        .HasForeignKey("DeliveryNoteFileModelId");
-
-                    b.HasOne("DAERP.BL.Models.Product.ProductModel", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("DAERP.BL.Models.Movements.ProductReceiptModel", b =>
-                {
-                    b.HasOne("DAERP.BL.Models.Product.ProductModel", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("Product");
                 });
@@ -692,14 +833,100 @@ namespace DAERP.DAL.Migrations
                     b.Navigation("ProductStrap");
                 });
 
+            modelBuilder.Entity("DAERP.BL.Models.Files.DeliveryNoteFileModel", b =>
+                {
+                    b.HasOne("DAERP.BL.Models.CustomerModel", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("DAERP.BL.Models.Files.IssuedInvoiceFileModel", b =>
+                {
+                    b.HasOne("DAERP.BL.Models.CustomerModel", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("DAERP.BL.Models.Files.ReturnNoteFileModel", b =>
+                {
+                    b.HasOne("DAERP.BL.Models.CustomerModel", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("DAERP.BL.Models.Movements.EshopIssueNoteModel", b =>
+                {
+                    b.HasOne("DAERP.BL.Models.EshopModel", "Eshop")
+                        .WithMany()
+                        .HasForeignKey("EshopId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAERP.BL.Models.Product.ProductModel", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Eshop");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("DAERP.BL.Models.Movements.NoteModel", b =>
+                {
+                    b.HasOne("DAERP.BL.Models.CustomerModel", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DAERP.BL.Models.Files.NoteFileModel", null)
+                        .WithMany("Notes")
+                        .HasForeignKey("NoteFileModelId");
+
+                    b.HasOne("DAERP.BL.Models.Product.ProductModel", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("DAERP.BL.Models.Movements.ProductReceiptModel", b =>
+                {
+                    b.HasOne("DAERP.BL.Models.Product.ProductModel", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("DAERP.BL.Models.CustomerModel", b =>
                 {
                     b.Navigation("CustomerProducts");
                 });
 
-            modelBuilder.Entity("DAERP.BL.Models.Files.DeliveryNoteFileModel", b =>
+            modelBuilder.Entity("DAERP.BL.Models.Files.NoteFileModel", b =>
                 {
-                    b.Navigation("DeliveryNotes");
+                    b.Navigation("Notes");
                 });
 
             modelBuilder.Entity("DAERP.BL.Models.Product.ProductModel", b =>

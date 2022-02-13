@@ -47,10 +47,15 @@ namespace DAERP.Web
             services.AddSingleton<IPathProvider, PathProvider>();
             
             services.AddTransient<ICustomerData, CustomerData>();
+            services.AddTransient<IEshopData, EshopData>();
             services.AddTransient<IProductData, ProductData>();
             services.AddTransient<IProductSelectService, ProductSelectService>();
+            services.AddTransient<IDeliveryNoteSelectService,DeliveryNoteSelectService>();
             services.AddTransient<IProductReceiptData, ProductReceiptData>();
             services.AddTransient<IDeliveryNoteData, DeliveryNoteData>();
+            services.AddTransient<IReturnNoteData, ReturnNoteData>();
+            services.AddTransient<IIssuedInvoiceData, IssuedInvoiceData>();
+            services.AddTransient<IEshopIssueNoteData, EshopIssueNoteData>();
             services.AddTransient<ICustomerProductData, CustomerProductData>();
 
             services.AddControllersWithViews();

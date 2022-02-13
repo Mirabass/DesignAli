@@ -18,7 +18,7 @@ namespace DAERP.BL.Models
         public string Designation { get; set; }
         [Display(Name = "Stav")]
         [Column(TypeName = "nvarchar(3)")]
-        public string State { get; set; }
+        public string State { get; set; } = "A";
         [Display(Name = "Název prodejny")]
         [Required]
         [Column(TypeName = "nvarchar(256)")]
@@ -43,7 +43,7 @@ namespace DAERP.BL.Models
         [Column(TypeName = "nvarchar(256)")]
         public string SFCity { get; set; }
         [Display(Name = "Stát - SF")]
-        [Column(TypeName = "nvarchar(2)")]
+        [Column(TypeName = "nvarchar(3)")]
         public string SFCountry { get; set; }
         /// <summary>
         /// IČO
@@ -99,7 +99,7 @@ namespace DAERP.BL.Models
         [Column(TypeName = "nvarchar(256)")]
         public string DFCity { get; set; }
         [Display(Name = "Stát - DF")]
-        [Column(TypeName = "nvarchar(2)")]
+        [Column(TypeName = "nvarchar(3)")]
         public string DFCountry { get; set; }
         [Display(Name = "Telefon - DF")]
         [Column(TypeName = "nvarchar(256)")]

@@ -3,7 +3,7 @@
 <div class="container-fluid p-3">
     <div class="col-sm-12 col-md-12">
         <div class="row">
-            <div class="col-sm-12 col-md-6"><h2 class="text-primary">04.01.01 - Dodací listy - stažení a úprava souborů MS Excel</h2></div>
+            <div class="col-sm-12 col-md-6"><h2 class="text-primary">04.02.03 - Dodací listy - stažení a úprava souborů MS Excel</h2></div>
             <div class="col-sm-12 col-md-6">
                 <form asp-action="Index" method="get">
                     <div class="form-actions no-color">
@@ -61,7 +61,7 @@
                                           <a asp-action="MakeNotFinished"
                                              asp-route-id="@file.Id"
                                              asp-route-sortOrder="@ViewData["CurrentSort"]"
-                                             asp-route-pageNumber="@(Model.PageIndex - 1)"
+                                             asp-route-pageNumber="@(Model.PageIndex)"
                                              asp-route-currentFilter="@ViewData["CurrentFilter"]" class="mx-1"><i class="fas fa-check"></i></a>
                                       }
                                       else
@@ -69,7 +69,7 @@
                                           <a asp-action="MakeFinished"
                                              asp-route-id="@file.Id"
                                              asp-route-sortOrder="@ViewData["CurrentSort"]"
-                                             asp-route-pageNumber="@(Model.PageIndex - 1)"
+                                             asp-route-pageNumber="@(Model.PageIndex)"
                                              asp-route-currentFilter="@ViewData["CurrentFilter"]" class="mx-1"><i class="far fa-square"></i></a>       
                                       }
                                    </td>

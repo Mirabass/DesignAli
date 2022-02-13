@@ -11,6 +11,7 @@ namespace DAERP.Web.ViewModels
         public PaginatedList<ProductModel> Products { get; set; }
         public List<SelectedProduct> SelectedProducts { get; set; }
         public CustomerModel Customer { get; set; }
+        public EshopModel Eshop { get; set; }
     }
     public class SelectedProduct
     {

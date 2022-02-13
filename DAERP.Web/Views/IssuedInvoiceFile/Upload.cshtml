@@ -1,0 +1,47 @@
+﻿@model DAERP.BL.Models.Files.IssuedInvoiceFileModel
+<form method="post" asp-action="Upload" enctype="multipart/form-data">
+    <div class="p-3">
+        <input asp-for="Id" hidden />
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group row">
+            <h2 class="text-black-50 pl-3">Nahrát upravenou fakturu vydanou</h2>
+        </div>
+        <div class="form-group row border p-2 shadow rounded">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-md-3 col-6 p-1">
+                        <div class="col">
+                            <label asp-for="FileName"></label>
+                        </div>
+                        <div class="col">
+                            <input asp-for="FileName" disabled class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-6 p-1">
+                        <div class="col">
+                            <label asp-for="ExcelFile"></label>
+                        </div>
+                        <div class="col">
+                            <input type="file" id="file1" 
+                                    name="file1" />
+                            <span asp-validation-for="ExcelFile" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+             </div>
+                
+            <div class="col-12">
+                <div class="form-group row justify-content-around p-2">
+                    <div class="col-6">
+                        <input type="submit" class="btn btn-info w-75" value="Nahrát" />
+                    </div>
+                    <div class="col-6">
+                        <a class="btn btn-danger w-75" asp-action="Index">Vrátit se</a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+</form>

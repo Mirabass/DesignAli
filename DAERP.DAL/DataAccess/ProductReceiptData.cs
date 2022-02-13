@@ -28,7 +28,7 @@ namespace DAERP.DAL.DataAccess
         {
             return _db.ProductReceipts
                 .Include(pr => pr.Product)
-                    .ThenInclude(p => p.ProductDivision);
+                    .ThenInclude(p => p.ProductDivision).AsNoTracking();
         }
     }
 }

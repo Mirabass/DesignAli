@@ -645,8 +645,6 @@ namespace DAERP.DAL.Migrations
                     b.HasBaseType("DAERP.BL.Models.Files.NoteFileModel");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasDiscriminator().HasValue(1);
                 });
 
             modelBuilder.Entity("DAERP.BL.Models.Files.IssuedInvoiceFileModel", b =>
@@ -654,8 +652,6 @@ namespace DAERP.DAL.Migrations
                     b.HasBaseType("DAERP.BL.Models.Files.NoteFileModel");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasDiscriminator().HasValue(3);
                 });
 
             modelBuilder.Entity("DAERP.BL.Models.Files.ReturnNoteFileModel", b =>
@@ -684,8 +680,6 @@ namespace DAERP.DAL.Migrations
                     b.HasIndex("EshopId");
 
                     b.HasIndex("ProductId");
-
-                    b.HasDiscriminator().HasValue(5);
                 });
 
             modelBuilder.Entity("DAERP.BL.Models.Movements.NoteModel", b =>
@@ -723,8 +717,6 @@ namespace DAERP.DAL.Migrations
                         .HasColumnType("money");
 
                     b.HasIndex("ProductId");
-
-                    b.HasDiscriminator().HasValue(3);
                 });
 
             modelBuilder.Entity("DAERP.BL.Models.Movements.DeliveryNoteModel", b =>
@@ -739,8 +731,6 @@ namespace DAERP.DAL.Migrations
 
                     b.Property<int>("StartingAmount")
                         .HasColumnType("int");
-
-                    b.HasDiscriminator().HasValue(1);
                 });
 
             modelBuilder.Entity("DAERP.BL.Models.Movements.IssuedInvoiceModel", b =>
@@ -755,8 +745,6 @@ namespace DAERP.DAL.Migrations
 
                     b.Property<string>("DeliveryNoteNumber")
                         .HasColumnType("nvarchar(max)");
-
-                    b.HasDiscriminator().HasValue(4);
                 });
 
             modelBuilder.Entity("DAERP.BL.Models.Movements.ReturnNoteModel", b =>

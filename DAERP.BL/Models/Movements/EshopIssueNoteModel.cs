@@ -17,6 +17,7 @@ namespace DAERP.BL.Models.Movements
         [Required]
         [ForeignKey("Eshop")]
         public int EshopId { get; set; }
+        [Required]
         public EshopModel Eshop { get; set; }
         [Display(Name = "Cena - VE")]
         [DataType(DataType.Currency)]
@@ -27,6 +28,7 @@ namespace DAERP.BL.Models.Movements
         : base(product, lastOrderThisYear)
         {
             OperatedSellingPrice = operatedSellingPrice;
+            EshopId = eshop.Id;
             Eshop = eshop;
             Amount = amount;
             Fill();
@@ -40,6 +42,7 @@ namespace DAERP.BL.Models.Movements
         public override void ClearChildModels()
         {
             base.ClearChildModels();
+            Eshop = null;
         }
     }
 }

@@ -102,6 +102,12 @@ namespace DAERP.Web.Controllers
 
         }
         [Authorize(Roles = "Admin,Manager,Cashier")]
+        public IActionResult EshopSelect()
+        {
+            MultiDropDownListViewModel model = Helper.StaticHelper.GetModelForEshopSelect(_eshopData);
+            return View(model);
+        }
+        [Authorize(Roles = "Admin,Manager,Cashier")]
         [HttpPost]
         public IActionResult PostSelectedEshop(PostSelectedViewModel model)
         {
@@ -123,10 +129,16 @@ namespace DAERP.Web.Controllers
             int? removeAllSelected
             )
         {
+            if (eshopId is null)
+            {
+                eshopId = TempData["EshopId"] as int?;
+            }
+            TempData["EshopId"] = null;
             List<ProductModel> products = _productData.GetAllProductsWithChildModelsIncluded().ToList();
             List<SelectedProduct> selectedProducts = _productSelectService.Get(addSelected, removeSelected,
-                removeAllSelected, TempData, false);
+                removeAllSelected, TempData, true);
             DecreaseStockViewBySelectedProducts(products, selectedProducts);
+            products = products.Where(p => p.MainStockAmount > 0).ToList();
             PaginatedList<ProductModel> paginatedList = StaticHelper.SortAndFilterProductsForSelectPurpose(currentSort, sortOrder, currentFilter,
                 searchString, pageNumber, ViewData, products);
             selectedProducts.ForEach(sp => sp.Product = _productData.GetProductWithChildModelsIncludedBy(sp.Product.Id));
@@ -174,10 +186,12 @@ namespace DAERP.Web.Controllers
                     selectedProduct.Product.ProductPrices.OperatedSellingPrice);
                 eshopIssueNotes.Add(eshopIssueNote);
             }
+            var editedProducts = selectedProducts.Select(sp => sp.Product);
             eshopIssueNotes.ForEach(rn => rn.ClearChildModels());
 
             // Database:
             _eshopIssueNoteData.AddRangeOfEshopIssueNotes(eshopIssueNotes);
+            _productData.UpdateRangeOfProducts(editedProducts);
 
             TempData["SelectedProductsIds"] = null;
             TempData["SelectedProductAmounts"] = null;

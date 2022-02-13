@@ -151,6 +151,7 @@ namespace DAERP.Web.Controllers
                 productReceipts.Add(productReceipt);
                 selectedProduct.Product.IncreaseMainStockOf(productReceipt.Amount, costPrice);
             }
+
             _productReceiptData.AddRangeOfProductReceipts(productReceipts);
             var editedProducts = selectedProducts.Select(sp => sp.Product);
             _productData.UpdateRangeOfProducts(editedProducts);

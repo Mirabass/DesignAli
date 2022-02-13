@@ -1,0 +1,30 @@
+﻿@model DAERP.Web.ViewModels.MultiDropDownListViewModel
+<link href="~/lib/bootstrap/bootstrap-multiselect/css/bootstrap-multiselect.css" rel="stylesheet" />
+
+<h2 class="text-primary">Výběr eshopu</h2>
+<br />
+<div>
+    <div class="form-group row border p-2 shadow rounded justify-content-center">
+        <div class="row p-3">
+            <div class="col text-info">
+                Nejdřív vyberte eshop
+            </div>
+        </div>
+        <div class="row p-3">
+            <div class="col">
+                <form asp-action="PostSelectedEshop">
+                    <div class="row">
+                        <div class="col">
+                            <select name="SelectedIds"
+                            asp-items="@Model.ItemList"></select>
+                        </div>
+                        <div class="col">
+                            <input type="submit" value="Pokračovat" class="btn btn-primary" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+    

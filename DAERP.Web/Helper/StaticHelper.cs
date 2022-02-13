@@ -49,9 +49,9 @@ namespace DAERP.Web.Helper
             return imageDataURL;
         }
 
-        internal static MultiDropDownListViewModel GetModelForCustomerSelect(ICustomerData _customerData)
+        internal static MultiDropDownListViewModel GetModelForCustomerSelect(ICustomerData customerData)
         {
-            var activeCustomers = _customerData.GetAllCustomers().Where(c => c.State == "A");
+            var activeCustomers = customerData.GetAllCustomers().Where(c => c.State == "A");
             var data = new List<MultiDropDownListViewModel>();
             foreach (var customer in activeCustomers)
             {
@@ -59,6 +59,22 @@ namespace DAERP.Web.Helper
                 {
                     Id = customer.Id,
                     Name = customer.Designation + ": " + customer.Name
+                });
+            }
+            MultiDropDownListViewModel model = new();
+            model.ItemList = data.Select(x => new SelectListItem { Text = x.Name, Value = x.Id.ToString() }).ToList();
+            return model;
+        }
+        internal static MultiDropDownListViewModel GetModelForEshopSelect(IEshopData eshopData)
+        {
+            var activeEshops = eshopData.GetAllEshops().Where(c => c.State == "A");
+            var data = new List<MultiDropDownListViewModel>();
+            foreach (var Eshop in activeEshops)
+            {
+                data.Add(new MultiDropDownListViewModel
+                {
+                    Id = Eshop.Id,
+                    Name = Eshop.Designation + ": " + Eshop.Name
                 });
             }
             MultiDropDownListViewModel model = new();
@@ -120,6 +136,7 @@ namespace DAERP.Web.Helper
             }
             return PaginatedList<ProductModel>.Create(products, pageNumber ?? 1, pageSize);
         }
+
 
         internal static PaginatedList<DeliveryNoteModel> SortAndFilterDeliveryNotesForSelectPurpose(string currentSort,
             string sortOrder, string currentFilter, string searchString, int? pageNumber,

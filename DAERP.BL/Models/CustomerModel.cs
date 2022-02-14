@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Helper;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -36,6 +37,7 @@ namespace DAERP.BL.Models
         [Display(Name = "Ulice, č.p. - SF")]
         [Column(TypeName = "nvarchar(256)")]
         public string SFStreetAndNo { get; set; }
+
         [Display(Name = "PSČ - SF")]
         [Column(TypeName = "nvarchar(6)")]
         public string SFZIP { get; set; }
@@ -193,5 +195,29 @@ namespace DAERP.BL.Models
         public DateTime? DateLastModified { get; set; }
 
         public IList<CustomerProductModel> CustomerProducts { get; set; }
+
+        public static async Task<List<CustomerModel>> MapAsync(Dictionary<(int, int), string> customerData, Dictionary<string, int> mapSettings, int startingRow)
+        {
+            int lastRow = customerData.Select(_ => _.Key.Item1).Max() + 1;
+            List<CustomerModel> customers = new List<CustomerModel>();
+            List<Task> tasks = new List<Task>();
+            for (int row = startingRow; row < lastRow; row++)
+            {
+                tasks.Add(Task.Run(() =>
+                    customers.Add(Mapper<CustomerModel>.Map(customerData
+                        .Where(cd => cd.Key.Item1 == row)
+                        .ToDictionary(cd => cd.Key, cd => cd.Value), mapSettings))));
+            }
+            try
+            {
+                await Task.WhenAll(tasks);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return customers;
+        }
     }
 }

@@ -184,8 +184,8 @@ namespace DAERP.BL.Models
         [Column (TypeName = "nvarchar(256)")]
         public string ContractPeriod { get; set; }
         [Display(Name = "Provize")]
-        [Column(TypeName = "decimal(8,2)")]
-        public decimal? ContractProvisionPercentValue { get; set; }
+        [Column(TypeName = "nvarchar(256)")]
+        public string ContractProvisionPercentValue { get; set; }
         #endregion
 
         [Display(Name = "Poznámka")]
@@ -203,10 +203,11 @@ namespace DAERP.BL.Models
             List<Task> tasks = new List<Task>();
             for (int row = startingRow; row < lastRow; row++)
             {
-                tasks.Add(Task.Run(() =>
-                    customers.Add(Mapper<CustomerModel>.Map(customerData
-                        .Where(cd => cd.Key.Item1 == row)
-                        .ToDictionary(cd => cd.Key, cd => cd.Value), mapSettings))));
+                Dictionary<int, string> data = customerData
+                                .Where(cd => cd.Key.Item1 == row)
+                                .ToDictionary(cd => cd.Key.Item2, cd => cd.Value);
+                CustomerModel customer = Mapper<CustomerModel>.Map(data, mapSettings);
+                customers.Add(customer);
             }
             try
             {

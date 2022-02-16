@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DAERP.BL.Models.CustomerModel>
+﻿@model DAERP.Web.Helper.PaginatedList<DAERP.BL.Models.CustomerModel>
 
 @{
     ViewData["Title"] = "Customers";
@@ -6,7 +6,23 @@
 
 
 <div class="container-fluid p-3">
-    <h2 class="text-primary">01.00.01 - Číselník odběratelů</h2>
+    <div class="col-12 col-md-12">
+        <div class="row">
+            <div class="col-12 col-md-6"><h2 class="text-primary">01.00.01 - Číselník odběratelů</h2></div>
+                <div class="col-12 col-md-6">
+                    <form asp-action="Index" method="get">
+                        <div class="form-actions no-color">
+                            <p>
+                                Prohledat odběratele: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+                                <input type="hidden" name="CurrentSort" value="@ViewData["CurrentSort"]" />
+                                <input type="submit" value="Filtrovat" class="btn btn-secondary"/> |
+                                <a class="btn btn-outline-warning" asp-action="Index" asp-route-currentSort="@ViewData["CurrentSort"]">Zpět na celý seznam</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     <br />
    <div>
        <table class="table table-bordered table-striped table-responsive" style="width:unset;text-align:center;word-wrap:normal">
@@ -35,20 +51,20 @@
                    <th id="colorDesign" colspan="11">
                        Smlouva
                    </th>
-                   <th id="productHeader" rowspan="2" style="vertical-align:middle">
+                   <th id="productHeader" rowspan="2" style="vertical-align:middle;min-width: 260px;">
                        @Html.LabelFor(m => m.FirstOrDefault().Comment)
                    </th>
                </tr>
                <tr>
                    <th id="productHeader">@Html.LabelFor(m => m.FirstOrDefault().Designation)</th>
                    <th id="productHeader">@Html.LabelFor(m => m.FirstOrDefault().State)</th>
-                   <th id="productHeader">@Html.LabelFor(m => m.FirstOrDefault().Name)</th>
-                   <th id="productHeader">@Html.LabelFor(m => m.FirstOrDefault().Franchise)</th>
+                   <th id="productHeader" style="min-width: 220px;">@Html.LabelFor(m => m.FirstOrDefault().Name)</th>
+                   <th id="productHeader" style="min-width: 220px;">@Html.LabelFor(m => m.FirstOrDefault().Franchise)</th>
 
-                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().SFName)</th>
+                   <th id="colorDesign" style="min-width: 220px;">@Html.LabelFor(m => m.FirstOrDefault().SFName)</th>
                    <th id="colorDesign" style="min-width: 160px;">@Html.LabelFor(m => m.FirstOrDefault().SFStreetAndNo)</th>
-                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().SFZIP)</th>
-                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().SFCity)</th>
+                   <th id="colorDesign" style="min-width: 100px;">@Html.LabelFor(m => m.FirstOrDefault().SFZIP)</th>
+                   <th id="colorDesign" style="min-width: 220px;">@Html.LabelFor(m => m.FirstOrDefault().SFCity)</th>
                    <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().SFCountry)</th>
                    <th id="colorDesign" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().SFIN)</th>
                    <th id="colorDesign" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().SFTIN)</th>
@@ -59,32 +75,32 @@
                    <th id="strap">@Html.LabelFor(m => m.FirstOrDefault().CurrencyCode)</th>
                    <th id="strap">@Html.LabelFor(m => m.FirstOrDefault().RoundPriceWithVAT)</th>
 
-                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFName)</th>
-                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFContactPerson)</th>
+                   <th id="motive" style="min-width: 220px;">@Html.LabelFor(m => m.FirstOrDefault().DFName)</th>
+                   <th id="motive" style="min-width: 220px;">@Html.LabelFor(m => m.FirstOrDefault().DFContactPerson)</th>
                    <th id="motive" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().DFStreetAndNo)</th>
                    <th id="motive" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().DFZIP)</th>
-                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFCity)</th>
+                   <th id="motive" style="min-width: 220px;">@Html.LabelFor(m => m.FirstOrDefault().DFCity)</th>
                    <th id="motive" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().DFCountry)</th>
-                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFPhone)</th>
-                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFMobile)</th>
+                   <th id="motive" style="min-width: 160px;">@Html.LabelFor(m => m.FirstOrDefault().DFPhone)</th>
+                   <th id="motive" style="min-width: 160px;">@Html.LabelFor(m => m.FirstOrDefault().DFMobile)</th>
                    <th id="motive" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().DFEmail)</th>
                    <th id="motive" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().DFIN)</th>
                    <th id="motive" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().DFTIN)</th>
-                   <th id="motive">@Html.LabelFor(m => m.FirstOrDefault().DFBank)</th>
+                   <th id="motive" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().DFBank)</th>
                    <th id="motive" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().DFAccountNumber)</th>
                    <th id="motive" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().DFBIC)</th>
 
-                   <th id="accessories">@Html.LabelFor(m => m.FirstOrDefault().MDName)</th>
-                   <th id="accessories">@Html.LabelFor(m => m.FirstOrDefault().MDContactPerson)</th>
+                   <th id="accessories" style="min-width: 220px;">@Html.LabelFor(m => m.FirstOrDefault().MDName)</th>
+                   <th id="accessories" style="min-width: 220px;">@Html.LabelFor(m => m.FirstOrDefault().MDContactPerson)</th>
                    <th id="accessories" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().MDStreetAndNo)</th>
                    <th id="accessories" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().MDZIP)</th>
                    <th id="accessories">@Html.LabelFor(m => m.FirstOrDefault().MDCity)</th>
 
-                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().ContractDANumber)</th>
+                   <th id="colorDesign" style="min-width: 160px;">@Html.LabelFor(m => m.FirstOrDefault().ContractDANumber)</th>
                    <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().ContractONumber)</th>
-                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().ContractContent)</th>
-                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().ContractPoPro)</th>
-                   <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().ContractPoUm)</th>
+                   <th id="colorDesign" style="min-width: 220px;">@Html.LabelFor(m => m.FirstOrDefault().ContractContent)</th>
+                   <th id="colorDesign" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().ContractPoPro)</th>
+                   <th id="colorDesign" style="min-width: 200px;">@Html.LabelFor(m => m.FirstOrDefault().ContractPoUm)</th>
                    <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().ContractDateSigned)</th>
                    <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().ContractDateFrom)</th>
                    <th id="colorDesign">@Html.LabelFor(m => m.FirstOrDefault().ContractDateTo)</th>
@@ -170,4 +186,28 @@
             }
         </table>
    </div>
+   <div>
+            <div class="row">
+                @{
+                    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+                    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+                }
+                <div class="col p-2">
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-pageNumber="@(Model.PageIndex - 1)"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       class="btn btn-secondary @prevDisabled">
+                       <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@ViewData["CurrentSort"]"
+                       asp-route-pageNumber="@(Model.PageIndex + 1)"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       class="btn btn-secondary @nextDisabled">
+                       <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+       </div>
 </div>

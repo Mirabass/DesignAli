@@ -1,4 +1,6 @@
+using DAERP.BL.Models;
 using DAERP.DAL.Data;
+using DAERP.Web.Helper;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,7 +32,8 @@ namespace DAERP.Web
                 try
                 {
                     var context = services.GetRequiredService<ApplicationDbContext>();
-                    await DbInitializer.InitializeAsync(context);
+                    var paths = GeneratePaths(services);
+                    await DbInitializer.InitializeAsync(context, paths);
                 }
                 catch (Exception ex)
                 {
@@ -39,7 +42,16 @@ namespace DAERP.Web
                 }
             }
         }
-
+        private static Dictionary<Type, string> GeneratePaths(IServiceProvider services)
+        {
+            var pathProvider = services.GetRequiredService<IPathProvider>();
+            string customerDataFilePath = "static_files/GoogleSheetData/01.00.01 - Èíselník odbìratelù - ÈO - to export.tsv";
+            Dictionary<Type, string> paths = new Dictionary<Type, string>()
+            {
+                { typeof(CustomerModel), pathProvider.MapPath(customerDataFilePath)}
+            };
+            return paths;
+        }
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>

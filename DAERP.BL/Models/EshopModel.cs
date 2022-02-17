@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Helper;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -132,5 +133,31 @@ namespace DAERP.BL.Models
         public string Comment { get; set; }
         public DateTime? DateCreated { get; set; }
         public DateTime? DateLastModified { get; set; }
+
+        public static async Task<List<EshopModel>> MapAsync(Dictionary<(int, int), string> eshopData, Dictionary<string, int> mapSettings, int startingRow)
+        {
+            int lastRow = eshopData.Select(_ => _.Key.Item1).Max() + 1;
+            List<EshopModel> eshops = new List<EshopModel>();
+            List<Task> tasks = new List<Task>();
+            for (int row = startingRow; row < lastRow; row++)
+            {
+                Dictionary<int, string> data = eshopData
+                                .Where(cd => cd.Key.Item1 == row)
+                                .ToDictionary(cd => cd.Key.Item2, cd => cd.Value);
+                EshopModel Eshop = Mapper<EshopModel>.Map(data, mapSettings);
+                eshops.Add(Eshop);
+            }
+            try
+            {
+                await Task.WhenAll(tasks);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            return eshops;
+        }
+
     }
 }

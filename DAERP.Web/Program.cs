@@ -46,9 +46,11 @@ namespace DAERP.Web
         {
             var pathProvider = services.GetRequiredService<IPathProvider>();
             string customerDataFilePath = "static_files/GoogleSheetData/01.00.01 - Èíselník odbìratelù - ÈO - to export.tsv";
+            string eshopDataFilePath = "static_files/GoogleSheetData/01.00.01 - Èíselník odbìratelù - Eshop - to export.tsv";
             Dictionary<Type, string> paths = new Dictionary<Type, string>()
             {
-                { typeof(CustomerModel), pathProvider.MapPath(customerDataFilePath)}
+                { typeof(CustomerModel), pathProvider.MapPath(customerDataFilePath)},
+                { typeof(EshopModel), pathProvider.MapPath(eshopDataFilePath)}
             };
             return paths;
         }

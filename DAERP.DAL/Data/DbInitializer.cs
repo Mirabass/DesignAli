@@ -15,6 +15,53 @@ namespace DAERP.DAL.Data
         {
             context.Database.EnsureCreated();
             await InitializeCustomersAsync(context, paths[typeof(CustomerModel)]);
+            await InitializeEshopsAsync(context, paths[typeof(EshopModel)]);
+        }
+
+        private static async Task InitializeEshopsAsync(ApplicationDbContext context, string path)
+        {
+            if (context.Eshops.Any())
+            {
+                return;
+            }
+            Dictionary<(int, int), string> eshopData = FileProcessor.LoadDataFromFile_tableWithTabs(path);
+            Dictionary<string, int> mapSettings = new Dictionary<string, int>
+            {
+                { nameof(EshopModel.Designation), 1 },
+                { nameof(EshopModel.State), 3 },
+                { nameof(EshopModel.Name), 4 },
+                { nameof(EshopModel.Web), 5 },
+                { nameof(EshopModel.ContactPerson), 6 },
+                { nameof(EshopModel.Phone), 7 },
+                { nameof(EshopModel.Mobile), 8 },
+                { nameof(EshopModel.Email), 9 },
+                { nameof(EshopModel.SFName), 10 },
+                { nameof(EshopModel.SFStreetAndNo), 11 },
+                { nameof(EshopModel.SFZIP), 12 },
+                { nameof(EshopModel.SFCity), 13 },
+                { nameof(EshopModel.SFCountry), 14 },
+                { nameof(EshopModel.SFIN), 15 },
+                { nameof(EshopModel.SFTIN), 16 },
+                { nameof(EshopModel.FVDiscountPercentValue), 17 },
+                { nameof(EshopModel.Maturity), 18 },
+                { nameof(EshopModel.CurrencyCode), 19 },
+                { nameof(EshopModel.RoundPriceWithVAT), 20 },
+                { nameof(EshopModel.ContractDANumber), 21 },
+                { nameof(EshopModel.ContractONumber), 22 },
+                { nameof(EshopModel.ContractContent), 23 },
+                { nameof(EshopModel.ContractPoPro), 24 },
+                { nameof(EshopModel.ContractPoUm), 25 },
+                { nameof(EshopModel.ContractDateSigned), 26 },
+                { nameof(EshopModel.ContractDateFrom), 27 },
+                { nameof(EshopModel.ContractDateTo), 28 },
+                { nameof(EshopModel.ContractRent), 29 },
+                { nameof(EshopModel.ContractPeriod), 30 },
+                { nameof(EshopModel.ContractProvisionPercentValue), 31 },
+                { nameof(EshopModel.Comment), 34 }
+            };
+            List<EshopModel> eshops = await EshopModel.MapAsync(eshopData, mapSettings, 2);
+            await context.Eshops.AddRangeAsync(eshops);
+            await context.SaveChangesAsync();
         }
 
         private static async Task InitializeCustomersAsync(ApplicationDbContext context, string path)

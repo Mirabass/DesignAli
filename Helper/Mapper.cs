@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -20,7 +21,8 @@ namespace Helper
                 object propertyValue = data[setting.Value].ToString();
                 if (!string.IsNullOrWhiteSpace((string)propertyValue))
                 {
-                    propertyValue = Convert.ChangeType(propertyValue, propertyType, CultureInfo.InvariantCulture);
+                    var converter = TypeDescriptor.GetConverter(propertyType);
+                    propertyValue = converter.ConvertFrom(propertyValue);
                     piInstance.SetValue(obj, propertyValue);
                 }
             }

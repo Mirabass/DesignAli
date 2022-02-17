@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Helper;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -30,5 +32,17 @@ namespace DAERP.BL.Models.Product
         public DateTime DateCreated { get; set; }
         public DateTime DateLastModified { get; set; }
 
+        public static ProductDivisionModel Map(Dictionary<int, string> productDivisionDataRow,
+            Dictionary<string, int> mapSettings,
+            ProductKindModel productKind,
+            ProductMaterialModel productMaterial)
+        {
+            ProductDivisionModel productDivision = Mapper<ProductDivisionModel>.Map(productDivisionDataRow, mapSettings);
+            productDivision.ProductKind = productKind;
+            productDivision.ProductMaterial = productMaterial;
+            productDivision.DateCreated = DateTime.Now;
+            productDivision.DateLastModified = DateTime.Now;
+            return productDivision;
+        }
     }
 }

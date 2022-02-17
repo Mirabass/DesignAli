@@ -1,4 +1,5 @@
 ﻿using DAERP.BL.Models;
+using DAERP.BL.Models.Product;
 using Helper;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,47 @@ namespace DAERP.DAL.Data
             context.Database.EnsureCreated();
             await InitializeCustomersAsync(context, paths[typeof(CustomerModel)]);
             await InitializeEshopsAsync(context, paths[typeof(EshopModel)]);
+            await InitializeProductDivisionsAsync(context, paths[typeof(ProductDivisionModel)]);
+        }
+
+        private static async Task InitializeProductDivisionsAsync(ApplicationDbContext context, string path)
+        {
+            if (context.ProductDivisions.Any())
+            {
+                return;
+            }
+            Dictionary<(int, int), string> productDivisionData = FileProcessor.LoadDataFromFile_tableWithTabs(path);
+            Dictionary<string, int> pkMapSettings = new Dictionary<string, int>
+            {
+                { nameof(ProductKindModel.Number), 2 },
+                { nameof(ProductKindModel.Name), 3 }
+            };
+            Dictionary<string, int> pmMapSettings = new Dictionary<string, int>
+            {
+                { nameof(ProductMaterialModel.Number), 4 },
+                { nameof(ProductMaterialModel.Name), 5 }
+            };
+            Dictionary<string, int> pdMapSettings = new Dictionary<string, int>
+            {
+                { nameof(ProductDivisionModel.Number), 0 },
+                { nameof(ProductDivisionModel.Name), 1 },
+                { nameof(ProductDivisionModel.ProductType), 6 },
+                { nameof(ProductDivisionModel.Comment), 7 }
+            };
+            int lastRow = productDivisionData.Select(_ => _.Key.Item1).Max() + 1;
+            List<ProductDivisionModel> productDivisions = new();
+            for (int row = 2; row < lastRow; row++)
+            {
+                Dictionary<int, string> productDivisionDataRow = productDivisionData
+                    .Where(pd => pd.Key.Item1 == row)
+                    .ToDictionary(pd => pd.Key.Item2, pd => pd.Value);
+                ProductKindModel productKind = ProductKindModel.Map(productDivisionDataRow, pkMapSettings);
+                ProductMaterialModel productMaterial = ProductMaterialModel.Map(productDivisionDataRow, pmMapSettings);
+                ProductDivisionModel productDivisionModel = ProductDivisionModel.Map(productDivisionDataRow, pdMapSettings, productKind, productMaterial);
+                productDivisions.Add(productDivisionModel);
+            }
+            await context.ProductDivisions.AddRangeAsync(productDivisions);
+            await context.SaveChangesAsync();
         }
 
         private static async Task InitializeEshopsAsync(ApplicationDbContext context, string path)
@@ -59,7 +101,7 @@ namespace DAERP.DAL.Data
                 { nameof(EshopModel.ContractProvisionPercentValue), 31 },
                 { nameof(EshopModel.Comment), 34 }
             };
-            List<EshopModel> eshops = await EshopModel.MapAsync(eshopData, mapSettings, 2);
+            List<EshopModel> eshops = EshopModel.Map(eshopData, mapSettings, 2);
             await context.Eshops.AddRangeAsync(eshops);
             await context.SaveChangesAsync();
         }
@@ -121,7 +163,7 @@ namespace DAERP.DAL.Data
                 { nameof(CustomerModel.ContractProvisionPercentValue), 47 },
                 { nameof(CustomerModel.Comment), 50 }
             };
-            List<CustomerModel> customers = await CustomerModel.MapAsync(customerData, mapSettings, 1);
+            List<CustomerModel> customers = CustomerModel.Map(customerData, mapSettings, 1);
             await context.Customers.AddRangeAsync(customers);
             await context.SaveChangesAsync();
         }

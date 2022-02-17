@@ -196,11 +196,10 @@ namespace DAERP.BL.Models
 
         public IList<CustomerProductModel> CustomerProducts { get; set; }
 
-        public static async Task<List<CustomerModel>> MapAsync(Dictionary<(int, int), string> customerData, Dictionary<string, int> mapSettings, int startingRow)
+        public static List<CustomerModel> Map(Dictionary<(int, int), string> customerData, Dictionary<string, int> mapSettings, int startingRow)
         {
             int lastRow = customerData.Select(_ => _.Key.Item1).Max() + 1;
             List<CustomerModel> customers = new List<CustomerModel>();
-            List<Task> tasks = new List<Task>();
             for (int row = startingRow; row < lastRow; row++)
             {
                 Dictionary<int, string> data = customerData
@@ -208,15 +207,6 @@ namespace DAERP.BL.Models
                                 .ToDictionary(cd => cd.Key.Item2, cd => cd.Value);
                 CustomerModel customer = Mapper<CustomerModel>.Map(data, mapSettings);
                 customers.Add(customer);
-            }
-            try
-            {
-                await Task.WhenAll(tasks);
-            }
-            catch (Exception)
-            {
-
-                throw;
             }
             return customers;
         }

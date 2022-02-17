@@ -1,4 +1,5 @@
 using DAERP.BL.Models;
+using DAERP.BL.Models.Product;
 using DAERP.DAL.Data;
 using DAERP.Web.Helper;
 using Microsoft.AspNetCore.Hosting;
@@ -47,10 +48,12 @@ namespace DAERP.Web
             var pathProvider = services.GetRequiredService<IPathProvider>();
             string customerDataFilePath = "static_files/GoogleSheetData/01.00.01 - Èíselník odbìratelù - ÈO - to export.tsv";
             string eshopDataFilePath = "static_files/GoogleSheetData/01.00.01 - Èíselník odbìratelù - Eshop - to export.tsv";
+            string rvDataFilePath = "static_files/GoogleSheetData/02.00.02 - Èíselník výrobkù - RV - to export.tsv";
             Dictionary<Type, string> paths = new Dictionary<Type, string>()
             {
                 { typeof(CustomerModel), pathProvider.MapPath(customerDataFilePath)},
-                { typeof(EshopModel), pathProvider.MapPath(eshopDataFilePath)}
+                { typeof(EshopModel), pathProvider.MapPath(eshopDataFilePath)},
+                { typeof(ProductDivisionModel), pathProvider.MapPath(rvDataFilePath)}
             };
             return paths;
         }

@@ -1,6 +1,7 @@
 ﻿using DAERP.BL.Models;
 using DAERP.BL.Models.Product;
 using Helper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,77 @@ namespace DAERP.DAL.Data
             await InitializeCustomersAsync(context, paths[typeof(CustomerModel)]);
             await InitializeEshopsAsync(context, paths[typeof(EshopModel)]);
             await InitializeProductDivisionsAsync(context, paths[typeof(ProductDivisionModel)]);
+            await InitializeProductAsync(context, paths[typeof(ProductModel)]);
+        }
+
+        private static async Task InitializeProductAsync(ApplicationDbContext context, string path)
+        {
+            if (context.Products.Any())
+            {
+                return;
+            }
+            Dictionary<(int, int), string> productData = FileProcessor.LoadDataFromFile_tableWithTabs(path);
+            Dictionary<string, int> pcdMapSettings = new Dictionary<string, int>
+            {
+                { nameof(ProductColorDesignModel.Quantity), 8 },
+                { nameof(ProductColorDesignModel.Orientation), 9 },
+                { nameof(ProductColorDesignModel.MainPartRAL), 10 },
+                { nameof(ProductColorDesignModel.MainPartColorName), 11 },
+                { nameof(ProductColorDesignModel.PocketRAL), 13 },
+                { nameof(ProductColorDesignModel.PocketColorName), 14 }
+            };
+            Dictionary<string, int> psMapSettings = new Dictionary<string, int>()
+            {
+                { nameof(ProductStrapModel.Type), 16 },
+                { nameof(ProductStrapModel.Material), 17 },
+                { nameof(ProductStrapModel.Length), 18 },
+                { nameof(ProductStrapModel.Width), 19 },
+                { nameof(ProductStrapModel.RAL), 20 },
+                { nameof(ProductStrapModel.ColorName), 21 },
+                { nameof(ProductStrapModel.Attachment), 23 }
+            };
+            Dictionary<string, int> ppMapSettings = new Dictionary<string, int>()
+            {
+                { nameof(ProductPricesModel.OperatedCostPrice), 26 },
+                { nameof(ProductPricesModel.OperatedSellingPrice), 27 }
+            };
+            Dictionary<string, int> pMapSettings = new Dictionary<string, int>()
+            {
+                { nameof(ProductModel.EAN), 2 },
+                { nameof(ProductModel.Design), 5 },
+                { nameof(ProductModel.Motive), 26 },
+                { nameof(ProductModel.Accessories), 27 }
+            };
+            int lastRow = productData.Select(pd => pd.Key.Item1).Max() + 1;
+            List<ProductModel> products = new();
+            for (int row = 2; row < lastRow; row++)
+            {
+                Dictionary<int, string> productDataRow = productData
+                        .Where(pd => pd.Key.Item1 == row)
+                        .ToDictionary(pd => pd.Key.Item2, pd => pd.Value);
+                ProductDivisionModel productDivision = GetProductDivision(context, productDataRow, 1);
+                ProductColorDesignModel productColorDesign = ProductColorDesignModel.Map(productDataRow, pcdMapSettings);
+                ProductStrapModel productStrap = ProductStrapModel.Map(productDataRow, psMapSettings);
+                ProductPricesModel productPrices = ProductPricesModel.Map(productDataRow, ppMapSettings);
+                // TODO: Add Image
+                ProductModel product = ProductModel.Map(productDataRow, pMapSettings, productDivision, productColorDesign, productStrap, productPrices);
+            }
+        }
+
+        private static ProductDivisionModel GetProductDivision(ApplicationDbContext context, Dictionary<int, string> productDataRow, int productDesignationPosition)
+        {
+            string designation = productDataRow[productDesignationPosition];
+            string divisionNumberString = designation.Substring(0, 3);
+            string kindNumberString = designation.Substring(4, 2);
+            string materialNumberString = designation.Substring(7, 2);
+            int divisionNumber = Convert.ToInt32(divisionNumberString);
+            int kindNumber = Convert.ToInt32(kindNumberString);
+            int materialNumber = Convert.ToInt32(materialNumberString);
+            ProductDivisionModel productDivision = context.ProductDivisions
+                .Include(pd => pd.ProductKind).AsNoTracking()
+                .Include(pd => pd.ProductMaterial).AsNoTracking()
+                .FirstOrDefault(pd => pd.ProductKind.Number == kindNumber && pd.ProductMaterial.Number == materialNumber && pd.Number == divisionNumber);
+            return productDivision;
         }
 
         private static async Task InitializeProductDivisionsAsync(ApplicationDbContext context, string path)

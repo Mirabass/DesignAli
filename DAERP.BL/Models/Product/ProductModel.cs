@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Helper;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -37,6 +38,7 @@ namespace DAERP.BL.Models.Product
         [Display(Name = "Doplňky")]
         [Column(TypeName = "nvarchar(256)")]
         public string Accessories { get; set; }
+        public object ProductMaterial { get; private set; }
         [Required]
         public DateTime DateCreated { get; set; }
         [Required]
@@ -76,6 +78,23 @@ namespace DAERP.BL.Models.Product
         {
             ProductCustomers = null;
             ProductDivision = null;
+        }
+
+        public static ProductModel Map(Dictionary<int, string> productDataRow,
+            Dictionary<string, int> mapSettings,
+            ProductDivisionModel productDivision,
+            ProductColorDesignModel productColorDesign,
+            ProductStrapModel productStrap,
+            ProductPricesModel productPrices)
+        {
+            ProductModel product = Mapper<ProductModel>.Map(productDataRow, mapSettings);
+            product.ProductDivision = productDivision;
+            product.ProductColorDesign = productColorDesign;
+            product.ProductStrap = productStrap;
+            product.ProductPrices = productPrices;
+            product.DateCreated = DateTime.Now;
+            product.DateLastModified = DateTime.Now;
+            return product;
         }
     }
 }

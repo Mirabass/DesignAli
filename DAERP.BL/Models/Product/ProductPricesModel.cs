@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Helper;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -25,5 +26,11 @@ namespace DAERP.BL.Models.Product
         [Display(Name = "Zisk")]
         [Column(TypeName = "decimal(4,1)")]
         public decimal GainPercentValue { get; set; } = 0;
+
+        public static ProductPricesModel Map(Dictionary<int, string> productDataRow, Dictionary<string, int> mapSettings)
+        {
+            ProductPricesModel productPrices = Mapper<ProductPricesModel>.Map(productDataRow, mapSettings);
+            return productPrices;
+        }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace Helper
 {
@@ -67,6 +68,42 @@ namespace Helper
         public static Dictionary<(int, int), string> LoadDataFromFile_tableWithTabs(string filePath)
         {
             return LoadTableDataFromFile(filePath, '\t');
+        }
+        /// <summary>
+        /// Exports data to text file separated by choosed separator, saves file to choosed location with choosed name
+        /// </summary>
+        /// <param name="dataToExport">key item 1 = row; key item 2 = column; object = value - can be string, int, double, decimal etc.</param>
+        /// <param name="exportFolderPath"></param>
+        /// <param name="fileName"></param>
+        /// <param name="separator">'\t', ';',...</param>
+        /// <param name="fileExtension">"csv", "tsv", "txt", ...</param>
+        /// <exception cref="Exception"></exception>
+        public static void Export(Dictionary<(int, int), object> dataToExport, string exportFolderPath, string fileName, char separator, string fileExtension)
+        {
+            if (exportFolderPath == null)
+            {
+                throw new Exception();
+            }
+            if (!Directory.Exists(exportFolderPath))
+            {
+                throw new Exception();
+            }
+            fileName += "." + fileExtension;
+
+            string filePath = exportFolderPath + "\\" + fileName;
+            StreamWriter streamWriter = new StreamWriter(filePath, false, Encoding.UTF8);
+            dataToExport = dataToExport.OrderBy(d => d.Key.Item2).OrderBy(d => d.Key.Item1).ToDictionary(d => d.Key, d => d.Value);
+            for (int row = 0; row < dataToExport.Select(d => d.Key.Item1).Max() + 1; row++)
+            {
+                List<object> rowItems = dataToExport.Where(d => d.Key.Item1 == row).Select(d => d.Value).ToList();
+                if (rowItems is not null)
+                {
+                    List<string> rowItemsString = rowItems.ConvertAll(ri => ri.ToString());
+                    string line = string.Join(separator, rowItemsString);
+                    streamWriter.WriteLine(line);
+                }
+            }
+            streamWriter.Close();
         }
     }
 }

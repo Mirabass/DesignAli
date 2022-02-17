@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Helper;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAERP.BL.Models.Product
@@ -8,7 +11,8 @@ namespace DAERP.BL.Models.Product
         [Required]
         public int Id { get; set; }
         [Display(Name = "Počet")]
-        public int? Quantity { get; set; }
+        [Column(TypeName = "nvarchar(256)")]
+        public string Quantity { get; set; }
         [Display(Name = "Orientace")]
         [Column(TypeName = "nvarchar(256)")]
         public string Orientation { get; set; }
@@ -28,5 +32,11 @@ namespace DAERP.BL.Models.Product
         public string PocketColorName { get; set; }
         [NotMapped]
         public string PocketColorHex { get; set; }
+
+        public static ProductColorDesignModel Map(Dictionary<int, string> productDataRow, Dictionary<string, int> mapSettings)
+        {
+            ProductColorDesignModel productColorDesign = Mapper<ProductColorDesignModel>.Map(productDataRow, mapSettings);
+            return productColorDesign;
+        }
     }
 }

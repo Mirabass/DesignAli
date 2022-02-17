@@ -49,11 +49,13 @@ namespace DAERP.Web
             string customerDataFilePath = "static_files/GoogleSheetData/01.00.01 - Èíselník odbìratelù - ÈO - to export.tsv";
             string eshopDataFilePath = "static_files/GoogleSheetData/01.00.01 - Èíselník odbìratelù - Eshop - to export.tsv";
             string rvDataFilePath = "static_files/GoogleSheetData/02.00.02 - Èíselník výrobkù - RV - to export.tsv";
+            string productDataFilePath = "static_files/GoogleSheetData/02.00.02 - Èíselník výrobkù - ÈV - to export.tsv";
             Dictionary<Type, string> paths = new Dictionary<Type, string>()
             {
-                { typeof(CustomerModel), pathProvider.MapPath(customerDataFilePath)},
-                { typeof(EshopModel), pathProvider.MapPath(eshopDataFilePath)},
-                { typeof(ProductDivisionModel), pathProvider.MapPath(rvDataFilePath)}
+                {typeof(CustomerModel), pathProvider.MapPath(customerDataFilePath)},
+                {typeof(EshopModel), pathProvider.MapPath(eshopDataFilePath)},
+                {typeof(ProductDivisionModel), pathProvider.MapPath(rvDataFilePath)},
+                {typeof(ProductModel), pathProvider.MapPath(productDataFilePath)}
             };
             return paths;
         }

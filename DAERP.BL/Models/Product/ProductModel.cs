@@ -21,6 +21,9 @@ namespace DAERP.BL.Models.Product
         [Required]
         public long EAN { get; set; }
         [Required]
+        [ForeignKey("ProductDivision")]
+        public int ProductDivisionId { get; set; }
+        [Required]
         public ProductDivisionModel ProductDivision { get; set; }
         [Required]
         public ProductPricesModel ProductPrices { get; set; }
@@ -38,7 +41,6 @@ namespace DAERP.BL.Models.Product
         [Display(Name = "Doplňky")]
         [Column(TypeName = "nvarchar(256)")]
         public string Accessories { get; set; }
-        public object ProductMaterial { get; private set; }
         [Required]
         public DateTime DateCreated { get; set; }
         [Required]
@@ -89,6 +91,7 @@ namespace DAERP.BL.Models.Product
         {
             ProductModel product = Mapper<ProductModel>.Map(productDataRow, mapSettings);
             product.ProductDivision = productDivision;
+            product.ProductDivisionId = productDivision.Id;
             product.ProductColorDesign = productColorDesign;
             product.ProductStrap = productStrap;
             product.ProductPrices = productPrices;

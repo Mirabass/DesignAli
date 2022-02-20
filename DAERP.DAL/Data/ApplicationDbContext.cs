@@ -34,7 +34,6 @@ namespace DAERP.DAL.Data
                 .HasValue<IssuedInvoiceFileModel>(3);
         }
 
-        public DbSet<ProductModel> Products { get; set; }
         public DbSet<ProductPricesModel> ProductPrices { get; set; }
         public DbSet<ProductColorDesignModel> ProductColorDesigns { get; set; }
         public DbSet<ProductDivisionModel> ProductDivisions { get; set; }
@@ -42,6 +41,7 @@ namespace DAERP.DAL.Data
         public DbSet<ProductMaterialModel> ProductMaterials { get; set; }
         public DbSet<ProductStrapModel> ProductStraps { get; set; }
         public DbSet<ProductImageModel> ProductImages { get; set; }
+        public DbSet<ProductModel> Products { get; set; }
         public DbSet<CustomerModel> Customers { get; set; }
         public DbSet<EshopModel> Eshops { get; set; }
         public DbSet<CustomerProductModel> CustomersProducts { get; set; }

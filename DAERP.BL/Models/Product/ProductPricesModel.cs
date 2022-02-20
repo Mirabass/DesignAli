@@ -26,7 +26,6 @@ namespace DAERP.BL.Models.Product
         [Display(Name = "Zisk")]
         [Column(TypeName = "decimal(4,1)")]
         public decimal GainPercentValue { get; set; } = 0;
-
         public static ProductPricesModel Map(Dictionary<int, string> productDataRow, Dictionary<string, int> mapSettings)
         {
             ProductPricesModel productPrices = Mapper<ProductPricesModel>.Map(productDataRow, mapSettings);

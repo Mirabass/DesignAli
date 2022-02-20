@@ -206,6 +206,8 @@ namespace DAERP.BL.Models
                                 .Where(cd => cd.Key.Item1 == row)
                                 .ToDictionary(cd => cd.Key.Item2, cd => cd.Value);
                 CustomerModel customer = Mapper<CustomerModel>.Map(data, mapSettings);
+                customer.DateCreated = System.DateTime.Today;
+                customer.DateLastModified = System.DateTime.Today;
                 customers.Add(customer);
             }
             return customers;

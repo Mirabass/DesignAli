@@ -143,8 +143,10 @@ namespace DAERP.BL.Models
                 Dictionary<int, string> data = eshopData
                                 .Where(cd => cd.Key.Item1 == row)
                                 .ToDictionary(cd => cd.Key.Item2, cd => cd.Value);
-                EshopModel Eshop = Mapper<EshopModel>.Map(data, mapSettings);
-                eshops.Add(Eshop);
+                EshopModel eshop = Mapper<EshopModel>.Map(data, mapSettings);
+                eshop.DateCreated = System.DateTime.Today;
+                eshop.DateLastModified = System.DateTime.Today;
+                eshops.Add(eshop);
             }
             return eshops;
         }

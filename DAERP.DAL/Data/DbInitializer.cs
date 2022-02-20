@@ -1,4 +1,5 @@
-﻿using DAERP.BL.Models;
+﻿using DAERP.BL;
+using DAERP.BL.Models;
 using DAERP.BL.Models.Product;
 using Helper;
 using Microsoft.EntityFrameworkCore;
@@ -16,10 +17,59 @@ namespace DAERP.DAL.Data
         public static async Task InitializeAsync(ApplicationDbContext context, Dictionary<Type, string> paths)
         {
             context.Database.EnsureCreated();
-            await InitializeCustomersAsync(context, paths[typeof(CustomerModel)]);
+            List<CustomerModel> customers = await InitializeCustomersAsync(context, paths[typeof(CustomerModel)]);
             await InitializeEshopsAsync(context, paths[typeof(EshopModel)]);
             await InitializeProductDivisionsAsync(context, paths[typeof(ProductDivisionModel)]);
             await InitializeProductAsync(context, paths[typeof(ProductModel)]);
+            await InitializeProductCustomerStockAsync(context, customers);
+            await InitializeProductCustomerPricesAsync(context);
+        }
+
+        private static async Task InitializeProductCustomerPricesAsync(ApplicationDbContext context)
+        {
+            await context.CustomersProducts
+                .Include(cp => cp.Product)
+                    .ThenInclude(cp => cp.ProductPrices)
+                .Include(cp => cp.Customer)
+                .ForEachAsync(pc =>
+                {
+                    pc.DeliveryNotePrice = BL.PriceCalculation.DeliveryNotePrice(
+                        pc.Product.ProductPrices.GainPercentValue,
+                        pc.Customer.ProvisionFor60PercentValue,
+                        pc.Product.ProductPrices.OperatedCostPrice);
+                    pc.IssuedInvoicePrice = BL.PriceCalculation.IssuedInvoicePrice(
+                        pc.DeliveryNotePrice,
+                        pc.Customer.FVDiscountPercentValue);
+                    pc.Value = BL.PriceCalculation.StockValue(
+                        pc.AmountInStock,
+                        pc.DeliveryNotePrice);
+                });
+            var customersProducts = context.CustomersProducts;
+            context.CustomersProducts.UpdateRange(customersProducts);
+            await context.SaveChangesAsync();
+        }
+
+        private static async Task InitializeProductCustomerStockAsync(ApplicationDbContext context, List<CustomerModel> customers)
+        {
+            if (context.CustomersProducts.Any())
+            {
+                return;
+            }
+            List<CustomerProductModel> customerProducts = new();
+            await context.Products.ForEachAsync(p =>
+            {
+                foreach (CustomerModel customer in customers)
+                {
+                    CustomerProductModel customerProduct = new CustomerProductModel
+                    {
+                        ProductId = p.Id,
+                        CustomerId = customer.Id
+                    };
+                    customerProducts.Add(customerProduct);
+                }
+            });
+            await context.CustomersProducts.AddRangeAsync(customerProducts);
+            await context.SaveChangesAsync();
         }
 
         private static async Task InitializeProductAsync(ApplicationDbContext context, string path)
@@ -73,7 +123,13 @@ namespace DAERP.DAL.Data
                 ProductPricesModel productPrices = ProductPricesModel.Map(productDataRow, ppMapSettings);
                 // TODO: Add Image
                 ProductModel product = ProductModel.Map(productDataRow, pMapSettings, productDivision, productColorDesign, productStrap, productPrices);
+                product.ProductPrices.GainPercentValue = BL.PriceCalculation.GainPercentValue(product.ProductPrices.OperatedCostPrice, product.ProductPrices.OperatedSellingPrice);
+                CustomOperations.CreateAndAsignDesignationFor(product);
+                product.ProductDivision = null;
+                products.Add(product);
             }
+            await context.Products.AddRangeAsync(products);
+            await context.SaveChangesAsync();
         }
 
         private static ProductDivisionModel GetProductDivision(ApplicationDbContext context, Dictionary<int, string> productDataRow, int productDesignationPosition)
@@ -85,7 +141,7 @@ namespace DAERP.DAL.Data
             int divisionNumber = Convert.ToInt32(divisionNumberString);
             int kindNumber = Convert.ToInt32(kindNumberString);
             int materialNumber = Convert.ToInt32(materialNumberString);
-            ProductDivisionModel productDivision = context.ProductDivisions
+            ProductDivisionModel productDivision = context.ProductDivisions.AsNoTracking()
                 .Include(pd => pd.ProductKind).AsNoTracking()
                 .Include(pd => pd.ProductMaterial).AsNoTracking()
                 .FirstOrDefault(pd => pd.ProductKind.Number == kindNumber && pd.ProductMaterial.Number == materialNumber && pd.Number == divisionNumber);
@@ -178,11 +234,11 @@ namespace DAERP.DAL.Data
             await context.SaveChangesAsync();
         }
 
-        private static async Task InitializeCustomersAsync(ApplicationDbContext context, string path)
+        private static async Task<List<CustomerModel>> InitializeCustomersAsync(ApplicationDbContext context, string path)
         {
             if (context.Customers.Any())
             {
-                return;
+                return context.Customers.ToList();
             }
             Dictionary<(int, int), string> customerData = FileProcessor.LoadDataFromFile_tableWithTabs(path);
             Dictionary<string, int> mapSettings = new Dictionary<string, int>
@@ -238,6 +294,7 @@ namespace DAERP.DAL.Data
             List<CustomerModel> customers = CustomerModel.Map(customerData, mapSettings, 1);
             await context.Customers.AddRangeAsync(customers);
             await context.SaveChangesAsync();
+            return customers;
         }
     }
 }

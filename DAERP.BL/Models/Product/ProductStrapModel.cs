@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Helper;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAERP.BL.Models.Product
@@ -14,11 +17,11 @@ namespace DAERP.BL.Models.Product
         [Column(TypeName = "nvarchar(256)")]
         public string Material { get; set; }
         [Display(Name = "Délka")]
-        [Column(TypeName = "numeric(5,3)")]
-        public decimal? Length { get; set; }
+        [Column(TypeName = "nvarchar(256)")]
+        public string Length { get; set; }
         [Display(Name = "Šířka")]
-        [Column(TypeName = "numeric(5,3)")]
-        public decimal? Width { get; set; }
+        [Column(TypeName = "nvarchar(256)")]
+        public string Width { get; set; }
         [Column(TypeName = "numeric(4)")]
         public int? RAL { get; set; }
         [Display(Name = "Barva")]
@@ -29,5 +32,11 @@ namespace DAERP.BL.Models.Product
         [Display(Name = "Uchycení")]
         [Column(TypeName = "nvarchar(128)")]
         public string Attachment { get; set; }
+
+        public static ProductStrapModel Map(Dictionary<int, string> productDataRow, Dictionary<string, int> mapSettings)
+        {
+            ProductStrapModel productStrap = Mapper<ProductStrapModel>.Map(productDataRow, mapSettings);
+            return productStrap;
+        }
     }
 }

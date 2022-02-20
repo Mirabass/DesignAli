@@ -4,14 +4,16 @@ using DAERP.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DAERP.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220217131937_ProductUpdate010")]
+    partial class ProductUpdate010
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -559,7 +561,7 @@ namespace DAERP.DAL.Migrations
                     b.Property<int?>("ProductColorDesignId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductDivisionId")
+                    b.Property<int?>("ProductDivisionId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ProductImageId")
@@ -820,9 +822,7 @@ namespace DAERP.DAL.Migrations
 
                     b.HasOne("DAERP.BL.Models.Product.ProductDivisionModel", "ProductDivision")
                         .WithMany()
-                        .HasForeignKey("ProductDivisionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductDivisionId");
 
                     b.HasOne("DAERP.BL.Models.Product.ProductImageModel", "ProductImage")
                         .WithMany()

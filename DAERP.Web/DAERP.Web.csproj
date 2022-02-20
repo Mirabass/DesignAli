@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Content Remove="wwwroot\static_files\DL rr-xxxx - dd.mm.rr - Odběratel - vzor.xlsx" />
+    <Content Remove="wwwroot\static_files\GoogleSheetData\01.00.01 - Číselník odběratelů - ČO - to export.tsv" />
   </ItemGroup>
 
   <ItemGroup>
@@ -85,6 +86,7 @@
 
   <ItemGroup>
     <None Include="wwwroot\static_files\DL rr-xxxx - dd.mm.rr - Odběratel - vzor.xlsx" />
+    <None Include="wwwroot\static_files\GoogleSheetData\01.00.01 - Číselník odběratelů - ČO - to export.tsv" />
   </ItemGroup>
 
 </Project>

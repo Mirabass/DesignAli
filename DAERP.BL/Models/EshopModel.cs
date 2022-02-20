@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Helper;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -132,5 +133,23 @@ namespace DAERP.BL.Models
         public string Comment { get; set; }
         public DateTime? DateCreated { get; set; }
         public DateTime? DateLastModified { get; set; }
+
+        public static List<EshopModel> Map(Dictionary<(int, int), string> eshopData, Dictionary<string, int> mapSettings, int startingRow)
+        {
+            int lastRow = eshopData.Select(_ => _.Key.Item1).Max() + 1;
+            List<EshopModel> eshops = new List<EshopModel>();
+            for (int row = startingRow; row < lastRow; row++)
+            {
+                Dictionary<int, string> data = eshopData
+                                .Where(cd => cd.Key.Item1 == row)
+                                .ToDictionary(cd => cd.Key.Item2, cd => cd.Value);
+                EshopModel eshop = Mapper<EshopModel>.Map(data, mapSettings);
+                eshop.DateCreated = System.DateTime.Today;
+                eshop.DateLastModified = System.DateTime.Today;
+                eshops.Add(eshop);
+            }
+            return eshops;
+        }
+
     }
 }

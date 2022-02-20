@@ -22,6 +22,13 @@ namespace DAERP.Web.Controllers
         {
             ViewData["ControllerToRedirect"] = controllerToRedirect;
             MultiDropDownListViewModel model = Helper.StaticHelper.GetModelForCustomerSelect(_customerData);
+            if (model.ItemList.Count == 0)
+            {
+                return View("Error", new ErrorViewModel()
+                {
+
+                });
+            }
             return View("_CustomerSelect", model);
         }
     }

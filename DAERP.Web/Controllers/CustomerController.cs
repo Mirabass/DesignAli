@@ -1,7 +1,10 @@
 ﻿using DAERP.BL.Models;
 using DAERP.DAL.DataAccess;
+using DAERP.DAL.Services;
+using DAERP.Web.Helper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,10 +22,64 @@ namespace DAERP.Web.Controllers
             _customerProductData = customerProductData;
         }
         [Authorize(Roles = "Admin,Manager,Cashier")]
-        public IActionResult Index()
+        public IActionResult Index(
+            string currentSort,
+            string sortOrder,
+            string currentFilter,
+            string searchString,
+            int? pageNumber)
         {
+            if (sortOrder is null)
+            {
+                sortOrder = currentSort;
+            }
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["CurrentFilter"] = searchString ?? currentFilter;
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
             IEnumerable<CustomerModel> customers = _customerData.GetAllCustomers();
-            return View(customers);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                string normalizedSearchString = searchString.Normalize(System.Text.NormalizationForm.FormD).ToUpper();
+                customers = customers.Where(c =>
+                    c.Name.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString) ||
+                    c.DFName.Normalize(System.Text.NormalizationForm.FormD).ToString().Contains(normalizedSearchString) ||
+                    c.Designation.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString) ||
+                    c.SFName.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString) ||
+                    c.MDName.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString)
+                );
+            }
+            if (customers.Count() > 0)
+            {
+                string defaultPropToSort = "Designation";
+                Helper.StaticHelper.SetDataForSortingPurposes(ViewData, sortOrder, customers.FirstOrDefault(), defaultPropToSort);
+                if (String.IsNullOrEmpty(sortOrder))
+                {
+                    sortOrder = defaultPropToSort;
+                }
+                bool descending = false;
+                if (sortOrder.EndsWith("_desc"))
+                {
+                    sortOrder = sortOrder.Substring(0, sortOrder.Length - 5);
+                    descending = true;
+                }
+                if (descending)
+                {
+                    customers = customers.OrderByDescending(e => DataOperations.GetPropertyValue(e, sortOrder));
+                }
+                else
+                {
+                    customers = customers.OrderBy(e => DataOperations.GetPropertyValue(e, sortOrder));
+                }
+            }
+            int pageSize = 12;
+            return View(PaginatedList<CustomerModel>.Create(customers, pageNumber ?? 1, pageSize));
         }
         // GET-Create
         [Authorize(Roles = "Admin,Manager")]

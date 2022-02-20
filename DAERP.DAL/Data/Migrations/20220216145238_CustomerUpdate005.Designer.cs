@@ -4,14 +4,16 @@ using DAERP.DAL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DAERP.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220216145238_CustomerUpdate005")]
+    partial class CustomerUpdate005
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -417,8 +419,8 @@ namespace DAERP.DAL.Migrations
                     b.Property<decimal?>("PocketRAL")
                         .HasColumnType("numeric(4)");
 
-                    b.Property<string>("Quantity")
-                        .HasColumnType("nvarchar(256)");
+                    b.Property<int?>("Quantity")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -559,7 +561,7 @@ namespace DAERP.DAL.Migrations
                     b.Property<int?>("ProductColorDesignId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductDivisionId")
+                    b.Property<int?>("ProductDivisionId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ProductImageId")
@@ -620,8 +622,8 @@ namespace DAERP.DAL.Migrations
                     b.Property<string>("ColorName")
                         .HasColumnType("nvarchar(128)");
 
-                    b.Property<string>("Length")
-                        .HasColumnType("nvarchar(256)");
+                    b.Property<decimal?>("Length")
+                        .HasColumnType("numeric(5,3)");
 
                     b.Property<string>("Material")
                         .HasColumnType("nvarchar(256)");
@@ -632,8 +634,8 @@ namespace DAERP.DAL.Migrations
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("Width")
-                        .HasColumnType("nvarchar(256)");
+                    b.Property<decimal?>("Width")
+                        .HasColumnType("numeric(5,3)");
 
                     b.HasKey("Id");
 
@@ -820,9 +822,7 @@ namespace DAERP.DAL.Migrations
 
                     b.HasOne("DAERP.BL.Models.Product.ProductDivisionModel", "ProductDivision")
                         .WithMany()
-                        .HasForeignKey("ProductDivisionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductDivisionId");
 
                     b.HasOne("DAERP.BL.Models.Product.ProductImageModel", "ProductImage")
                         .WithMany()

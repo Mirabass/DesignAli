@@ -22,8 +22,6 @@
             </div>
         </div>
     <br />
-    @if (Model.Count() > 0)
-   {
        <div>
            <table
             class="table table-bordered table-striped table-responsive"
@@ -120,12 +118,13 @@
                        </th>
                    </tr>
                </thead>
-
-               <tbody>
-                   @foreach (var product in Model)
-                   {
-                       <tr data-toggle="popover" data-trigger="hover" id="@product.Id">
-                           <td>
+               @if (Model.Count() > 0)
+            {
+                <tbody>
+                    @foreach (var product in Model)
+                    {
+                        <tr data-toggle="popover" data-trigger="hover" id="@product.Id">
+                            <td>
                                 <div class="row">
                                     <div class="col text-nowrap">
                                         <a asp-controller="Product" asp-action="Update" asp-route-Id="@product.Id" class="btn btn-primary mx-1">
@@ -134,44 +133,44 @@
                                         <a asp-controller="Product" asp-action="Delete" asp-route-Id="@product.Id" class="btn mx-1 bg-danger">
                                             <i class="fas fa-trash"></i>
                                         </a>
-                                     </div>
+                                    </div>
                                 </div>
-                           </td>
+                            </td>
 
-                           <td>@product.Designation</td>
-                           <td>@product.EAN</td>
-                           <td>@product.ProductDivision.Name</td>
-                           <td>@product.ProductDivision.ProductType</td>
+                            <td>@product.Designation</td>
+                            <td>@product.EAN</td>
+                            <td>@product.ProductDivision.Name</td>
+                            <td>@product.ProductDivision.ProductType</td>
 
-                           <td>@product.ProductPrices.OperatedCostPrice</td>
-                           <td>@product.ProductPrices.OperatedSellingPrice</td>
+                            <td>@product.ProductPrices.OperatedCostPrice</td>
+                            <td>@product.ProductPrices.OperatedSellingPrice</td>
 
-                           <td>@product.ProductColorDesign.Quantity</td>
-                           <td>@product.ProductColorDesign.Orientation</td>
-                           <td>@product.ProductColorDesign.MainPartRAL</td>
-                           <td>@product.ProductColorDesign.MainPartColorName</td>
-                           <td style="background-color:@product.ProductColorDesign.MainPartColorHex"></td>
-                           <td>@product.ProductColorDesign.PocketRAL</td>
-                           <td>@product.ProductColorDesign.PocketColorName</td>
-                           <td style="background-color:@product.ProductColorDesign.PocketColorHex"></td>
+                            <td>@product.ProductColorDesign.Quantity</td>
+                            <td>@product.ProductColorDesign.Orientation</td>
+                            <td>@product.ProductColorDesign.MainPartRAL</td>
+                            <td>@product.ProductColorDesign.MainPartColorName</td>
+                            <td style="background-color:@product.ProductColorDesign.MainPartColorHex"></td>
+                            <td>@product.ProductColorDesign.PocketRAL</td>
+                            <td>@product.ProductColorDesign.PocketColorName</td>
+                            <td style="background-color:@product.ProductColorDesign.PocketColorHex"></td>
 
-                           <td>@product.ProductStrap.Type</td>
-                           <td>@product.ProductStrap.Material</td>
-                           <td>@product.ProductStrap.Length</td>
-                           <td>@product.ProductStrap.Width</td>
-                           <td>@product.ProductStrap.RAL</td>
-                           <td>@product.ProductStrap.ColorName</td>
-                           <td style="background-color:@product.ProductStrap.ColorHex"></td>
-                           <td>@product.ProductStrap.Attachment</td>
+                            <td>@product.ProductStrap.Type</td>
+                            <td>@product.ProductStrap.Material</td>
+                            <td>@product.ProductStrap.Length</td>
+                            <td>@product.ProductStrap.Width</td>
+                            <td>@product.ProductStrap.RAL</td>
+                            <td>@product.ProductStrap.ColorName</td>
+                            <td style="background-color:@product.ProductStrap.ColorHex"></td>
+                            <td>@product.ProductStrap.Attachment</td>
 
-                           <td>@product.Motive</td>
-                           <td>@product.Accessories</td>
-                       </tr>
-                   }
+                            <td>@product.Motive</td>
+                            <td>@product.Accessories</td>
+                        </tr>
+                    }
 
-               </tbody>
-
-           </table>
+                </tbody>
+            }
+        </table>
        </div>
        <div>
             <div class="row">
@@ -197,5 +196,4 @@
                 </div>
             </div>
        </div>
-   }
 </div>

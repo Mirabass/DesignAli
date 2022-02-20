@@ -7,8 +7,6 @@
 <div class="container-fluid p-3">
     <h2 class="text-primary">02.00.03 - Rozdělení výrobků</h2>
     <br />
-    @if (Model.Count() > 0)
-   {
        <div>
            <table class="table table-bordered table-striped" style="width:unset;text-align:center;word-wrap:normal">
                <thead>
@@ -44,12 +42,13 @@
                        </th>
                     </tr>
                 </thead>
-
+                @if (Model.Count() > 0)
+            {
                 <tbody>
-                   @foreach (var productDivision in Model)
-                   {
-                       <tr>
-                           <td>
+                    @foreach (var productDivision in Model)
+                    {
+                        <tr>
+                            <td>
                                 <div class="row">
                                     <div class="col text-nowrap">
                                         <a asp-controller="ProductDivision" asp-action="Update" asp-route-Id="@productDivision.Id" class="btn btn-primary mx-1">
@@ -58,22 +57,22 @@
                                         <a asp-controller="ProductDivision" asp-action="Delete" asp-route-Id="@productDivision.Id" class="btn mx-1 bg-danger">
                                             <i class="fas fa-trash"></i>
                                         </a>
-                                     </div>
+                                    </div>
                                 </div>
-                           </td>
-                           <td>@productDivision.Number</td>
-                           <td>@productDivision.Name</td>
-                           <td>@productDivision.ProductKind.Number</td>
-                           <td>@productDivision.ProductKind.Name</td>
-                           <td>@productDivision.ProductMaterial.Number</td>
-                           <td>@productDivision.ProductMaterial.Name</td>
-                           <td>@productDivision.ProductType</td>
-                           <td>@productDivision.Comment</td>
-                       </tr>
-                   }
+                            </td>
+                            <td>@productDivision.Number</td>
+                            <td>@productDivision.Name</td>
+                            <td>@productDivision.ProductKind.Number</td>
+                            <td>@productDivision.ProductKind.Name</td>
+                            <td>@productDivision.ProductMaterial.Number</td>
+                            <td>@productDivision.ProductMaterial.Name</td>
+                            <td>@productDivision.ProductType</td>
+                            <td>@productDivision.Comment</td>
+                        </tr>
+                    }
                 </tbody>
-            </table>
+            }
+        </table>
         </div>
-   }
 </div>
 

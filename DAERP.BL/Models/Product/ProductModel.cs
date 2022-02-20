@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Helper;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -19,6 +20,9 @@ namespace DAERP.BL.Models.Product
         public string Designation { get; set; }
         [Required]
         public long EAN { get; set; }
+        [Required]
+        [ForeignKey("ProductDivision")]
+        public int ProductDivisionId { get; set; }
         [Required]
         public ProductDivisionModel ProductDivision { get; set; }
         [Required]
@@ -76,6 +80,24 @@ namespace DAERP.BL.Models.Product
         {
             ProductCustomers = null;
             ProductDivision = null;
+        }
+
+        public static ProductModel Map(Dictionary<int, string> productDataRow,
+            Dictionary<string, int> mapSettings,
+            ProductDivisionModel productDivision,
+            ProductColorDesignModel productColorDesign,
+            ProductStrapModel productStrap,
+            ProductPricesModel productPrices)
+        {
+            ProductModel product = Mapper<ProductModel>.Map(productDataRow, mapSettings);
+            product.ProductDivision = productDivision;
+            product.ProductDivisionId = productDivision.Id;
+            product.ProductColorDesign = productColorDesign;
+            product.ProductStrap = productStrap;
+            product.ProductPrices = productPrices;
+            product.DateCreated = DateTime.Now;
+            product.DateLastModified = DateTime.Now;
+            return product;
         }
     }
 }

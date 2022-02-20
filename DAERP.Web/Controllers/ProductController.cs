@@ -152,7 +152,10 @@ namespace DAERP.Web.Controllers
                 product.DateLastModified = System.DateTime.Today;
                 try
                 {
-                    product.ProductImage = ImageFromFile(Request.Form.Files.FirstOrDefault(), ModelState);
+                    if (Request.Form.Files.Count != 0)
+                    {
+                        product.ProductImage = ImageFromFile(Request.Form.Files.FirstOrDefault(), ModelState);
+                    }
                 }
                 catch (Exception)
                 {
@@ -269,7 +272,10 @@ namespace DAERP.Web.Controllers
                 updatedProduct.DateLastModified = System.DateTime.Today;
                 try
                 {
-                    updatedProduct.ProductImage = ImageFromFile(Request.Form.Files.FirstOrDefault(), ModelState);
+                    if (Request.Form.Files.Count != 0)
+                    {
+                        updatedProduct.ProductImage = ImageFromFile(Request.Form.Files.FirstOrDefault(), ModelState);
+                    }
                 }
                 catch (Exception)
                 {

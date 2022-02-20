@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DAERP.BL\DAERP.BL.csproj" />
+    <ProjectReference Include="..\Helper\Helper.csproj" />
   </ItemGroup>
 
 </Project>

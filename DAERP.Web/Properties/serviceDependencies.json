@@ -1,6 +1,26 @@
 {
   "dependencies": {
+    "mssql2": {
+      "ignored": "true",
+      "suggestion": "true",
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:BusinessDataConnection_home"
+    },
+    "mssql3": {
+      "ignored": "true",
+      "suggestion": "true",
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:BusinessDataConnection"
+    },
+    "mssql4": {
+      "ignored": "true",
+      "suggestion": "true",
+      "type": "mssql",
+      "connectionId": "ConnectionStrings:DefaultConnection_home"
+    },
     "mssql1": {
+      "ignored": "true",
+      "suggestion": "true",
       "type": "mssql",
       "connectionId": "ConnectionStrings:DefaultConnection"
     }

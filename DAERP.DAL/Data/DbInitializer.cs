@@ -27,6 +27,10 @@ namespace DAERP.DAL.Data
 
         private static async Task InitializeProductCustomerPricesAsync(ApplicationDbContext context)
         {
+            if (context.CustomersProducts.FirstOrDefault().DeliveryNotePrice != 0)
+            {
+                return;
+            }
             await context.CustomersProducts
                 .Include(cp => cp.Product)
                     .ThenInclude(cp => cp.ProductPrices)

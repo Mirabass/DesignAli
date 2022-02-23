@@ -10,9 +10,9 @@ namespace DAERP.DAL.Services
     public class ColorProvider : IColorProvider
     {
         private readonly List<ColorModel> _colors = new List<ColorModel>();
-        public ColorProvider()
+        public ColorProvider(string RALlistPath)
         {
-            using (StreamReader r = new StreamReader(@"..\DAERP.DAL\Data\RAL.json"))
+            using (StreamReader r = new StreamReader(RALlistPath))
             {
                 string json = r.ReadToEnd();
                 Dictionary<string,string> items = JsonConvert.DeserializeObject<Dictionary<string,string>>(json);

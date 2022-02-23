@@ -43,9 +43,11 @@ namespace DAERP.Web
             // Personal services:
             services.AddAutoMapper(typeof(ProductProfile));
 
-            services.AddSingleton<IColorProvider, ColorProvider>();
             services.AddSingleton<IPathProvider, PathProvider>();
-            
+            services.AddSingleton<IColorProvider>(x => new ColorProvider(
+                    x.GetRequiredService<IPathProvider>().MapPath("static_files/RAL.json")
+                ));
+
             services.AddTransient<ICustomerData, CustomerData>();
             services.AddTransient<IEshopData, EshopData>();
             services.AddTransient<IProductData, ProductData>();

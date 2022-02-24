@@ -56,49 +56,62 @@ namespace DAERP.Web.Controllers
             {
                 searchString = currentFilter;
             }
-            IEnumerable<ProductModel> products = _productData.GetAllProductsWithChildModelsIncluded();
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                string normalizedSearchString = searchString.Normalize(System.Text.NormalizationForm.FormD).ToUpper();
-                products = products.Where(p => 
-                    p.Designation.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString) ||
-                    p.EAN.ToString().Contains(normalizedSearchString) ||
-                    p.ProductDivision.Name.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString) ||
-                    p.ProductDivision.ProductType.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString)
-                );
-            }
-            if (products.Count() > 0)
-            {
-                string defaultPropToSort = "Designation";
-                Helper.StaticHelper.SetDataForSortingPurposes(ViewData, sortOrder, products.FirstOrDefault(), defaultPropToSort);
-                foreach (ProductModel product in products)
-                {
-                    
-                    product.ProductColorDesign.MainPartColorHex = _colorProvider.GetHexFromRal(product.ProductColorDesign.MainPartRAL);
-                    product.ProductColorDesign.PocketColorHex = _colorProvider.GetHexFromRal(product.ProductColorDesign.PocketRAL);
-                    product.ProductStrap.ColorHex = _colorProvider.GetHexFromRal(product.ProductStrap.RAL);
-                }
-                if (String.IsNullOrEmpty(sortOrder))
-                {
-                    sortOrder = defaultPropToSort;
-                }
-                bool descending = false;
-                if (sortOrder.EndsWith("_desc"))
-                {
-                    sortOrder = sortOrder.Substring(0, sortOrder.Length - 5);
-                    descending = true;
-                }
-                if (descending)
-                {
-                    products = products.OrderByDescending(e => DataOperations.GetPropertyValue(e, sortOrder));
-                }
-                else
-                {
-                    products = products.OrderBy(e => DataOperations.GetPropertyValue(e, sortOrder));
-                }
-            }
+            string defaultPropToSort = "Designation";
+            Helper.StaticHelper.SetDataForSortingPurposes(ViewData, sortOrder, new ProductModel(), defaultPropToSort);
             int pageSize = 12;
+            IEnumerable<ProductModel> products = _productData.GetProducts(searchString, sortOrder, pageSize, pageNumber ?? 1);
+            foreach (ProductModel product in products)
+            {
+
+                product.ProductColorDesign.MainPartColorHex = _colorProvider.GetHexFromRal(product.ProductColorDesign.MainPartRAL);
+                product.ProductColorDesign.PocketColorHex = _colorProvider.GetHexFromRal(product.ProductColorDesign.PocketRAL);
+                product.ProductStrap.ColorHex = _colorProvider.GetHexFromRal(product.ProductStrap.RAL);
+            }
             return View(PaginatedList<ProductModel>.Create(products, pageNumber ?? 1, pageSize));
+
+            //IEnumerable<ProductModel> products = _productData.GetAllProductsWithChildModelsIncluded();
+            //if (!String.IsNullOrEmpty(searchString))
+            //{
+            //    string normalizedSearchString = searchString.Normalize(System.Text.NormalizationForm.FormD).ToUpper();
+            //    products = products.Where(p => 
+            //        p.Designation.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString) ||
+            //        p.EAN.ToString().Contains(normalizedSearchString) ||
+            //        p.ProductDivision.Name.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString) ||
+            //        p.ProductDivision.ProductType.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString)
+            //    );
+            //}
+            //if (products.Count() > 0)
+            //{
+            //    string defaultPropToSort = "Designation";
+            //    Helper.StaticHelper.SetDataForSortingPurposes(ViewData, sortOrder, products.FirstOrDefault(), defaultPropToSort);
+            //    foreach (ProductModel product in products)
+            //    {
+                    
+            //        product.ProductColorDesign.MainPartColorHex = _colorProvider.GetHexFromRal(product.ProductColorDesign.MainPartRAL);
+            //        product.ProductColorDesign.PocketColorHex = _colorProvider.GetHexFromRal(product.ProductColorDesign.PocketRAL);
+            //        product.ProductStrap.ColorHex = _colorProvider.GetHexFromRal(product.ProductStrap.RAL);
+            //    }
+            //    if (String.IsNullOrEmpty(sortOrder))
+            //    {
+            //        sortOrder = defaultPropToSort;
+            //    }
+            //    bool descending = false;
+            //    if (sortOrder.EndsWith("_desc"))
+            //    {
+            //        sortOrder = sortOrder.Substring(0, sortOrder.Length - 5);
+            //        descending = true;
+            //    }
+            //    if (descending)
+            //    {
+            //        products = products.OrderByDescending(e => DataOperations.GetPropertyValue(e, sortOrder));
+            //    }
+            //    else
+            //    {
+            //        products = products.OrderBy(e => DataOperations.GetPropertyValue(e, sortOrder));
+            //    }
+            //}
+            
+            //return View(PaginatedList<ProductModel>.Create(products, pageNumber ?? 1, pageSize));
         }
         [HttpPost]
         public JsonResult RetrieveProductImage(int? Id)

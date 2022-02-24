@@ -25,5 +25,6 @@ namespace DAERP.DAL.DataAccess
         Task UpdateProductCustomersPricesAsync(ProductModel product);
         ProductModel GetProductBy(int id);
         void UpdateRangeOfProducts(IEnumerable<ProductModel> editedProducts);
+        IEnumerable<ProductModel> GetProducts(string searchString, string sortOrder, int pageSize, int pageNumber);
     }
 }

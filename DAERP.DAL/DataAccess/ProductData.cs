@@ -1,6 +1,7 @@
 ﻿using DAERP.BL.Models;
 using DAERP.BL.Models.Product;
 using DAERP.DAL.Data;
+using DAERP.DAL.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -189,6 +190,29 @@ namespace DAERP.DAL.DataAccess
         {
             _db.Products.UpdateRange(editedProducts);
             _db.SaveChanges();
+        }
+
+        public IEnumerable<ProductModel> GetProducts(string searchString, string sortOrder, int pageSize, int pageNumber)
+        {
+            searchString = "kl";
+            string normalizedSearchString = searchString.Normalize(System.Text.NormalizationForm.FormD).ToUpper();
+            IEnumerable<ProductModel> products = _db.Products
+                .Include(product => product.ProductStrap).AsNoTracking()
+                .Include(product => product.ProductColorDesign).AsNoTracking()
+                .Include(product => product.ProductPrices).AsNoTracking()
+                .Include(product => product.ProductDivision)
+                    .ThenInclude(pd => pd.ProductKind).AsNoTracking()
+                .Include(product => product.ProductDivision)
+                    .ThenInclude(pd => pd.ProductMaterial).AsNoTracking()
+                .Include(product => product.ProductCustomers).AsNoTracking()
+                .Where(p => p.Designation.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString) ||
+                    p.EAN.ToString().Contains(normalizedSearchString) ||
+                    p.ProductDivision.Name.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString) ||
+                    p.ProductDivision.ProductType.Normalize(System.Text.NormalizationForm.FormD).ToUpper().Contains(normalizedSearchString))
+                .OrderBy(e => DataOperations.GetPropertyValue(e, sortOrder))
+                .Skip((pageNumber - 1) * pageSize).Take(pageSize);
+
+            return products;
         }
     }
 }
